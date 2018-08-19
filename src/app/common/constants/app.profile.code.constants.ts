@@ -1,0 +1,2 @@
+export const ORGANIZATION_PROFILE_CODE = "100";
+export const INDIVIDUAL_PROFILE_CODE = "101";

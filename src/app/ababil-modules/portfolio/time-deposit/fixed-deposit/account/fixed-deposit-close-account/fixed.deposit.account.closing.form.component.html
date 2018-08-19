@@ -1,0 +1,264 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Account closing</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+
+<mat-card style="margin-bottom: 10px;">
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{fixedDepositAccount.number}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account Title</th>
+                        <td>{{fixedDepositAccount.name}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Currency</th>
+                        <td>{{fixedDepositAccount.currencyCode}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: rigth;">
+                <button pButton type="button" label="Account detail" class="default-btn" (click)="showAccountDetail()" style="float: right;"></button>
+                <button pButton type="button" style="float: right;" label="Signature" class="default-btn" (click)="showSignature()"></button>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<mat-card>
+    <mat-tab-group dynamicHeight  (selectedTabChange)="tabChanged($event)">
+
+        <mat-tab label="Transactions">
+
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="width: 100%; margin-bottom: 10px;">
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                        <mat-card style="flex: 6;margin-right: 5px;">
+                            <mat-card-title>Debit & Credit:</mat-card-title>
+            
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="profitDebit" pInputText>
+                                                <label>Profit debit</label>
+                                                <div *ngIf="accountClosingForm.controls['profit'].errors && !accountClosingForm.controls['profit'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['profit'].errors.moreThanProvisionedProfitError">Profit can not be more than provisioned profit {{fixedDepositAccount.provisionalProfit}}.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="profitCredit" pInputText>
+                                                <label>Profit credit</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="taxDebit" pInputText>
+                                                <label>Tax debit</label>
+                                            </span>
+                                        </div>
+            
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="taxCredit" pInputText>
+                                                <label>Tax credit</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="exciseDutyDebit" pInputText>
+                                                <label>Excise duty debit</label>
+                                            </span>
+                                        </div>
+            
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="exciseDutyCredit" pInputText>
+                                                <label>Excise duty credit</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                        <mat-card style="flex: 6">
+                            <mat-card-title>Transactions:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="netPayable" pInputText>
+                                                <label>Net payable</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown [options]="creditAccountTypes" [autoWidth]="false" formControlName="destinationAccountType"></p-dropdown>
+                                                <label class="md-inputlabel-2">Credit account type</label>
+                                            </span>
+                                        </div>
+            
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield-2">
+                                                <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.number" [ngModelOptions]="{standalone: true}">
+                                                <label class="md-inputlabel-2">Account number</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                            <span class="md-inputfield">
+                                                <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.name" [ngModelOptions]="{standalone: true}"
+                                                    [disabled]="true">
+                                                <label>Account title</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+            
+
+        </mat-tab>
+
+        <mat-tab label="Charges">
+            <common-charge-table #chargeTable [charges]="charges" (onChargeChange)="onChargeChange()" [editable]="true"></common-charge-table>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card>
+
+
+<!-- <div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 6;margin-right: 5px;">
+                <mat-card-title>Debit & Credit:</mat-card-title>
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profitDebit" pInputText>
+                                    <label>Profit debit</label>
+                                    <div *ngIf="accountClosingForm.controls['profit'].errors && !accountClosingForm.controls['profit'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['profit'].errors.moreThanProvisionedProfitError">Profit can not be more than provisioned profit {{fixedDepositAccount.provisionalProfit}}.</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profitCredit" pInputText>
+                                    <label>Profit credit</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="taxDebit" pInputText>
+                                    <label>Tax debit</label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="taxCredit" pInputText>
+                                    <label>Tax credit</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="exciseDutyDebit" pInputText>
+                                    <label>Excise duty debit</label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="exciseDutyCredit" pInputText>
+                                    <label>Excise duty credit</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 6">
+                <mat-card-title>Transactions:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="netPayable" pInputText>
+                                    <label>Net payable</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <p-dropdown [options]="creditAccountTypes" [autoWidth]="false" formControlName="destinationAccountType"></p-dropdown>
+                                    <label class="md-inputlabel-2">Credit account type</label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.number" [ngModelOptions]="{standalone: true}">
+                                    <label class="md-inputlabel-2">Account number</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                <span class="md-inputfield">
+                                    <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.name" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="true">
+                                    <label>Account title</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div> -->
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+
+
+
+<p-dialog header="Instalment deposit account signature" [(visible)]="fixedDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="accountId" [customerId]="customerId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Instalment deposit account detail" [(visible)]="fixedDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-fixed-account-detail [fixedDepositAccountId]="accountId"></common-fixed-account-detail>
+</p-dialog>

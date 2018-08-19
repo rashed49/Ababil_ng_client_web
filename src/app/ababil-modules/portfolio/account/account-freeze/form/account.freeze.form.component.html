@@ -1,0 +1,44 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">{{menuTitle()}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label={{saveButtonLabel()}} icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Title</th>
+                    <td>{{account.name}}</td>
+                </tr>
+                <tr>
+                    <th>Account No</th>
+                    <td>{{account.number}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group" [formGroup]="accountFreezeForm">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="reason">
+                        <label>Reason*</label>
+                        <div *ngIf="accountFreezeForm.controls['reason'].errors && !accountFreezeForm.controls['reason'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountFreezeForm.controls['reason'].errors.required">Reason is required.</div>
+                        </div>                       
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-card>

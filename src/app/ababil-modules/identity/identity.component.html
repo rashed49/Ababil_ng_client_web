@@ -1,0 +1,48 @@
+<div class="ui-g">
+  <div class="ababil-toolbar">
+    <span class="ababil-toolbar-header">Identity</span>
+    <div class="ababil-toolbar-button-group">
+      <button pButton type="button" icon="ui-icon-search" (click)="op.show($event)"></button>
+      <button pButton type="button" label="New" icon="ui-icon-plus" class="default-btn" (click)="create()" *ngIf="!selected"></button>
+      <button pButton type="button" label="Edit" icon="ui-icon-edit" class="default-btn" (click)="edit()" *ngIf="selected"></button>
+      <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn" (click)="delete()" *ngIf="selected"></button>
+      <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="fetchIdentityTypes()"></button>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+  <div class="ui-g-12">
+
+    <p-overlayPanel #op>
+      <br/>
+      <div class="ui-g ui-fluid form-group">
+        <div class="ui-g-12 ui-md-6">
+          <span class="md-inputfield">
+            <input type="text" pInputText>
+            <label>Identity Subject Type</label>
+          </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+          <span class="md-inputfield">
+            <input type="text" pInputText>
+            <label>Type Name</label>
+          </span>
+        </div>
+      </div>
+
+      <button pButton type="button" label="Search" class="primary-btn" (click)="op.hide($event)"></button>
+    </p-overlayPanel>
+    <br/>
+
+    <p-dataTable [value]="identityTypes" selectionMode="single" [(selection)]="selected" #dt>
+      <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+      <p-column field="identitySubjectType" header="Identity Subject Type" [filter]="true" filterPlaceholder="Search"></p-column>
+      <p-column field="typeName" header="Type Name" [filter]="true" filterPlaceholder="Search"></p-column>
+    </p-dataTable>
+
+  </div>
+</div>

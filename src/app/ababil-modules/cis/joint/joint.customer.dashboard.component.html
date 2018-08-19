@@ -1,0 +1,124 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Joint Customer: {{customer ? customer.name:""}}</span>
+        <div class="ababil-toolbar-button-group">
+            <!-- <button pButton type="button" label="Joint Applicants" icon="ui-icon-account-circle" class="default-btn" (click)="showApplicants()"></button> --> 
+            <button pButton type="button" label="Add Applicant" icon="ui-icon-plus" class="default-btn" (click)="addNewSubject()" [hidden]="applicantTypes.length==subjects.length"></button>
+            <!-- <button pButton type="button" label="Document" icon="ui-icon-library-books" class="default-btn" (click)="addDocument()"></button> -->
+            <p-splitButton label="Options" icon="ui-icon-device-hub" [model]="addAccountItems" *ngIf="!isInactive"></p-splitButton>
+            <button pButton type="button" label="Activate" *ngIf="isInactive && subjects.length>1" icon="ui-icon-check-circle" class="default-btn"
+                (click)="activate()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div>
+    <div class="ui-g ui-g-fluid">
+        <div style="display: flex;flex-direction: row;width: 100%">
+            <div style="margin-right: 10px;flex: 3;height: 100%">
+                <h5>Applicants:</h5>
+                <hr/>
+                <div *ngFor="let subject of subjects">
+
+                    <div class="ababil-custom-card">
+                      <div >
+                           <img src="{{imageApiUrl}}/{{subject.id}}/image" style="float: left;width: 64px;text-align: center;" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';">
+                      </div>
+                      <div class="ababil-custom-card-details">
+                          <div class="ababil-custom-card-title-box">
+                              <div class="ababil-custom-card-title">
+                                  {{subject.name}}
+                              </div>
+                              <div class="ababil-custom-card-subtitle">
+                                  {{getApplicationTypeDescriptionById(subject.applicantTypeId)}}
+                              </div>
+                          </div>
+                          <div style="margin-top: 15px;">
+                              <button pButton type="button" icon="ui-icon-edit" style="position: absolute;top: auto;left: auto;bottom: 8px;right: 40px;" (click)="editSubject(subject.id)"></button>
+                              <button pButton type="button" icon="ui-icon-trash" style="position: absolute;top: auto;left: auto;bottom: 8px;right: 8px;" (click)="removeSubject()"></button>
+                          </div>  
+                      </div>        
+                    </div>
+                </div>
+            </div>
+            <div style="flex: 8;height: 100%">
+                <cis-dashboard-accounts [customerId]="customerId"></cis-dashboard-accounts>
+            </div>
+        </div>
+    </div>
+</div>
+
+                    <!-- <mat-card style="margin-bottom: 10px;padding: 15px 0px 5px 15px;">
+                        <mat-card-header>
+                            <img mat-card-avatar src="https://vignette.wikia.nocookie.net/parody/images/c/c2/Charlie-Brown-3.jpg" style="height: 80px;width: 80px;">
+                            <div style="margin: 15px 10px 10px 20px;">
+                                <mat-card-title>{{subject.name}}</mat-card-title>
+                                <mat-card-subtitle>{{getApplicationTypeDescriptionById(subject.applicantTypeId)}}</mat-card-subtitle>
+                            </div>
+                        </mat-card-header>
+                        <mat-card-actions style="padding: 0px;margin-bottom: 5px;margin-left: 5px;margin-right: 0px;">
+                           <button mat-button style="color:teal" (click)="editSubject(subject.id)" icon="ui-icon-edit">Edit</button>
+                           <button mat-button style="color:teal" (click)="removeSubject()" icon="ui-icon-trash">Existing</button>    
+                        </mat-card-actions>   
+                    </mat-card> -->
+                    <!-- card container -->
+
+
+<!-- <div>
+    <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Joint Customer: {{customer.name}}</span>
+                <div class="ui-toolbar-group-right">
+                    <button pButton type="button" label="Add Applicant" icon="ui-icon-plus" class="default-btn"
+                        (click)="addNewSubject()" [hidden]="applicantTypes.length==subjects.length"></button>
+                     <button pButton type="button" label="Document" icon="ui-icon-library-books" class="default-btn" (click)="addDocument()"></button>     
+                    <p-splitButton label="Time Deposit Account" icon="ui-icon-plus" [model]="addAccountItems" *ngIf="!isInactive"></p-splitButton>
+                    <button pButton type="button" label="Activate"
+                        *ngIf="isInactive && subjects.length>1" 
+                        icon="ui-icon-check-circle" class="default-btn" (click)="activate()"></button>
+                    <button pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn" (click)="cancel()"></button>
+                </div>
+            </div>
+        </p-header>
+
+        <div>
+            <div class="ui-g ui-g-fluid">
+                <div class="ui-g-8">
+                    <cis-dashboard-accounts [customerId]="customerId"></cis-dashboard-accounts>
+                </div>
+
+                <div class="ui-g-4">
+                    <h5>Applicants:</h5>
+                    <hr/>                    
+                    <div class="ui-g-12">
+                        <div *ngFor="let subject of subjects">
+                            <div class="card">
+                                <div class="ui-g">
+                                    <div class="ui-g-3">
+                                        <img src="assets/images/default-user.png" width="45">
+                                    </div>
+                                    <div class="ui-g-9">
+                                        <span style="font-size: 16px;font-weight: bold">{{subject.name}}</span>
+                                        <br/>
+                                        <span style="font-size: 12px;">{{getApplicationTypeDescriptionById(subject.applicantTypeId)}}</span>
+                                        <br/>
+                                        <span>
+                                            <a (click)="editSubject(subject.id)" style="cursor: pointer;color:teal;text-decoration: underline">Edit</a>
+                                            <a (click)="removeSubject()" style="cursor: pointer;color:teal;text-decoration: underline">Delete</a>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div> -->

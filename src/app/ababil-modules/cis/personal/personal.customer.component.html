@@ -1,0 +1,83 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<individual-lookup (onSelect)="onExistingIndividualSelect($event)" #individualLookup></individual-lookup>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Single Customer: {{customer.name}}</span>
+        <div class="ababil-toolbar-button-group">
+            <p-splitButton label="Options" icon="ui-icon-device-hub" [model]="addAccountItems" *ngIf="!isInactive"></p-splitButton>
+            <!-- <button pButton type="button" label="Activate" *ngIf="isInactive && individualSubject" icon="ui-icon-check-circle" class="default-btn"
+                (click)="activate()"></button> -->
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div>
+    <div style="display: flex;flex-direction: row; width:100%;">
+        <div style="margin-right: 5px; flex: 2;flex-wrap:wrap;">
+            <mat-card style="height: 100%; width: 300px;">
+                <img mat-card-image style="border:none; border-radius: 50%; padding: 60px; margin-bottom: 0px; margin-top: -48px !important;"
+                    src="{{imageApiUrl}}/{{individualInfoFormData.id}}/image" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                    #individualImage>
+                <mat-card-header style="justify-content: center; margin-top: -25px;">
+                    <mat-card-title>
+                        <h5>
+                            {{dashboardIndividualInfo.name}}
+                        </h5>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-actions style="align-content: center;justify-content: center; display:flex;padding-top: 0px;">
+                    <div>
+                        <button mat-raised-button style="color:teal" (click)="editSubject()">{{individualSubject?'Edit Profile':'New'}}</button>
+                        <!-- <button mat-button style="color:teal" (click)="lookUpExistingIndividual()" *ngIf="!individualSubject">Existing</button> -->
+                    </div>
+                </mat-card-actions>
+                <hr/>
+                <mat-card-content style="width: 165px;word-wrap: break-word;font-size: 13px;">
+                    <h6 style="color:teal">About</h6>
+                    <div style="color: #a9a9a9">
+                        <div class="span">
+                            <i class="material-icons iconprop">{{'wc'}}</i>
+                            {{dashboardIndividualInfo.gender}}
+                            <br>
+                        </div>
+                        <div class="span">
+                            <i class="material-icons iconprop">{{'date_range'}}</i>
+                            {{dashboardIndividualInfo.dob}}
+                            <br>
+                        </div>
+                        <h6 style="color:teal; margin-top: 25px">Contact</h6>
+                        <div class="span">
+                            <i class="material-icons iconprop">{{'phone'}}</i>
+                            {{dashboardIndividualInfo.cellPhone}}
+                            <br>
+                        </div>
+                        <div class="span">
+                            <i class="material-icons iconprop">{{'mail_outline'}}</i>
+                            {{dashboardIndividualInfo.email}}
+                            <br>
+                        </div>
+                        <div class="span">
+                            <i class="material-icons iconprop">{{'location_on'}}</i>Present: <br>{{dashboardIndividualInfo.presentAddress}}
+                            <br>
+                        </div>
+                        <div class="span">
+                                <i class="material-icons iconprop">{{'location_on'}}</i>Permanent: <br>{{dashboardIndividualInfo.permanentAddress}}
+                                <br>
+                            </div>
+                        <!-- <p>
+                        Permanent Address:
+                        <hr class="no-margin-hr" /> {{dashboardIndividualInfo.permanentAddress}}
+                        </p> -->
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div style="flex: 9">
+            <cis-dashboard-accounts [customerId]="customerId"></cis-dashboard-accounts>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)">
+</verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Fixed Deposit Withdrawal Advice</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div class="ui-g ui-fluid">
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Fixed Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Account No</th>
+                                <td>{{fixedDepositAccount.number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Account Status</th>
+                                <td>{{fixedDepositAccount.status}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Current Balance</th>
+                                <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                                    | number:'1.2-2') : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Lien Amount</th>
+                                <td>{{lienAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th>Quard Amonut</th>
+                                <td>{{quardAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Withdrawable Amount</th>
+                                <td class="ui-lg-3">
+                                    {{withdrawalAmount | number:'1.2-2' : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title> Withdrawal Mapping Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Account Number</th>
+                            <td>{{DemandDepositAccount.number}}</td>
+                        </tr>
+                        <tr>
+                            <th>Reference Number</th>
+                            <td>{{withdrawalAdvice.referenceNumber}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Amount</th>
+                            <td class="ui-lg-3">{{withdrawalAdvice.withdrawalLimit | number:'1.2-2' : ""}} ({{amountInWords}})</td>
+                        </tr>
+                        <tr>
+                            <th>Expire Date</th>
+                            <td>{{withdrawalAdvice.expiryDate |date }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

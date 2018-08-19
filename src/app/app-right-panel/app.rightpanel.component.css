@@ -1,0 +1,44 @@
+li {
+    word-break: break-all;
+}
+
+a {
+    text-decoration: none;
+    color: #888888;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
+i {
+    color: #888888;
+    padding-top: 10px;
+}
+
+.noTaskMessege i {
+    color: #888888 !important;
+    font-size: 116px !important;
+    padding-top: 75px;
+    opacity: .5;
+    animation-name: example;
+    animation-duration: 4s;
+}
+
+.noTaskMessegeToDsiplay {
+    font-size: 22px;
+    vertical-align: middle;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #9DCE64;
+    margin-top: 24px;
+    color: white;
+    padding: 20px 0px;
+    box-shadow: 2px 2px 2px #888888;
+    border-radius: 5px;
+}
+
+/* @keyframes example {
+    from {transform: rotate(140deg);}
+    to {transform: rotate(0deg);}
+} */

@@ -1,0 +1,121 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approval flow task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g ui-fluid form-group" [formGroup]='taskForm'>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+               <input type="text" pInputText formControlName="name">
+               <label>Name</label>
+               <div *ngIf="taskForm.controls['name'].errors && !taskForm.controls['name'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!taskForm.controls['name'].errors.required">Name is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!taskForm.controls['name'].errors.minlength">Name minimum length is 2 charachters.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!taskForm.controls['name'].errors.maxlength">Name maximun length is 32 charachters.</div>                       
+               </div>
+
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <h5>Approver rule:</h5>
+            <hr/>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="assignmentRestrictions" [autoWidth]="false" formControlName="approverAssignmentRestriction"></p-dropdown>
+                <div *ngIf="taskForm.controls['approverAssignmentRestriction'].errors && !taskForm.controls['approverAssignmentRestriction'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!taskForm.controls['approverAssignmentRestriction'].errors.required">Approver assignment restriction is required.</div>                       
+                </div>
+                <label class="md-inputlabel-2">Assignment restriction*</label>     
+            </span>
+        </div>
+
+        <!-- <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+               <p-dropdown [options]="departmentRestrictions" [autoWidth]="false" formControlName="approverRuleDepartmentRestriction"></p-dropdown>
+               <div *ngIf="taskForm.controls['approverRuleDepartmentRestriction'].errors && !taskForm.controls['approverRuleDepartmentRestriction'].pristine">
+                    <div class="dropdown-error-msg"[hidden]="!taskForm.controls['approverRuleDepartmentRestriction'].errors.required">Approver department restriction is required.</div>                       
+               </div>
+               <label class="md-inputlabel-2">Department Restriction*</label>
+            </span>
+        </div> -->
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+               <p-dropdown [options]="branchRestrictions" [autoWidth]="false" formControlName="approverRuleBranchRestriction"></p-dropdown>
+               <div *ngIf="taskForm.controls['approverRuleBranchRestriction'].errors && !taskForm.controls['approverRuleBranchRestriction'].pristine">
+                    <div class="dropdown-error-msg"[hidden]="!taskForm.controls['approverRuleBranchRestriction'].errors.required">Approver branch restriction is required.</div>                       
+               </div>
+               <label class="md-inputlabel-2">Branch restriction*</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6" *ngIf="taskForm.controls['approverRuleBranchRestriction'].value=='SPECIFIC_BRANCH'">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="branches" [autoWidth]="false" formControlName="branchId" filter="true"></p-dropdown>
+                <label class="md-inputlabel-2">Branch*</label>
+                <div *ngIf="taskForm.controls['branchId'].errors && !taskForm.controls['branchId'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!taskForm.controls['branchId'].errors.required">Branch is required.</div>                    
+                </div>  
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="userLevelRestriction" [autoWidth]="false" formControlName="approverRuleUserLevelRestriction"></p-dropdown>
+                <div *ngIf="taskForm.controls['approverRuleUserLevelRestriction'].errors && !taskForm.controls['approverRuleUserLevelRestriction'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!taskForm.controls['approverRuleUserLevelRestriction'].errors.required">Approver user level restriction is required.</div>                       
+                </div>
+                <label class="md-inputlabel-2">User level Restriction*</label>
+            </span>
+        </div>
+
+        <!-- <div class="ui-g-12 ui-md-12">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p-checkbox binary="true" label="Approver Check Transaction Limit" formControlName="approverRuleCheckTransactionLimit"></p-checkbox>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- <br/> -->
+
+        <!-- <div class="ui-g-12 ui-md-12">
+            <h5>Delegate Rule:</h5>
+            <hr/>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <p-dropdown [options]="branchRestrictions" [autoWidth]="false" formControlName="delegateeRuleBranchRestriction"></p-dropdown>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <p-dropdown [options]="departmentRestrictions" [autoWidth]="false" formControlName="delegateeRuleDepartmentRestriction"></p-dropdown>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <p-dropdown [options]="userLevelRestriction" [autoWidth]="false" formControlName="delegateeRuleUserLevelRestriction"></p-dropdown>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <p-checkbox binary="true" label="Delegatee Check Transaction Limit" formControlName="delegateeRuleCheckTransactionLimit"></p-checkbox>
+                </div>
+            </div>
+        </div> -->
+
+    </div>
+</mat-card>

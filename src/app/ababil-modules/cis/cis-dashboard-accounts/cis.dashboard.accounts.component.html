@@ -1,0 +1,154 @@
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-3">
+        <mat-card>DD</mat-card>
+    </div>
+    <div class="ui-g-12 ui-md-3">
+        <mat-card>FD</mat-card>
+    </div>
+    <div class="ui-g-12 ui-md-3">
+        <mat-card>RD</mat-card>
+    </div>
+    <div class="ui-g-12 ui-md-3">
+        <mat-card>FI</mat-card>
+    </div>
+</div>
+
+<div style="display: flex; flex-direction: column; margin-left: 10px;">
+    <mat-card *ngIf="demanDepositAccounts.length>0" style="margin-right: 5px; padding: 25px;">
+        <div style="height: 100%">
+            <!-- <div [hidden]="demanDepositAccounts.length>1 || timeDepositsAccounts.length>1 || financingAccounts.length>1" style="display: inline-block;width:100%;height: 100%;font-size: 18px;padding: 45%;color:teal;font-weight: bolder">
+                No data
+            </div>     -->
+            <!-- <div [hidden]="demanDepositAccounts.length<1"> -->
+            <h5>Demand Deposits(DD):</h5>
+            <hr class="no-margin-hr" />
+            <p-dataTable [value]="demanDepositAccounts" selectionMode="single" [responsive]="false" (onRowClick)="onAccountRowClicked($event,'DD')"
+                #dtDDA>
+                <p-column field="name" header="Title" filter="true"></p-column>
+                <p-column field="accountNumber" header="Account Number" filter="true">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <div align="center">
+                            {{data.number}}
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="balance.availableBalance" header="Balance">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <div align="right">
+                            {{data.balance.availableBalance | number:'1.2-4'}}
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="depositAccountStatus" header="Status" filter="true">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <div align="center">
+                            {{data.freeze ? "FREEZE" : data.status}}
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </mat-card>
+    <!-- </div> -->
+    <br/>
+    <!-- <div [hidden]="true"> -->
+    <mat-card *ngIf="fixedDepositAccounts.length>0" style="margin-right: 5px; padding: 25px;">
+        <div style="height: 100%">
+            <h5>Fixed Deposits(FD):</h5>
+            <hr class="no-margin-hr" />
+            <p-dataTable [value]="fixedDepositAccounts" selectionMode="single" [responsive]="false" (onRowSelect)="onAccountRowClicked($event,'FD')"
+                #dtTDA>
+                <p-column field="name" header="Title" filter="true"></p-column>
+                <p-column field="number" header="Account Number" filter="true"></p-column>
+                <p-column field="balance" header="Balance"></p-column>
+                <p-column field="status" header="Status" filter="true"></p-column>
+            </p-dataTable>
+        </div>
+    </mat-card>
+    <!-- </div> -->
+    <br/>
+    <mat-card *ngIf="recurringDepositAccounts.length>0" style="margin-right: 5px; padding: 25px;">
+        <div class="ui-g-12" style="height: 100%">
+            <h5>Installment Deposits(RD):</h5>
+            <hr class="no-margin-hr" />
+            <p-dataTable [value]="recurringDepositAccounts" selectionMode="single" [responsive]="false" (onRowSelect)="onAccountRowClicked($event,'RD')"
+                #dtTDA>
+                <p-column field="name" header="Title" filter="true"></p-column>
+                <p-column field="number" header="Account Number" filter="true"></p-column>
+                <p-column field="balance" header="Balance"></p-column>
+                <p-column field="status" header="Status" filter="true"></p-column>
+            </p-dataTable>
+        </div>
+    </mat-card>
+    <br/>
+    <!-- <div [hidden]="true"> -->
+    <mat-card *ngIf="financingAccounts.length>0" style="margin-right: 5px; padding: 25px;">
+        <div style="height: 100%">
+            <h5>Financing Accounts(FI):</h5>
+            <hr class="no-margin-hr" />
+            <p-dataTable [value]="financingAccounts" selectionMode="single" [responsive]="false" (onRowSelect)="onAccountRowClicked($event,'FA')"
+                #dtFA>
+                <p-column field="accTitle" header="Title" filter="true"></p-column>
+                <p-column field="accNo" header="Account Number" filter="true"></p-column>
+                <p-column field="balance" header="Balance"></p-column>
+                <p-column field="depositAccountStatus" header="Status" filter="true"></p-column>
+            </p-dataTable>
+            <!-- </div> -->
+        </div>
+    </mat-card>
+
+
+    <!-- <mat-card style="margin-right: 5px; padding: 25px;">
+        <div style="height: 100%">
+            <h5>Lien</h5>
+            <hr class="no-margin-hr" />
+            <p-dataTable selectionMode="single" [responsive]="false">
+                <p-column header="Title" filter="true"></p-column>
+                <p-column header="Account Number" ></p-column>
+                <p-column  header="Lien Amount" filter="true"></p-column>
+            </p-dataTable>
+
+        </div>
+    </mat-card> -->
+
+    <!-- <mat-card style="flex: 3; padding: 10px;">
+        <mat-card-content>
+            <h5>Credit Risk Grading:</h5>
+            <hr class="no-margin-hr" />
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g colorbox colorbox-2">
+                    <div class="ui-g-4">
+                        <i class="material-icons">shopping_card</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Business</span>
+                        <span class="colorbox-count">378</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g colorbox colorbox-1">
+                    <div class="ui-g-4">
+                        <i class="material-icons">check_circle</i>
+                    </div>
+                    <div class="ui-g-8">
+                        <span class="colorbox-name">Personal</span>
+                        <span class="colorbox-count">1000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12">
+            </div>
+
+            <h5>Asset & Liability Overview:</h5>
+            <hr class="no-margin-hr" />
+            <div class="ui-g-12">
+                <p-chart type="doughnut" [data]="pieData" [height]="180" [width]="200" [options]="assetPieChartOptions"></p-chart>
+            </div>
+            <div class="ui-g-12">
+                <p-chart type="doughnut" [data]="pieData" [height]="180" [width]="200" [options]="liabilityPieChartOptions"></p-chart>
+            </div>
+        </mat-card-content>
+    </mat-card> -->
+</div>

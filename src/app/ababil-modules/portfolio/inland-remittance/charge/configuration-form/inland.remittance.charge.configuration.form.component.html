@@ -1,0 +1,463 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+
+<gl-account-lookup [display]="glAccountLookUpDisplay" [resultType]="glAccountLookUpMode" (onSelect)="onSearchResult($event)"
+    (onClose)="onSearchModalClose($event)"></gl-account-lookup>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Inland remittance charge configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveChargeConfiguration()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="chargeConfigurationForm">
+
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <mat-card-title>Charge configuration:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="inlandRemittanceProducts | productPipe" [autoWidth]="false" formControlName="inlandRemittanceProduct"
+                                    appendTo="body"></p-dropdown>
+                                <label class="md-inputlabel-2">Product name</label>
+                                <div *ngIf="chargeConfigurationForm.controls['inlandRemittanceProduct'].errors && !chargeConfigurationForm.controls['inlandRemittanceProduct'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['inlandRemittanceProduct'].errors.required">Product is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <div style="display: flex; flex-direction: row; width: 100%">
+                                <div style="flex: 9;">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="chargeGl" pInputText readonly>
+                                        <label>Charge GL</label>
+                                        <div *ngIf="chargeConfigurationForm.controls['chargeGl'].errors && !chargeConfigurationForm.controls['chargeGl'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['chargeGl'].errors.required">Charge GL is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 1; margin-left: 5px;">
+                                    <button pButton type="button" icon="ui-icon-search" class="default-btn" pTooltip="Search charge GL" tooltipPosition="top"
+                                        (click)="searchGlAccount(true)"> </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <div style="display: flex; flex-direction: row; width: 100%">
+                                <div style="flex: 9;">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="vatGl" pInputText readonly>
+                                        <label>VAT GL</label>
+                                        <div *ngIf="chargeConfigurationForm.controls['vatGl'].errors && !chargeConfigurationForm.controls['vatGl'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['vatGl'].errors.required">VAT GL is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 1; margin-left: 5px;">
+                                    <button pButton type="button" icon="ui-icon-search" class="default-btn" pTooltip="Search VAT GL" tooltipPosition="top" (click)="searchGlAccount(false)">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <div style="display: flex; direction: row; width: 100%;">
+                                <div style="flex: 3;">
+                                    <p-checkbox formControlName="defaultConfiguration" binary="true"></p-checkbox>
+                                    <span class="task-name">Default configuration</span>
+                                </div>
+
+                                <div style="flex: 3; margin-left: 12px;" *ngIf="!defaultConfiguration">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="productCurrencies" [autoWidth]="false" formControlName="currencyCode" appendTo="body"></p-dropdown>
+                                        <label class="md-inputlabel-2">Currency code</label>
+                                        <div *ngIf="chargeConfigurationForm.controls['currencyCode'].errors && !chargeConfigurationForm.controls['currencyCode'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['currencyCode'].errors.required">Currency code is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 3; margin-left: 12px;" *ngIf="!defaultConfiguration">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="chargeCurrencyTypes" [autoWidth]="false" formControlName="calculationCurrency" appendTo="body"></p-dropdown>
+                                        <label class="md-inputlabel-2">Calculation currency</label>
+                                        <div *ngIf="chargeConfigurationForm.controls['calculationCurrency'].errors && !chargeConfigurationForm.controls['calculationCurrency'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['calculationCurrency'].errors.required">Calculation currency is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 3; margin-left: 12px;" *ngIf="defaultConfiguration">
+                                    <span class="md-inputfield">
+                                        <input type="text" pInputText formControlName="calculationCurrency" readonly>
+                                        <label>Calculation currency</label>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 3; margin-left: 12px;" *ngIf="!defaultConfiguration">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="chargeCurrencyTypes" [autoWidth]="false" formControlName="transactionCurrency" appendTo="body"></p-dropdown>
+                                        <label class="md-inputlabel-2">Transaction currency</label>
+                                        <div *ngIf="chargeConfigurationForm.controls['transactionCurrency'].errors && !chargeConfigurationForm.controls['transactionCurrency'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['transactionCurrency'].errors.required">Transaction currency is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div style="flex: 3; margin-left: 12px;" *ngIf="defaultConfiguration">
+                                    <span class="md-inputfield">
+                                        <input type="text" pInputText formControlName="transactionCurrency" readonly>
+                                        <label>Transaction currency</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1;">
+                <mat-card-title>Charge calculation:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4 md-inputfield" style="font-size: 16px;">
+                            <p-selectButton [options]="chargeOptions" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedChargeOption" (onChange)="chargeOptionChange()"></p-selectButton>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="!isChargeSlabBased">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="chargeAmount" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>Charge amount {{isChargeFixed?'':'(%)'}}</label>
+                                <div *ngIf="chargeConfigurationForm.controls['chargeAmount'].errors && !chargeConfigurationForm.controls['chargeAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['chargeAmount'].errors.required && !chargeConfigurationForm.controls['chargeAmount'].errors.isNumber">Charge amount is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="!isChargeFixed">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="minCharge" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>Minimum charge</label>
+                                <div *ngIf="chargeConfigurationForm.controls['minCharge'].errors && !chargeConfigurationForm.controls['minCharge'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['minCharge'].errors.required && !chargeConfigurationForm.controls['minCharge'].errors.isNumber">Minimum charge is required.</div>
+                                </div>
+                                <div *ngIf="!minMaxChargeValid && !chargeConfigurationForm.controls['minCharge'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all">Minimum charge should be less than maximum charge.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="!isChargeFixed">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="maxCharge" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>Maximum charge</label>
+                                <div *ngIf="chargeConfigurationForm.controls['maxCharge'].errors && !chargeConfigurationForm.controls['maxCharge'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['maxCharge'].errors.required && !chargeConfigurationForm.controls['maxCharge'].errors.isNumber">Maximum charge is required.</div>
+                                </div>
+                                <div *ngIf="!minMaxChargeValid && !chargeConfigurationForm.controls['maxCharge'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all">Maximum charge should be grater than minimum charge.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isChargeSlabBased">
+                        <br>
+                        <mat-card-title style="display: flex;flex-direction: row">
+                            <div style="flex:1">Slab based charge configuration list:</div>
+                            <div align="right">
+                                <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add slab" tooltipPosition="top" (click)="addChargeSlab()"></button>
+                            </div>
+                        </mat-card-title>
+
+                        <p-dataTable [value]="inlandRemittanceSlabChargeConfigs" [responsive]="true" [editable]="true">
+                            <p-column field="fromAmount" header="From amount" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    {{isNumber(data.fromAmount)? (data.fromAmount | number:'1.2-4'):(data.fromAmount)}}
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="toAmount" header="To amount" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [ngClass]="{'invalid-datatable-row':(!data.toAmount || data.toAmount<=data.fromAmount)}"
+                                    />
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1"
+                                        [ngClass]="{'invalid-datatable-row':(!data.toAmount || data.toAmount<=data.fromAmount)}"
+                                    />
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="fixed" header="Fixed(No/Yes)">
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1"></p-inputSwitch>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div align="center">
+                                        <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1"></p-inputSwitch>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="chargeAmount" header="Charge amount" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [ngClass]="{'invalid-datatable-row':!data.chargeAmount}"
+                                    />
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1"
+                                        [ngClass]="{'invalid-datatable-row':!data.chargeAmount}" />
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="minCharge" header="Minimum charge" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.minCharge || !(data.maxCharge > data.minCharge)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [maxlength]="balanceLength" [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1 || data.fixed"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.minCharge || !(data.maxCharge > data.minCharge)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="maxCharge" header="Maximum charge" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.maxCharge || !(data.maxCharge > data.minCharge)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [maxlength]="balanceLength" [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [disabled]="index!=inlandRemittanceSlabChargeConfigs.length-1 && inlandRemittanceSlabChargeConfigs.length>1 || data.fixed"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.maxCharge || !(data.maxCharge > data.minCharge)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column header="Delete">
+                                <ng-template let-index="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <button type="text" (click)="chargeSlabDelete()" pButton icon="ui-icon-delete" class="ui-button-danger" *ngIf="index==(inlandRemittanceSlabChargeConfigs.length-1) && inlandRemittanceSlabChargeConfigs.length>0"></button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1;">
+                <mat-card-title>VAT calculation:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4 md-inputfield" style="font-size: 16px;">
+                            <p-selectButton [options]="vatOptions" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedVatOption" (onChange)="vatOptionChange()"></p-selectButton>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="!isVatSlabBased">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="vatAmount" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>VAT amount {{isVatFixed?'':'(%)'}}</label>
+                                <div *ngIf="chargeConfigurationForm.controls['vatAmount'].errors && !chargeConfigurationForm.controls['vatAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['vatAmount'].errors.required && !chargeConfigurationForm.controls['vatAmount'].errors.isNumber">VAT amount is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="!isVatFixed">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="minVat" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>Minimum VAT</label>
+                                <div *ngIf="chargeConfigurationForm.controls['minVat'].errors && !chargeConfigurationForm.controls['minVat'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['minVat'].errors.required && !chargeConfigurationForm.controls['minVat'].errors.isNumber">Minimum VAT is required.</div>
+                                </div>
+                                <div *ngIf="!minMaxVatValid && !chargeConfigurationForm.controls['minVat'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all">Minimum VAT should be less than maximum VAT.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="!isVatFixed">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="maxVat" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength">
+                                <label>Maximum VAT</label>
+                                <div *ngIf="chargeConfigurationForm.controls['maxVat'].errors && !chargeConfigurationForm.controls['maxVat'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeConfigurationForm.controls['maxVat'].errors.required && !chargeConfigurationForm.controls['maxVat'].errors.isNumber">Maximum VAT is required.</div>
+                                </div>
+                                <div *ngIf="!minMaxVatValid && !chargeConfigurationForm.controls['maxVat'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all">Maximum VAT should be grater than minimum VAT.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="isVatSlabBased">
+                        <br>
+                        <mat-card-title style="display: flex;flex-direction: row">
+                            <div style="flex:1">Slab based VAT configuration list:</div>
+                            <div align="right">
+                                <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add slab" tooltipPosition="top" (click)="addVatSlab()"></button>
+                            </div>
+                        </mat-card-title>
+
+                        <p-dataTable [value]="inlandRemittanceSlabVatConfigs" [responsive]="true" [editable]="true">
+                            <p-column field="fromAmount" header="From amount" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    {{isNumber(data.fromAmount)? (data.fromAmount | number:'1.2-4'):(data.fromAmount)}}
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="toAmount" header="To amount" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [ngClass]="{'invalid-datatable-row':(!data.toAmount || data.toAmount<=data.fromAmount)}"
+                                    />
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1"
+                                        [ngClass]="{'invalid-datatable-row':(!data.toAmount || data.toAmount<=data.fromAmount)}"
+                                    />
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="fixed" header="Fixed(No/Yes)">
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1"></p-inputSwitch>
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div align="center">
+                                        <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1"></p-inputSwitch>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="vatAmount" header="VAT amount" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [ngClass]="{'invalid-datatable-row':!data.vatAmount}"
+                                    />
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                        [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1"
+                                        [ngClass]="{'invalid-datatable-row':!data.vatAmount}" />
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="minVat" header="Minimum VAT" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.minVat || !(data.maxVat > data.minVat)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [maxlength]="balanceLength" [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1 || data.fixed"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.minVat || !(data.maxVat > data.minVat)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column field="maxVat" header="Maximum VAT" [editable]="true" [style]="{'text-align':'right'}">
+                                <ng-template let-col let-data="rowData" pTemplate="body">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.maxVat || !(data.maxVat > data.minVat)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                    <div *ngIf="!data.fixed">
+                                        <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                            [maxlength]="balanceLength" [(ngModel)]="data.fixed? '' : data[col.field]" [ngModelOptions]="{standalone: true}"
+                                            [disabled]="index!=inlandRemittanceSlabVatConfigs.length-1 && inlandRemittanceSlabVatConfigs.length>1 || data.fixed"
+                                            [ngClass]="{'invalid-datatable-row':(!data.fixed && (!data.maxVat || !(data.maxVat > data.minVat)))}"
+                                        />
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+                            <p-column header="Delete">
+                                <ng-template let-index="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <button type="text" (click)="vatSlabDelete()" pButton icon="ui-icon-delete" class="ui-button-danger" *ngIf="index==(inlandRemittanceSlabVatConfigs.length-1) && inlandRemittanceSlabVatConfigs.length>0"></button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+    </form>
+</div>

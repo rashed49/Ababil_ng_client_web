@@ -1,0 +1,88 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<mat-card style="margin-bottom:5px;">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-6">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Title</th>
+                    <td>{{demandDepositAccount.name}}</td>
+                </tr>
+                <tr>
+                    <th>Open Date</th>
+                    <td>{{demandDepositAccount.openingDate | date:'medium'}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Account No</th>
+                    <td>{{demandDepositAccount.number}}</td>
+                </tr>
+                <tr>
+                    <th>Last Transaction Date</th>
+                    <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lastClientTransactionDate | date:'medium')
+                        : "" }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</mat-card>
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+
+            <mat-card style="flex: 6; margin-right:5px;">
+
+                <mat-card-title>Charges:</mat-card-title>
+                <div class="ui-g">
+                    <p-dataTable [value]="charges" #dt>
+                        <p-column [style]="{'text-align':'left'}" field="chargeName" header="Name">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.chargeName}}
+                            </ng-template>
+                        </p-column>
+                        <p-column [style]="{'text-align':'right','width':'200px'}" field="chargeAmount" header="Amount">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.chargeAmount | number:'1.2-4'}}
+                            </ng-template>
+                        </p-column>
+                        <p-column [style]="{'text-align':'right','width':'200px'}" field="vatAmount" header="VAT">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.vatAmount | number:'1.2-4'}}
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 6;">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g ui-fluid form-group" [formGroup]="reactivationViewForm">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="comment">
+                                <label>Comment</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

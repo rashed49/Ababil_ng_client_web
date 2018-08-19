@@ -1,0 +1,77 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%; padding: 5px;">
+    <mat-card style="margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: column; width: 100%;">
+
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12">
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [ngModel]="glAccount.code" [attr.disabled]="'disabled'" />
+                            <label>Gl account number</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [ngModel]="glAccount.type" [attr.disabled]="'disabled'" />
+                            <label>Gl account type</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield-2">
+                            <input type="text" pInputText [ngModel]="glAccount.currencies" [attr.disabled]="'disabled'" />
+                            <label class="md-inputlabel-2">Gl account currency</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </mat-card>
+
+    <p-dataTable [value]="glAccountLimits" [responsive]="true" [rows]="20" [paginator]="true" sortField="branchId" rowGroupMode="rowspan">
+        <p-column field="branchId" header="Branch name">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{branches.get(data.branchId)}}
+            </ng-template>
+        </p-column>
+        <p-column field="currencyCode" header="Currency code" [style]="{'width':'120px','text-align':'center'}"></p-column>
+        <p-column field="balanceLimit" header="Balance limit" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.balanceLimit? (data.balanceLimit | number) : data.balanceLimit}}
+            </ng-template>
+        </p-column>
+        <p-column field="isMonthlyLimitAllowed" header="Monthly limit required" [style]="{'width':'150px','text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="center">
+                    {{data.isMonthlyLimitAllowed? 'True': 'False'}}
+                </div>
+            </ng-template>
+        </p-column>
+        <p-column field="monthlyLimit" header="Monthly limit" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyLimit? (data.monthlyLimit | number) : data.monthlyLimit}}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</div>
+
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

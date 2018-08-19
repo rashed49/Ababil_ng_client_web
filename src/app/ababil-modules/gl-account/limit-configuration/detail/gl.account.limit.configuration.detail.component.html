@@ -1,0 +1,130 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">GL account limit configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Add new" icon="ui-icon-plus" class="default-btn" (click)="addNew()" *ngIf="createMode"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <mat-card style="margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: column; width: 100%;">
+
+            <div class="ui-g ui-fluid">
+                <div class="ui-g-12">
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [ngModel]="glAccount.code" [attr.disabled]="'disabled'" />
+                            <label>Account number</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [ngModel]="glAccount.type" [attr.disabled]="'disabled'" />
+                            <label>Account type</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield-2">
+                            <p-dropdown [options]="currencies" [autoWidth]="false" [(ngModel)]="selectedCurrency" (onChange)="onCurrencyChange($event.value)"
+                                [disabled]="taskId || createMode" *ngIf="!localCurrency"></p-dropdown>
+                                <input type="text" pInputText [ngModel]="selectedCurrency" [attr.disabled]="'disabled'" *ngIf="localCurrency"/>
+                            <label class="md-inputlabel-2">Account currency</label>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </mat-card>
+
+    <p-dataTable [value]="filteredGlAccountLimits" [responsive]="true" [rows]="20" [paginator]="true" #dt>
+        <p-column field="branchId" header="Branch name" [filter]="true" filterPlaceholder="Search">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{branches.get(data.branchId)}}
+            </ng-template>
+            <ng-template pTemplate="filter">
+                <input class="ui-column-filter ui-inputtext ui-widget ui-state-default ui-corner-all" type="text" [(ngModel)]="filteredBranch"
+                    pInputText (input)="filterBranch()" />
+            </ng-template>
+        </p-column>
+
+        <p-column field="currencyCode" header="Currency code" [style]="{'width':'120px','text-align':'center'}"></p-column>
+
+        <p-column field="balanceLimit" header="Balance limit" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.balanceLimit? (data.balanceLimit | number) : data.balanceLimit}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="pint" pInputText [(ngModel)]="data[col.field]" />
+            </ng-template>
+        </p-column>
+
+        <p-column [style]="{'width':'100px'}" header="Edit">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <button type="text" (click)="edit(data)" pButton icon="ui-icon-create"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</div>
+
+<p-dialog header="Gl limit configuration edit" [(visible)]="showDialog" modal="modal" [responsive]="true" [width]="550" [minWidth]="200"
+    [closable]="false">
+    <form [formGroup]="editGlLimitConfigurationForm">
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="branchName" style="opacity: 1 !important;" />
+                        <label>Branch name</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="currencyCode" style="opacity: 1 !important;" />
+                        <label>Currency code</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pKeyFilter="pint" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                            pInputText formControlName="balanceLimit" />
+                        <label>Balance limit*</label>
+                        <div *ngIf="editGlLimitConfigurationForm.controls['balanceLimit'].errors && !editGlLimitConfigurationForm.controls['balanceLimit'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!editGlLimitConfigurationForm.controls['balanceLimit'].errors.max">Balance maximum limit crossed.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!editGlLimitConfigurationForm.controls['balanceLimit'].errors.min">Balance minimum limit is not fullfilled.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!editGlLimitConfigurationForm.controls['balanceLimit'].errors.required && !editGlLimitConfigurationForm.controls['balanceLimit'].errors.isNumber">Balance limit is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </form>
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-save" (click)="save()" label="Save"></button>
+        <button type="button" pButton icon="ui-icon-cancel" (click)="showDialog=false" label="Close"></button>
+    </p-footer>
+
+</p-dialog>
+
+<p-dialog [(visible)]="showDialogMessage" modal="modal" [responsive]="true" [width]="400" [minWidth]="200" [closable]="false">
+    <p>Limit configuration is not required for this general ledger account.</p>
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-cancel" (click)="redirectGlAccountPage()" label="Close"></button>
+    </p-footer>
+</p-dialog>

@@ -1,0 +1,17 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Reports</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" ></button>
+            
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<p-dataTable sortMode="multiple" [value]="reports" selectionMode="single" (onRowSelect)="onRowSelect($event)" #dt>
+    <p-column field="reportName" header="Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+   
+</p-dataTable>

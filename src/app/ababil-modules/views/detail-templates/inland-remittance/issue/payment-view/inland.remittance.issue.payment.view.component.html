@@ -1,0 +1,81 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)">
+</verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Issue Payment</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+    <mat-card style="margin-right: 5px;flex: 1">
+        <mat-card-title>Basic Information</mat-card-title>
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Product Type</th>
+                <td>{{inlandRemittanceProductType}}</td>
+            </tr>
+            <tr>
+                <th class="table-row">Instrument No</th>
+                <td>{{inlandRemittanceInstrumentPaymentInfo.instrumentNo}}</td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td>{{inlandRemittanceInstrumentPaymentInfo.currencyCode}}</td>
+            </tr>
+        </table>
+
+    </mat-card>
+</div>
+
+<div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+    <mat-card style="margin-right: 5px;flex: 1">
+        <mat-card-title>Basic Information</mat-card-title>
+
+        <form class="ui-g-12 ui-fluid">
+            <div class="ui-g-12 ui-md-3">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentPaymentInfo.payeeNid" readonly>
+                        <label>Payee NID</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentPaymentInfo.paymentMethod" readonly>
+                        <label>Payment Method</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-3 ">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentPaymentInfo.payeeAccountNo" readonly>
+                        <label>Payee Account No</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentPaymentInfo.paymentRemark" readonly>
+                        <label>Narration</label>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+</div>

@@ -1,0 +1,101 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">{{reportConfiguration?reportConfiguration.reportName:'Report Without Title'}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" [label]="showParameterForm?'Hide Parameter Form':'Show Parameter Form'" class="default-btn" (click)="showParameterForm=!showParameterForm"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>            
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card style="margin-bottom:0px;padding-bottom:0px;" [hidden]="!showParameterForm">
+<div class="ui-g" [formGroup]="reportForm" style="margin-bottom:0px">
+    <div class="ui-g-12 ui-md-12" style="margin-bottom:0px">
+        <div class="ui-g ui-fluid form-group" style="margin-bottom:0px">
+
+                        <div *ngFor="let formControl of reportConfiguration.reportFormControls" [class]="formControl.class" style="margin-bottom:0px">
+                                
+                                
+                                    <span class="md-inputfield" *ngIf="formControl.inputType==='text'">
+                                        <input type="text" pInputText [formControlName]="formControl.name">
+                                        <label>{{formControl.label}}</label>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.required">{{formControl.label}} is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.pattern">{{formControl.label}} pattern is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.minlength">{{formControl.label}} minimum length is {{formControl.minlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum length is {{formControl.maxlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} minimum value is {{formControl.min}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum value is {{formControl.max}}.</div>
+                                    </span>
+                                    
+
+                                    <span class="md-inputfield" *ngIf="formControl.inputType==='date'">
+                                        <!-- <p-calendar [formControlName]="formControl.name" hourFormat="12" showButtonBar="true" monthNavigator="true" yearNavigator="true"
+                                            yearRange="1900:2050" utc="true"></p-calendar> -->
+                                        <p-calendar [formControlName]="formControl.name" readonlyInput="true" hourFormat="12" showButtonBar="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate" dateFormat="dd-mm-yy"></p-calendar>    
+                                        <label>{{formControl.label}}</label>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.required">{{formControl.label}} is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.pattern">{{formControl.label}} pattern is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.minlength">{{formControl.label}} minimum length is {{formControl.minlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum length is {{formControl.maxlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} minimum value is {{formControl.min}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum value is {{formControl.max}}.</div>
+                                    </span>
+                                
+
+                                
+                                    <span class="md-inputfield" *ngIf="formControl.inputType==='number'">
+                                        <input type="number" pInputText [formControlName]="formControl.name">
+                                        <label>{{formControl.label}}</label>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.required">{{formControl.label}} is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.pattern">{{formControl.label}} pattern is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.minlength">{{formControl.label}} minimum length is {{formControl.minlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum length is {{formControl.maxlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} minimum value is {{formControl.min}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum value is {{formControl.max}}.</div>
+                                    </span>
+                                
+
+                                
+                                    <span class="md-inputfield-2" *ngIf="formControl.inputType==='dropdown'">
+                                        <p-dropdown [options]="dropDownValues.get(formControl.name)" filter="true" [autoWidth]="false" [formControlName]="formControl.name"></p-dropdown>
+                                        <label class="md-inputlabel-2">{{formControl.label}}</label>
+                                        <!-- <div *ngFor="let validator of formControl.validators">
+                                           <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors[validator.type]">{{validator.msg}}</div>
+                                        </div>                                          -->
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.required">{{formControl.label}} is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.pattern">{{formControl.label}} pattern is required.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.minlength">{{formControl.label}} minimum length is {{formControl.minlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum length is {{formControl.maxlength}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} minimum value is {{formControl.min}}.</div>
+                                        <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!reportForm.controls[formControl.name].pristine && reportForm.controls[formControl.name].errors && reportForm.controls[formControl.name].errors.maxlength">{{formControl.label}} maximum value is {{formControl.max}}.</div>
+                                    </span>                                
+
+                        </div>
+                                
+                        <div class="ui-g-12 ui-md-12" style="padding-left: 5px;">
+                            <div class="ui-g-12 ui-md-2">
+                                <button class="default-btn" pButton type="button" label="Show Report" (click)="showReport();"></button>
+                            </div>
+                            <div class="ui-g-12 ui-md-9">
+                                
+                            </div>    
+                        </div>
+        </div>    
+    </div>
+</div>
+
+<!-- <mat-card-actions>
+    <div>
+      <button mat-button style="color:teal" (click)="showReport()">Show Report</button>                       
+    </div>
+</mat-card-actions> -->
+
+</mat-card>
+
+<br/>
+
+<iframe id="pdf-iframe" type="application/pdf" class="ui-g-12 ui-md-12" style="height: 900px;" #pdfIframe></iframe>
+            

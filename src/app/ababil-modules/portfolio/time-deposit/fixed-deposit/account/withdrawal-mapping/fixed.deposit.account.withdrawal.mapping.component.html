@@ -1,0 +1,110 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Withdrawal Mapping</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveFixedDepositWithdrawalAdvice()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="ui-g ui-fluid">
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Basic Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Account No</th>
+                                <td>{{fixedDepositAccount.number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Account Status</th>
+                                <td>{{fixedDepositAccount.status}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Current Balance</th>
+                                <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                                    | number:'1.2-2') : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Lien Amount</th>
+                                <td>{{lienAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th>Quard Amonut</th>
+                                <td>{{quardAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Withdrawable Amount</th>
+                                <td class="ui-lg-3">
+                                    {{withdrawalAmount | number:'1.2-2' : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+
+    </div>
+    <form style="display: flex;flex-direction: row;width:100%;padding-bottom:12px" [formGroup]="fixedDepositWithdrawalAdviceForm">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title> Withdrawal Mapping Information</mat-card-title>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-3" style="margin-top: 18px">
+                    <span class="md-inputfield-2">
+                        <p-dropdown appendTo="body" [options]="depositAccounts" [autoWidth]="false" formControlName="depositAccountId"></p-dropdown>
+                        <label class="md-inputlabel-2">Account Number</label>
+                        <div *ngIf="fixedDepositWithdrawalAdviceForm.controls['depositAccountId'].errors && !fixedDepositWithdrawalAdviceForm.controls['depositAccountId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalAdviceForm.controls['depositAccountId'].errors.required">Deposit account is required.</div>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-3" style="margin-top: 18px">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" formControlName="withdrawalLimit">
+                        <label>Amount</label>
+                        <div *ngIf="fixedDepositWithdrawalAdviceForm.controls['withdrawalLimit'].errors && !fixedDepositWithdrawalAdviceForm.controls['withdrawalLimit'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalAdviceForm.controls['withdrawalLimit'].errors.required">Amonut is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <textarea style="opacity: 1;" pInputTextarea [(ngModel)]="amountInWords" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                            placeholder="Amount in words"></textarea>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="referenceNumber" readonly>
+                        <label>Reference Number</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <p-calendar appnedTo="body" [showIcon]="true" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050"
+                            readonlyInput="true" utc="true" [minDate]="today" formControlName="expiryDate"></p-calendar>
+                        <label>Expiry Date</label>
+                        <div *ngIf="fixedDepositWithdrawalAdviceForm.controls['expiryDate'].errors && !fixedDepositWithdrawalAdviceForm.controls['expiryDate'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalAdviceForm.controls['expiryDate'].errors.required">Expire date is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>

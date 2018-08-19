@@ -1,0 +1,20 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approval flow profiles</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Add approval flow" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refresh()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<p-dataTable [value]="approvalflowProfiles" selectionMode="single" (onRowSelect)="onRowSelect($event)" #dt>
+    <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search"></p-column>
+    <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+</p-dataTable>
+
+
+<approvalflow-form #form (onSave)="onSave($event)" [formData]="approvalflowProfile" #approvalFlowDialog></approvalflow-form>

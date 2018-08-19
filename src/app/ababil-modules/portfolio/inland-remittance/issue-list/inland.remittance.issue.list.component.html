@@ -1,0 +1,114 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Issue List</span>
+        <div class="ababil-toolbar-button-group">
+            <!-- <button pButton type="button" label="Refund" icon="ui-icon-undo" class="default-btn" *ngIf="displayIssueActionButtons" (click)="refundRemittanceIssue(selectedRow)"></button> -->
+            <button pButton type="button" label="ReIssue" icon="ui-icon-undo" class="default-btn" *ngIf="displayReissueActionButton"
+                (click)="RemittanceReissue()"></button>
+            <button pButton type="button" label="Lost" icon="ui-icon-delete" class="default-btn" *ngIf="displayIssueActionButtons" (click)="lostInlandRemittanceIssue(selectedRow)"></button>
+            <button pButton type="button" label="Payment" icon="ui-icon-attach-money" class="default-btn" (click)="updateInlandRemittanceIssue(selectedRow)"
+                *ngIf="displayIssueActionButtons"></button>
+            <button pButton type="button" label="View" icon="ui-icon-view-headline" class="default-btn" (click)="viewIssueData(selectedRow)"
+                *ngIf="selectedRow"></button>
+            <button type="button" label="Search" pButton icon="ui-icon-search" (click)="opp.show($event)"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="inlandRemittanceInstrument" [tableStyle]="{'word-break':'break-all'}" selectionMode="single" [paginator]="true"
+            [rows]="20" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadInlandRemittanceIssuesLazily($event)" [(selection)]="selectedRow"
+            (onRowSelect)="onRowSelect($event)">
+            <p-column [sortable]="true" field="instrumentNo" header=" instrument No " [style]="{'text-align':'center','width':'120px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="purchaserName" header=" Purchaser Name" [style]="{'text-align':'left','width':'220px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="purchaserMobile" header=" Purchase mobile " [style]="{'text-align':'left','width':'160px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="payeeName" header=" Payee Name" [style]="{'text-align':'left','width':'220px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="payeeMobile" header=" Payee mobile" [style]="{'text-align':'left','width':'160px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="purchaseAmount" header="Purchase Amount" [style]="{'text-align':'right','width':'180px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="currencyCode" header="Currency" [style]="{'text-align':'left','width':'140px','vertical-align': 'top'}"></p-column>
+            <p-column [sortable]="true" field="status" header=" Status" [style]="{'text-align':'left','vertical-align': 'top'}"></p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<p-dialog header="Payment Issue " positionTop="10" [closable]="false" [(visible)]="displaypaymentIssue" modal="modal" [responsive]="true"
+    [width]="600">
+    <payment-issue #paymentIssue></payment-issue>
+    <div class="dialogButton">
+        <button type="button" class="default-btn " pButton icon="ui-icon-save" (click)="saveInlandRemittancePaymentIssue()" label="Save"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" (click)="cancelPaymentIssue()" label="Cancel"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Lost Issue" positionTop="30" [closable]="false" [(visible)]="displayLostIssue" modal="modal" [responsive]="true"
+    [width]="400">
+    <lost-issue #lostIssue></lost-issue>
+    <div class="dialogButton">
+        <button type="button" class="default-btn" pButton icon="ui-icon-delete" label="Lost" (click)="saveLostInlandRemittanceIssue()"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" label="Cancel" (click)="cancelLostIssue()"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Refund Issue" [closable]="false" positionTop="30" [(visible)]="displayRefundIssue" modal="modal" [responsive]="true"
+    [width]="400">
+    <refund-issue #refundIssue></refund-issue>
+    <div class="dialogButton">
+        <button type="button" class="default-btn" pButton icon="ui-icon-undo" label="Refund" (click)="saveRefundInladRemittanceIssue()"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" label="Cancel" (click)="cancelRefundIssue()"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="View Issue" positionTop="30" [(visible)]="displayViewIssue" modal="modal" [responsive]="true" [width]="800"
+    [height]="400">
+    <view-issue #viewIssue></view-issue>
+</p-dialog>
+
+<p-overlayPanel #opp [style]="{'width':'600px'}">
+    <div [formGroup]="InlandIssueSearchForm">
+        <br/>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="instrumentNo">
+                    <label>Instrument Number</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="currencyCode">
+                    <label>Currency Code</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="purchaserMobile">
+                    <label>purchaser Mobile</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="purchaserNid">
+                    <label>Purchaser NID</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="payeeMobile">
+                    <label>Payee Mobile</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="status">
+                    <label>Status</label>
+                </span>
+            </div>
+        </div>
+        <button pButton type="button" label="Search" class="primary-btn" style="float:right;margin-bottom: 10px" (click)="inlandRemittanceIssuesearch(null);opp.hide($event)"></button>
+    </div>
+</p-overlayPanel>

@@ -1,0 +1,215 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Customer - Organization</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="position: relative;padding-top:10px">
+
+    <form class="ui-fluid form-group">
+        <mat-tab-group>
+            <mat-tab label="Organization Information">
+                <br/>
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                        <mat-card-title>Basic Information:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g ui-fluid form-group">
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                            <input name="name" type="text" pInputText [(ngModel)]="organization.name" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Company Name*</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield-2">
+                                            <p-dropdown name="organizationTypeId" [options]="organizationTypes | organizationTypePipe" [autoWidth]="false" [(ngModel)]="organization.organizationTypeId"
+                                                [ngModelOptions]="{standalone: true}" disabled></p-dropdown>
+                                            <label class="md-inputlabel-2">Organization Type*</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="phonenumber" type="text" pInputText [(ngModel)]="organization.contactInformation.phoneNumber" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Phone Number</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="mobilenumber" type="text" pInputText [(ngModel)]="organization.contactInformation.mobileNumber" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Mobile Number*</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="altmobileumber" type="text" pInputText [(ngModel)]="organization.contactInformation.alternateMobileNumber" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Alternate Number</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="email" type="email" pInputText [(ngModel)]="organization.contactInformation.email" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Email</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="fax" type="text" pInputText [(ngModel)]="organization.contactInformation.fax" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Fax</label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 5; margin-right: 5px;" *ngIf="owners.length>0">
+                        <mat-card-title>Owners:</mat-card-title>
+                        <p-scrollPanel [style]="{width: '100%', height: '260px'}">
+                            <div style="padding:1em;line-height:1.5">
+                                <div *ngFor="let owner of owners">
+                                    <div class="card">
+                                        <div class="ui-g">
+                                            <div class="ui-g-3">
+                                                <img [src]="imageApiUrl+'/'+owner.id+'/'+'image'" width="80" style="position: absolute;top: 10px;left: 10px;" alt="Image not found"
+                                                    onerror="this.onerror=null;this.src='assets/images/noimage.jpg';">
+                                            </div>
+                                            <div class="ui-g-6" style="padding-top: 10px;">
+                                                <span style="font-size: 16px;font-weight: bold">{{owner.name}}</span>
+                                                <br/>
+                                                <span style="font-size: 12px;">{{owner.subjectType}}</span>
+                                                <br/>
+                                                <span>
+                                                    <a (click)="view(owner)" style="cursor: pointer;color:teal;text-decoration: underline">View</a>
+                                                </span>
+                                            </div>
+                                            <div class="ui-g-3" style="padding-left: 11px;padding-top: 0px;">
+                                                <br/>
+                                                <div style="color: teal;font-size: 20px;font-weight: bold">{{owner.sharePercentage}}%</div>
+                                                <span style="color: teal;font-size: 12px;">Share</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-scrollPanel>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                        <mat-card-title>Business Details:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="permanentManpower" type="text" pInputText [(ngModel)]="organization.businessDetails.permanentManpower" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Permanent Employees</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="contractualManpower" type="text" pInputText [(ngModel)]="organization.businessDetails.contractualManpower" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Contractual Employees</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="netWorth" type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                                [(ngModel)]="organization.businessDetails.netWorth" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Net Worth</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="monthlyTurnover" type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                                [(ngModel)]="organization.businessDetails.monthlyTurnover" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Monthly Turnover</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield-2">
+                                            <p-multiSelect [options]="typeOfBusiness | typeOfBusinessPipe" [(ngModel)]="organization.businessDetails.typeOfBusinesses"
+                                                [ngModelOptions]="{standalone: true}" disabled></p-multiSelect>
+                                            <label class="md-inputlabel-2">Type Of Business</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input name="otherInformation" type="text" pInputText [(ngModel)]="organization.businessDetails.otherInformation" [ngModelOptions]="{standalone: true}"
+                                                readonly>
+                                            <label>Other Information</label>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 5; margin-right: 5px;">
+                        <mat-card-title>Present Address:</mat-card-title>
+                        <address-component [address]='businessAddress' [viewMode]='viewMode' #businessAddressComponent></address-component>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                        <mat-card-title>Factory Address:</mat-card-title>
+                        <address-component [address]='factoryAddress' [viewMode]='viewMode' #factoryAddressComponent></address-component>
+                    </mat-card>
+
+                    <mat-card style="flex: 5; margin-right: 5px;">
+                        <mat-card-title>Registered Address:</mat-card-title>
+                        <address-component [address]='registeredAddress' [viewMode]='viewMode' #registeredAddressComponent></address-component>
+                    </mat-card>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Document">
+                <br/>
+                <document-view-component [clientId]="clientId" [profileCode]="profileCode" #docComponent></document-view-component>
+            </mat-tab>
+        </mat-tab-group>
+    </form>
+</div>
+
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

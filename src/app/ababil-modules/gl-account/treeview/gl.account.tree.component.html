@@ -1,0 +1,420 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<gl-account-lookup [display]="glAccountLookUpDisplay" [resultType]="glAccountLookUpMode" (onSelect)="onSearchResult($event)" (onClose)="onSearchModalClose($event)"></gl-account-lookup>
+<p-contextMenu #cm [model]="selectedNode?(selectedNode.data.gl==null?rootNodeMenus:(selectedNode.data.gl.parent?parentNodeMenus:childNodeMenus)):rootNodeMenus" [hidden]="!showContextMenu"></p-contextMenu>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">GL account tree view</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Configure Profit Rate" icon="ui-icon-plus" class="default-btn" (click)="addProfitRate()" *ngIf="!taskId"></button>
+            <button pButton type="button" label="Limit configuration" icon="ui-icon-ac-unit" class="default-btn" (click)="limitConfiguration()" *ngIf="!taskId"></button>
+            <button pButton type="button" label="Subsidiary Ledger" icon="ui-icon-plus" class="default-btn" (click)="addSubsidiaryLedger()" *ngIf="!taskId"></button>
+
+            <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button pButton type="button" label="Search" icon="ui-icon-search" class="default-btn" (click)="searchGlAccount('GL_ACCOUNT_PATH')"></button> 
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refresh()"></button>           
+        </div>
+    </div>
+</div>
+
+<br/>
+
+<div class="row">
+    <div class="ui-g-12">
+         <div style="display: flex;flex-direction: row;width:100%;">             
+
+            <div style="flex: 2;padding-bottom: 0px; margin-right: 5px;">                           
+                <p-tree [value]="glAccountTree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)" (onNodeContextMenuSelect)="nodeSelect($event)" (onNodeExpand)="loadNodes($event)"
+                    [contextMenu]="cm" [style]="{'width':'380px','height':'672px'}" #glTreeComponent *ngIf="!taskId"></p-tree>
+                <p-tree [value]="glAccountTree" selectionMode="single" [(selection)]="selectedNode" (onNodeSelect)="nodeSelect($event)"
+                    [style]="{'width':'380px','height':'550px'}" #glTreeComponent *ngIf="!!taskId"></p-tree>
+            </div>
+
+             <form style="flex: 8;padding-bottom: 0px;" #glAccountForm="ngForm"> 
+                   <mat-card style="margin-bottom: 7px;">
+
+                    <mat-card-title>Basic Configuration:</mat-card-title>
+                                                      
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                               <input type="text" required pInputText [(ngModel)] ="selectedNode.data.gl.code" pKeyFilter="pint" [minlength]="generalLedgerCodeLengthConfiguration" [maxlength]="generalLedgerCodeLengthConfiguration"
+                                                      #code="ngModel" name="code" (input)="glAccountChangeByUserInput(codeInputField)" [disabled]="selectedNode.data.gl.id!=null && selectedNode.data.gl.id!=0" #codeInputField>
+                                               <label>Account Code*</label>
+                                               <div *ngIf="code.errors && !code.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!code.errors.required">Code is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!code.errors.pattern">Code format is invalid.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!code.errors.minlength">Code length should be {{generalLedgerCodeLengthConfiguration}} characters.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!code.errors.maxlength">Code length should be {{generalLedgerCodeLengthConfiguration}} characters.</div>
+                                               </div>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                               <input type="text" required maxLength="100" pInputText [(ngModel)] ="selectedNode.data.gl.name" (input)="(selectedNode.data.gl && selectedNode.data.gl.name && selectedNode.data.gl.name.trim()!='')?selectedNode.label=selectedNode.data.gl.name:selectedNode.label='UN-NAMED NODE';glAccountChangeByUserInput(nameInputField);" 
+                                                      #name="ngModel" name="name" #nameInputField>
+                                               <label>Account Name*</label>
+                                               <div *ngIf="name.errors && !name.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!name.errors.required">Name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!name.errors.pattern">Name format is invalid.</div>
+                                               </div>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-2">
+                                            <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.parent" 
+                                                        #parent="ngModel" name="parent" (onChange)="glAccountChangeByUserInput(parentCheckBox)" [disabled]="selectedNode.children && selectedNode.children.length>0" #parentCheckBox></p-checkbox>
+                                                   <span class="taskName">Parent</span>                                                  
+                                            </span>
+                                        </div>
+                                                                               
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown required [options]="glTypes" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.type" 
+                                                      (onChange)="glAccountChangeByUserInput(glTypeDropDown)" appendTo="body" #glType="ngModel" name="glType" #glTypeDropDown></p-dropdown>
+                                                <label class="md-inputlabel-2">Type*</label>
+                                                <div *ngIf="glType.errors && !glType.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!glType.errors.required">Gl type is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!glType.errors.pattern">Gl type is invalid.</div>
+                                                </div>  
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                 <p-dropdown required [options]="(selectedNode.data.gl.accountNature=='ASSET'||selectedNode.data.gl.accountNature=='EXPENDITURE')?glSubTypesForAssetHead:glSubTypesForLiabilityHead" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.subType" 
+                                                       (onChange)="glAccountChangeByUserInput(glSubTypeDropDown)" appendTo="body" #glSubType="ngModel" name="glSubType" #glSubTypeDropDown></p-dropdown>
+                                                 <label class="md-inputlabel-2">Sub type*</label>
+                                                 <div *ngIf="glSubType.errors && !glSubType.pristine">
+                                                     <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!glSubType.errors.required">Gl subtype is required.</div>
+                                                     <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!glSubType.errors.pattern">Gl subtype is invalid.</div>
+                                                 </div>  
+                                            </span>
+                                        </div>                                        
+
+                                        <!-- <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown required [options]="leafTypes" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.leafType" 
+                                                        (onChange)="glAccountChangeByUserInput(leafTypeDropDown)" [disabled]="selectedNode.children && selectedNode.children.length>0" appendTo="body" #leafType="ngModel" name="leafType" #leafTypeDropDown></p-dropdown>
+                                                <label class="md-inputlabel-2">Leaf type*</label>
+                                                <div *ngIf="leafType.errors && !leafType.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!leafType.errors.required">Leaf type is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!leafType.errors.pattern">Leaf type is invalid.</div>
+                                                </div>  
+                                            </span>
+                                        </div>                                         -->
+
+                                        <div class="ui-g-12 ui-md-4" *ngIf="selectedNode.data.gl.id">
+                                            <span class="md-inputfield-2">
+                                                  <p-dropdown required [options]="statuses" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.status" 
+                                                        (onChange)="glAccountChangeByUserInput(statusDropDown)" appendTo="body" #status="ngModel" name="status" #statusDropDown></p-dropdown>
+                                                  <label class="md-inputlabel-2">Status*</label>
+                                                  <div *ngIf="status.errors && !status.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!status.errors.required">Status is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!status.errors.pattern">Status is invalid.</div>
+                                                  </div>  
+                                            </span>
+                                        </div>
+
+                                        <!-- <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                               <input type="text" required pInputText [(ngModel)] ="selectedNode.data.gl.sortOrder" 
+                                                      #sortOrder="ngModel" name="sortOrder" pKeyFilter="pint" (input)="glAccountChangeByUserInput(sortOrderInputField)" maxlength="4" #sortOrderInputField>
+                                               <label>Sort order*</label>
+                                               <div *ngIf="sortOrder.errors && !sortOrder.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!sortOrder.errors.required">Sort order is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!sortOrder.errors.pattern">Sort order is invalid.</div>
+                                               </div>
+                                            </span>
+                                        </div> -->
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                  <p-dropdown required [options]="branchRestrinction" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.branchRestriction" 
+                                                        (onChange)="glAccountChangeByUserInput(branchRestrictionDropDown)" appendTo="body" #branchRestriction="ngModel" name="branchRestriction" #branchRestrictionDropDown></p-dropdown>
+                                                  <label class="md-inputlabel-2">Transaction scope*</label>
+                                                  <div *ngIf="branchRestriction.errors && !branchRestriction.pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!branchRestriction.errors.required">Branch restriction is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!branchRestriction.errors.pattern">Branch restriction is invalid.</div>
+                                                  </div>  
+                                            </span>
+                                        </div>
+                                        
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                  <p-multiSelect resetFilterOnHide="true" [required]="branchRestriction.value == 'SPECIFIC_BRANCH'" [options]="branches" [(ngModel)] ="selectedNode.data.gl.branches" 
+                                                        (onChange)="glAccountChangeByUserInput(branchesMultiSelect)" appendTo="body" #branch="ngModel" name="branch" [disabled]="branchRestriction.value!='SPECIFIC_BRANCH'" #branchesMultiSelect></p-multiSelect>
+                                                  <label class="md-inputlabel-2">Branches*</label>
+                                                  <div *ngIf="branch.errors && !branch.pristine">
+                                                      <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!branch.errors.required">Branch is required.</div>
+                                                      <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!branch.errors.pattern">Branch is invalid.</div>
+                                                  </div>  
+                                            </span>
+                                        </div>
+
+                                        
+                                            
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield-2">
+                                                    <p-dropdown required [options]="currencyRestrictions" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.currencyRestriction" 
+                                                        (onChange)="glAccountChangeByUserInput(currencyTypeDropDown)" appendTo="body" #currencyRestriction="ngModel" name="currencyRestriction" #currencyTypeDropDown></p-dropdown>
+                                                    <label class="md-inputlabel-2">Currency type*</label>
+                                                    <div *ngIf="currencyRestriction.errors && !currencyRestriction.pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!currencyRestriction.errors.required">Currency restriction is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!currencyRestriction.errors.pattern">Currency restriction is invalid.</div>
+                                                    </div>  
+                                                </span>
+                                            </div>
+                                        
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield-2">
+                                                    <p-multiSelect resetFilterOnHide="true" [required]="currencyRestriction.value == 'MULTIPLE_CURRENCY'" [options]="currencies" [(ngModel)] ="selectedNode.data.gl.currencies" 
+                                                        (ngModelChange)="glAccountChangeByUserInput(currenciesMultiSelect)" appendTo="body" #currencyCode="ngModel" name="currencyCode" [disabled]="currencyRestriction.value != 'MULTIPLE_CURRENCY'" #currenciesMultiSelect></p-multiSelect>
+                                                    <label class="md-inputlabel-2">Currencies*</label>
+                                                    <div *ngIf="currencyCode.errors && !currencyCode.pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!currencyCode.errors.required">Currencies is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!currencyCode.errors.pattern">Currencies is invalid.</div>
+                                                    </div>  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield-2">
+                                                    <p-dropdown [options]="generalLedgerCategories" [autoWidth]="false" [(ngModel)] ="selectedNode.data.gl.categoryId" 
+                                                        (onChange)="glAccountChangeByUserInput(categoryId)" appendTo="body" #categoryId="ngModel" name="categoryId" #categoryId></p-dropdown>
+                                                    <label class="md-inputlabel-2">Category*</label>
+                                                    <div *ngIf="categoryId.errors && !categoryId.pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!categoryId.errors.required">Gl category is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!categoryId.errors.pattern">Gl category is invalid.</div>
+                                                    </div>  
+                                                </span>
+                                            </div>
+                                        
+
+
+                                            
+                                            <div class="ui-g-12 ui-md-12">
+                                                
+                                            <!-- <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.parent" 
+                                                        #parent="ngModel" name="parent" (onChange)="glAccountChangeByUserInput(parentCheckBox)" [disabled]="selectedNode.children && selectedNode.children.length>0" #parentCheckBox></p-checkbox>
+                                                   <span class="taskName">Parent</span>                                                  
+                                                </span>
+                                            </div> -->
+                                            
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isDirectPostingAllowed" 
+                                                        #directPostingAllowed="ngModel" name="directPostingAllowed" [disabled]="parent.value==null || parent.value==true" (onChange)="glAccountChangeByUserInput(directPostingAllowedCheckBox)" #directPostingAllowedCheckBox></p-checkbox>
+                                                   <span class="taskName">Direct posting</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isDirectPostingDebitAllowed" 
+                                                        #directPostingDebitAllowed="ngModel" name="directPostingDebitAllowed" (onChange)="glAccountChangeByUserInput(directPostingDebitAllowedCheckBox)" [disabled]="directPostingAllowed.value==null || directPostingAllowed.value==false" #directPostingDebitAllowedCheckBox></p-checkbox>
+                                                   <span class="taskName">Debit</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isDirectPostingCreditAllowed" 
+                                                        #directPostingCreditAllowed="ngModel" name="directPostingCreditAllowed" (onChange)="glAccountChangeByUserInput(directPostingCreditAllowedCheckBox)" [disabled]="directPostingAllowed.value==null || directPostingAllowed.value==false" #directPostingCreditAllowedCheckBox></p-checkbox>
+                                                   <span class="taskName">Credit</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isBackPeriodTransactionAllowed" 
+                                                        #isBackPeriodTransactionAllowed="ngModel" name="isBackPeriodTransactionAllowed" (onChange)="glAccountChangeByUserInput(isBackPeriodTransactionAllowedCheckBox)" #isBackPeriodTransactionAllowedCheckBox></p-checkbox>
+                                                   <span class="taskName">Value date transaction</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                   <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isNegativeBalanceAllowed" 
+                                                        #isNegativeBalanceAllowed="ngModel" name="isNegativeBalanceAllowed" (onChange)="glAccountChangeByUserInput(isNegativeBalanceAllowedCheckBox)" [disabled]="selectedNode.data.gl.type=='PRODUCT_GL'" #isNegativeBalanceAllowedCheckBox></p-checkbox>
+                                                   <span class="taskName">Negative balance</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isProfitCalculationAllowed" 
+                                                        #isProfitCalculationAllowed="ngModel" name="isProfitCalculationAllowed" (onChange)="glAccountChangeByUserInput(isProfitCalculationAllowedCheckBox)" [disabled]="selectedNode.data.gl.type=='PRODUCT_GL'" #isProfitCalculationAllowedCheckBox></p-checkbox>
+                                                    <span class="taskName">Profit applicable</span>                                                   
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isTemporary" 
+                                                        #isTemporary="ngModel" name="isTemporary" (onChange)="glAccountChangeByUserInput(isTemporaryCheckBox)" [disabled]="selectedNode.data.gl.type=='PRODUCT_GL'" #isTemporaryCheckBox></p-checkbox>
+                                                    <span class="taskName">Temporary GL</span>                                                   
+                                                </span>
+                                            </div>                                           
+
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isLimitRequired" 
+                                                        #isLimitRequired="ngModel" name="isLimitRequired" (onChange)="glAccountChangeByUserInput(isLimitRequiredCheckBox)" [disabled]="selectedNode.data.gl.type=='PRODUCT_GL'" #isLimitRequiredCheckBox></p-checkbox>
+                                                    <span class="taskName">Limit</span>                                                   
+                                                </span>
+                                            </div> 
+                                            
+                                            <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isIbtaRequired" 
+                                                        #ibtaRequired="ngModel" name="ibtaRequired" (onChange)="glAccountChangeByUserInput(ibtaRequiredCheckBox)" [disabled]="selectedNode.data.gl.subType != 'INTER_BRANCH'" #ibtaRequiredCheckBox></p-checkbox>
+                                                    <span class="taskName">IBTA</span>                                                   
+                                                </span>
+                                            </div> 
+
+                                            </div>                                           
+                                        
+                                    </div>
+                                </div>
+                            </div>                      
+                </mat-card>
+
+                <div style="display: flex;flex-direction: row;width:100%;">
+
+                <mat-card style="margin-right: 5px;margin-bottom: 7px;flex: 2;padding-bottom: 0px;">
+
+                    <mat-card-title style="margin-bottom:0px">Affairs Report:</mat-card-title>                   
+                    
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g ui-fluid form-group">
+
+                                <div class="ui-g-12 ui-md-12">                               
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isShowable" 
+                                                        #isShowable="ngModel" name="isShowable" (onChange)="glAccountChangeByUserInput(isShowableCheckbox)" #isShowableCheckbox></p-checkbox>
+                                                    <span class="taskName">Showable</span>                                                   
+                                                </span>
+                                            </div>                                                  
+                                            
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isBalanceShowable" 
+                                                        #isBalanceShowable="ngModel" name="isBalanceShowable" (onChange)="glAccountChangeByUserInput(isBalanceShowAbleCheckBox)" #isBalanceShowAbleCheckBox></p-checkbox>
+                                                    <span class="taskName">Balance showable</span>                                                  
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isBold" 
+                                                        #isBold="ngModel" name="isBold" (onChange)="glAccountChangeByUserInput(isBoldCheckBox)" #isBoldCheckBox></p-checkbox>
+                                                    <span class="taskName">Label bold</span>                                                  
+                                                </span>
+                                            </div>                                                          
+
+                                           
+
+                                            <div class="ui-g-12 ui-md-12"></div>
+
+                                            <!-- <div class="ui-g-12 ui-md-4">
+                                                <span class="md-inputfield">
+                                                    <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isSbsCode" 
+                                                        #isSbsCode="ngModel" name="isSbsCode" (onChange)="glAccountChangeByUserInput()"></p-checkbox>
+                                                    <span class="taskName">Sbs Code</span>                                                  
+                                                </span>
+                                            </div> -->
+                                            
+                                            <!-- <div class="ui-g-12 ui-md-12">
+                                                <span class="md-inputfield">
+                                                        <input type="text" [(ngModel)]="switchableParentGl.name" name="switchableParentGlName" [disabled]="true" pInputText>
+                                                        <label>Switchable General Account Name*</label>
+                                                </span>
+                                            </div> -->
+
+                                            <!-- <div class="ui-g-12 ui-md-9">
+                                                <span class="md-inputfield">
+                                                    
+                                                    <label>Switchable Parent:{{+switchableParentGl.id?' '+switchableParentGl.name+'('+switchableParentGl.code+')':''}}</label>
+                                                </span>
+                                            </div> -->
+
+                                            <!-- <div class="ui-g-12 ui-md-3">
+                                                <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="searchGlAccount('GL_ACCOUNT')"></button>                                                
+                                                <button pButton type="button" icon="ui-icon-cancel" class="default-btn" (click)="removeSwicthableParentGl()"></button>
+                                            </div> -->
+                                            <div class="ui-g-12 ui-md-12">
+                                                <div class="ui-inputgroup">
+                                                    <button pButton type="button" icon="ui-icon-search" (click)="searchGlAccount('GL_ACCOUNT')"></button>
+                                                    <span class="md-inputfield">
+                                                         <input type="text" [value]="switchableParentGl.id?switchableParentGl.name+'('+switchableParentGl.code+')':'Switchable Parent'" pInputText readonly="true">
+                                                         <label *ngIf="switchableParentGl.id">Switchable Parent</label>        
+                                                    </span>                                                   
+                                                    <button pButton type="button" icon="ui-icon-clear" (click)="removeSwicthableParentGl()"></button>         
+                                                </div>
+                                            </div>    
+
+                                           
+                                        
+                                </div>                                       
+                            </div>                                        
+                        </div>
+                    </div>
+                </mat-card>
+
+                <mat-card style="margin-bottom: 7px;flex: 1;padding-bottom: 0px;">
+
+                    <mat-card-title style="margin-bottom:0px">Others:</mat-card-title> 
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g ui-fluid form-group">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isCleanCash" 
+                                          #isCleanCash="ngModel" name="isCleanCash" (onChange)="glAccountChangeByUserInput(isCleanCashCheckBox)" #isCleanCashCheckBox></p-checkbox>
+                                <span class="taskName">Clean cash</span>                                                  
+                            </span>
+                        </div>
+                                            
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <p-checkbox binary="true" [(ngModel)] ="selectedNode.data.gl.isSupplementary" #isSupplementary="ngModel" name="isSupplementary" (onChange)="glAccountChangeByUserInput(isSupplementaryCheckBox)" #isSupplementaryCheckBox></p-checkbox>
+                                <span class="taskName">Supplementary</span>                                                  
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="alphanum" [maxLength]="20" [minLength]="20" [(ngModel)] ="selectedNode.data.gl.sbsCode" #sbsCode="ngModel" name="sbsCode" (input)="glAccountChangeByUserInput(sbsCodeInputField)" #sbsCodeInputField>
+                                <label>SBS Code</label>                                              
+                            </span>
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+
+                </mat-card>
+
+                </div>
+
+                <comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component> 
+            </form>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>
+

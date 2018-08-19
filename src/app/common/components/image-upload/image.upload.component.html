@@ -1,0 +1,53 @@
+<p-dialog header="Select profile photo" [(visible)]="show" (onHide)="hideModal()" appendTo="body" [modal]="true" [responsive]="false"
+    [resizable]="false" [width]="870" [height]="500">
+
+    <mat-tab-group (selectedTabChange)="tabChanged($event)" [hidden]="hideTabGroup">
+        <mat-tab label="Upload photo">
+            <div style="display: flex; flex-direction: column; width: 100%;">
+
+                <div class="image-upload" style="flex: 4.5; text-align:center">
+                    <label for="file-input" class="button" style="margin-top: 120px;">
+                        Select a photo from your computer
+                    </label>
+
+                    <input id="file-input" type="file" (change)="fileChangeEvent($event)" />
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Webcam">
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="flex: 5; text-align:center" *ngIf="!optionWebcam">
+                    <button pButton type="button" icon="ui-icon-camera-alt" class="default-btn" pTooltip="Capture picture" (click)="runWebcam()"
+                        style="margin-top: 120px; width:100px; height:100px; font-size: 280% !important; box-shadow: none;"></button>
+                </div>
+
+                <div style="flex: 5; text-align:center" *ngIf="optionWebcam">
+                    <canvas id="canvas" style="display:none;" width="350" height="350" #canvas></canvas>
+                    <ababil-webcam [show]="optionWebcam" #webcam></ababil-webcam>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Photos of you">
+
+        </mat-tab>
+    </mat-tab-group>
+
+
+    <div class="container" style="display: flex; flex-direction: row; width: 100%;" [hidden]="!showCropper">
+        <div class="cropper-container" style="flex: 6;">
+            <image-cropper [imageChangedEvent]="imageChangedEvent" [maintainAspectRatio]="true" [aspectRatio]="1/1" format="png" (imageCroppedBase64)="imageCropped($event)"
+                (imageLoaded)="imageLoaded()" (loadImageFailed)="loadImageFailed()" [imageBase64]="imageUrl"></image-cropper>
+        </div>
+
+        <div style="flex: 4; margin-top: 5px; margin-left: 28px;">
+            <img [src]="croppedImage" [width]="270" [height]="270" />
+        </div>
+    </div>
+
+    <p-footer *ngIf="optionWebcam || showCropper" style="height: 30px !important;">
+        <button pButton type="button" class="default-btn" label="Capture" icon="ui-icon-center-focus-weak" (click)="capture()" *ngIf="optionWebcam && !showCropper"></button>
+        <button pButton type="button" class="default-btn" label="Save" icon="ui-icon-save" (click)="done()" *ngIf="showCropper"></button>
+    </p-footer>
+</p-dialog>

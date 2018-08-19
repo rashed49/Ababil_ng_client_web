@@ -1,0 +1,169 @@
+<div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Customer Name</th>
+                        <td class="ui-lg-3">{{customer.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{demandDepositAccount.number}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Code</th>
+                        <td>{{productDetails.code}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Open Date</th>
+                        <td>{{demandDepositAccount.openingDate | date:'medium'}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Currency Code</th>
+                        <td class="ui-lg-3">{{demandDepositAccount.currencyCode}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account Status</th>
+                        <td>{{demandDepositAccount.status}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Description</th>
+                        <td>{{productDetails.description}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Last Transaction Date</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lastClientTransactionDate | date:'medium')
+                            : "" }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+        <mat-tab-group [selectedIndex]="0">
+    <mat-tab label="Balance information">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Current Balance</th>
+                        <td class="ui-lg-3">{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.currentBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Clearing Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.clearingAmount | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Minimum Balance</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.minimumBalance | number:'1.2-2')
+                            :""}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Available Balance</th>
+                        <td class="ui-lg-3">{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.availableBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Block Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.blockAmount | number:'1.2-2') :""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Lien Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lienAmount | number:'1.2-2') :
+                            ""}}
+                        </td>
+                    </tr>
+                </table>
+                <br>
+            </div>
+        </div>
+    </mat-tab>
+
+
+
+    <mat-tab label="Contact information" >
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Phone number</th>
+                        <td class="ui-lg-3">{{ (contactInformation.phoneNumber !== null) ? (contactInformation.phoneNumber) : "" }}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Mobile number</th>
+                        <td class="ui-lg-3">{{(contactInformation.mobileNumber !== null) ? (contactInformation.mobileNumber) : ""}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Alternate mobile number</th>
+                        <td class="ui-lg-3">{{(contactInformation.alternateMobileNumber !== null) ? (contactInformation.alternateMobileNumber)
+                            : ""}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Email</th>
+                        <td class="ui-lg-3">{{(contactInformation.email !== null) ? (contactInformation.email) : ""}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Fax</th>
+                        <td class="ui-lg-3">{{ (contactInformation.fax !== null) ? (contactInformation.fax) : "" }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Address</th>
+                        <td class="ui-lg-3">{{address.addressLine}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Country</th>
+                        <td class="ui-lg-3">{{country.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Division</th>
+                        <td class="ui-lg-3">{{division.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">District</th>
+                        <td class="ui-lg-3">{{district.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Upazilla</th>
+                        <td class="ui-lg-3">{{upazilla.name}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Bank notice">
+        <bank-notice-details [accountId]="accountId"></bank-notice-details>
+    </mat-tab>
+
+    <mat-tab label="Special instruction">
+        <common-special-instruction [accountId]="accountId"></common-special-instruction>
+    </mat-tab>
+
+</mat-tab-group>

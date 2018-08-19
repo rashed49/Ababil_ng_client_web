@@ -1,0 +1,54 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approval flow task detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+            <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-6">
+            <table class="table table-bordered table-striped">
+
+                <tr>
+                    <th>Approval flow task name</th>
+                    <td>{{task.name}}</td>
+                </tr>
+
+                <tr>
+                    <th>Approver assignment restriction</th>
+                    <td>{{approverAssignmentRestrictionMap.get(task.approverAssignmentRestriction)}}</td>
+                </tr>
+
+                <tr>
+                    <th>Approver user level restriction</th>
+                    <td>{{userLevelRestrictionMap.get(task.approverRuleUserLevelRestriction)}}</td>
+                </tr>
+
+                
+            </table>
+        </div>
+
+        <div class="ui-g-6">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Approver branch restriction</th>
+                    <td>{{approverBranchRestrictionMap.get(task.approverRuleBranchRestriction)}}</td>
+                </tr>
+
+                 <tr>
+                    <th>Branch</th>
+                    <td>{{task.branchId?branches.get(task.branchId):'N/A'}}</td>
+                </tr>
+               
+            </table>
+        </div>
+    </div>
+</mat-card>

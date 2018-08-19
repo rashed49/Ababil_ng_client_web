@@ -1,0 +1,240 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Individual Information</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <form class="ui-fluid form-group">
+            <mat-tab-group>
+                <mat-tab label="Individual Information">
+                    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+
+                        <mat-card class="img-container" style="padding:0px">
+                            <img [src]="individualId?(imageApiUrl+'/'+individualId+'/'+'image'):'assets/images/noimage.jpg'" alt="Photo of a user" style="width:100%;height:100%"
+                                alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" #individualImage>
+                        </mat-card>
+
+                        <mat-card style="flex: 8;padding-bottom: 0px;">
+                            <mat-card-title>Basic Information:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.firstName" maxlength="15" id="firstName" readonly>
+                                                <label>First Name*</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.middleName" maxlength="15" readonly>
+                                                <label>Middle Name</label>
+
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.lastName" maxlength="15" readonly>
+                                                <label>Last Name</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.fathersFirstName" maxlength="15" readonly>
+                                                <label>Father's First Name*</label>
+                                            </span>
+                                        </div>
+
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.fathersMiddleName" maxlength="15" readonly>
+                                                <label>Father's Middle Name</label>
+
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.fathersLastName" maxlength="15" readonly>
+                                                <label>Father's Last Name</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.mothersFirstName" maxlength="15" readonly>
+                                                <label>Mother's First Name*</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.mothersMiddleName" maxlength="15" readonly>
+                                                <label>Mother's Middle Name</label>
+
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.mothersLastName" maxlength="15" readonly>
+                                                <label>Mother's Last Name</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.gender" maxlength="15" readonly>
+                                                <label>Gender*</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.nationality" maxlength="15" readonly>
+                                                <label>Nationality</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.dateOfBirth | date" maxlength="15" readonly>
+                                                <label>Date Of Birth*</label>
+                                            </span>
+                                        </div>
+                                        <!-- <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <p-calendar [(ngModel)]="individualInformation.dateOfBirth" [ngModelOptions]="{standalone: true}"  hourFormat="12" showButtonBar="true" monthNavigator="true"
+                                                    yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate"
+                                                    dateFormat="dd-mm-yy" disabled="true"></p-calendar>
+                                                <label>Date Of Birth*</label>
+                                            </span>
+                                        </div> -->
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.residenceStatus" maxlength="15" readonly>
+                                                <label>Residential Status</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="countries.name" maxlength="15" readonly>
+                                                <label>Birth country</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4" *ngIf="!nrbBirthPlace">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="birthDistrictName" maxlength="15" readonly>
+                                                <label>Birth place</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4" *ngIf="nrbBirthPlace">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.foreignBirthPlace" maxlength="15" readonly>
+                                                <label>Birth place</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="15" [value]="individualInformation.maritalStatus" readonly>
+                                                <label>Marital Status*</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4" *ngIf="individualInformation.spouseName">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="40" [value]="individualInformation.spouseName" readonly>
+                                                <label>Spouse Name</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+
+                    <div style="display: flex;flex-direction: row;width:100%; padding-bottom:12px">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Contact Information:</mat-card-title>
+                            <br/>
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.contactInformation.phoneNumber" readonly>
+                                                <label>Phone Number</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.contactInformation.mobileNumber" readonly>
+                                                <label>Mobile Number*</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.contactInformation.alternateMobileNumber" readonly>
+                                                <label>Alternate Mobile Number</label>
+
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.contactInformation.email" readonly>
+                                                <label>Email</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText [value]="individualInformation.contactInformation.fax" readonly>
+                                                <label>Fax</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+
+                        <mat-card style="flex: 2">
+                            <mat-card-title>Present Address:</mat-card-title>
+                            <address-component [address]='presentAddress' [viewMode]="viewMode" #presentAddressComponent></address-component>
+                        </mat-card>
+                    </div>
+
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Permanent Address:</mat-card-title>
+                            <address-component [address]='permanentAddress' [viewMode]="viewMode" #permanentAddressComponent></address-component>
+                        </mat-card>
+
+                        <mat-card style="flex: 2">
+                            <mat-card-title>Professional Address:</mat-card-title>
+                            <address-component [address]='professionalAddress' [viewMode]="viewMode" #professionalAddressComponent></address-component>
+                        </mat-card>
+                    </div>
+                </mat-tab>
+
+                <mat-tab label="Document">
+                    <br/>
+                    <document-component [clientId]="clientId" [profileCode]="profileCode" #docComponent></document-component>
+                </mat-tab>
+            </mat-tab-group>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,45 @@
+<div class="ui-g-12">
+    <p-dataTable [value]="charges" [editable]="editable" [responsive]="true" (onEditComplete)="totalChargeCalculation()">
+        <p-column [style]="{'text-align':'left'}" field="chargeName" header="Name">
+            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                {{rowData.chargeName}}
+            </ng-template>
+        </p-column>
+        <p-column field="modifiedChargeAmount" [editable]="editable" header="Charge amount" *ngIf="editable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" pInputText [(ngModel)]="data[col.field]"
+                />
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input pInputText pKeyFilter="money" [(ngModel)]="data['modifiedChargeAmount']" (input)="onEditValidation(col.field,data['modifiedChargeAmount'],index)"
+                />
+            </ng-template>
+        </p-column>
+        <p-column field="modifiedVatAmount" [editable]="editable" header="VAT amount" *ngIf="editable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" pInputText [(ngModel)]="data[col.field]"
+                />
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input pInputText pKeyFilter="money" [(ngModel)]="data['modifiedVatAmount']"/>
+            </ng-template>
+        </p-column>
+        <p-column field="modifiedChargeAmount" [editable]="editable" header="Charge amount" *ngIf="!editable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                {{data.modifiedChargeAmount | number:'1.2-4'}}
+            </ng-template>
+        </p-column>
+        <p-column field="modifiedVatAmount" [editable]="editable" header="VAT amount"  *ngIf="!editable">
+                <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                    {{data.modifiedVatAmount | number:'1.2-4'}}
+                </ng-template>
+        </p-column>
+
+    </p-dataTable>
+    <h6 style="    font-size: 1rem;
+        background: #299788;
+        padding: 10px;
+        color: white;
+        text-transform: uppercase;">Total charge: {{totalChargeAmount | number}} {{ currencyCode}}</h6>
+
+</div>

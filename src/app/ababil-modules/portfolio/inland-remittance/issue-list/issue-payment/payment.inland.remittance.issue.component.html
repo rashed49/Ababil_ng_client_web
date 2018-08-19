@@ -1,0 +1,84 @@
+<div style="display: flex; flex-direction: row; width: 100%;" class="ui-g">
+    <div style="flex:1;margin:12px">
+
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th class="table-row">Instrument No</th>
+                <td>{{inlandRemittanceInstrument.instrumentNo}}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{inlandRemittanceInstrument.purchaseAmount}}</td>
+            </tr>
+            <tr>
+                <th>Purchaser Name</th>
+                <td>{{inlandRemittanceInstrument.purchaserName}}</td>
+            </tr>
+            <tr>
+                <th>Purchaser Mobile</th>
+                <td>{{inlandRemittanceInstrument.purchaserMobile}}</td>
+            </tr>
+            <tr>
+                <th>Payee Name</th>
+                <td>{{inlandRemittanceInstrument.payeeName}}</td>
+            </tr>
+            <!-- <tr>
+                <th>Address</th>
+                <td style="word-break:break-all">{{inlandRemittanceInstrument.payeeAddress}}</td>
+            </tr> -->
+        </table>
+
+        <form class="ui-g-12 ui-fluid" [formGroup]="paymentIssueForm">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="payeeNid" maxlength="20">
+                        <label>Payee NID</label>
+                        <div *ngIf="paymentIssueForm.controls['payeeNid'].errors && !paymentIssueForm.controls['payeeNid'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!paymentIssueForm.controls['payeeNid'].errors.pattern">NID is invalid</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!paymentIssueForm.controls['payeeNid'].errors.required">NID is required</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class=" ui-g-12 ui-md-12 boxt">
+                    <h6>Transection Information</h6>
+                    <div class="ui-g-12 ui-md-12" >
+                        <div class="ui-g-12 ui-md-12">
+                            <p-dropdown appendTo="body" [options]="paymentMethod" [autoWidth]="false" formControlName="paymentMethod"></p-dropdown>
+                            <div *ngIf="paymentIssueForm.controls['paymentMethod'].errors && !paymentIssueForm.controls['paymentMethod'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!paymentIssueForm.controls['paymentMethod'].errors.required">Payment type is required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 ">
+                            <!-- *ngIf=" this.paymentIssueForm.get('paymentMethod').value=='ACCOUNT'" -->
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="payeeAccountNo">
+                                <label>Payee Account No</label>
+                                <div *ngIf="paymentIssueForm.controls['payeeAccountNo'].errors && !paymentIssueForm.controls['payeeAccountNo'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!paymentIssueForm.controls['payeeAccountNo'].errors.required">Payee Account No is required</div>
+                                    </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="paymentRemark">
+                                <label>Narration</label>
+                                <div *ngIf="paymentIssueForm.controls['paymentRemark'].errors && !paymentIssueForm.controls['paymentRemark'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!paymentIssueForm.controls['paymentRemark'].errors.required">Payment Remark is required</div>
+                                    </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

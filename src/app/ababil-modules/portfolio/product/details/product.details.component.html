@@ -1,0 +1,228 @@
+<!-- <verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Product details</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Profit Rate" type="button" icon="ui-icon-attach-money" class="default-btn" [routerLink]="['profit-rate']"></button>
+            <button pButton label="General ledger mapping" type="button" icon="ui-icon-insert-link" class="default-btn" [routerLink]="['product-general-ledger-mapping']"></button>
+            <button pButton label="Edit" type="button" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1"> 
+            <mat-card-title style="display: flex;flex-direction: row">
+                <div style="flex:1">Basic information:</div>
+                <div align="right" ><b><p>{{productDetails.status}}</p></b></div>
+            </mat-card-title>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+
+                <div style="flex: 5; margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Name</th>
+                            <td>{{productDetails.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{productDetails.description}}</td>
+                        </tr>
+                        <tr>
+                            <th>Code</th>
+                            <td>{{productDetails.code}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- <div style="flex: 5;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Cheque prefix required</th>
+                           
+                            <td align="center"><i class='material-icons'>
+                                {{demandDepositProductDetails.chequePrefixRequired == true? "done":"check"}}</i></td>
+                        </tr>
+                        <tr>
+                            <th>Account introducer required</th>
+                            <td align="center"><i class='material-icons'>
+                                {{demandDepositProductDetails.hasIntroducer== true? "done":"close"}}</i></td>
+                        </tr>
+                        <tr>
+                            <th>Cheque required</th>
+                            <td align="center"><i class='material-icons'>
+                                {{demandDepositProductDetails.hasCheque== true?"done":"check"}}</i></td>
+                        </tr>
+                    </table>
+                </div> -->
+
+            </div>
+        </mat-card>
+    </div>
+
+    <!-- <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 3; margin-right: 5px;">
+            <mat-card-title>Profit earning criteria:</mat-card-title>
+            <div class="ui-g">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Profit bearing</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.profitBearing== true?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Minimum balance for profit calculation</th>
+                        <td>{{demandDepositProductDetails.minimumBalanceForProfitCalculation}}</td>
+                    </tr>
+                    <tr>
+                        <th>Minimum profit to apply</th>
+                        <td>{{demandDepositProductDetails.minimumProfitToApply}}</td>
+                    </tr>
+                    <tr>
+                        <th>Savings profit apply frequency</th>
+                        <td>{{demandDepositProductDetails.savingsProfitApplyFrequency}}</td>
+                    </tr>
+                    <tr>
+                        <th>Savings product calculation type</th>
+                        <td>{{demandDepositProductDetails.savingsProductCalculationType}}</td>
+                    </tr>
+                    <tr>
+                        <th>Savings daily product calculation type</th>
+                        <td>{{demandDepositProductDetails.savingsDailyProductCalculationBasedOn}}</td>
+                    </tr>
+                    <tr>
+                        <th>Savings monthly product calculation type</th>
+                        <td>{{demandDepositProductDetails.savingsMonthlyProductCalculationBasedOn}}</td>
+                    </tr>
+                </table>
+            </div>
+        </mat-card>
+
+        <mat-card style="flex: 3;">
+            <mat-card-title>Transaction rules:</mat-card-title>
+            <div class="ui-g">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Enforce transaction rule</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.transactionRuleEnforced?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Can transaction rule override</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.canTransactionRuleOverride?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Can transaction rule overridable by notice</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.canTransactionRuleOverridableByNotice?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Maximum number of transaction per week</th>
+                        <td>{{demandDepositProductDetails.maxNumberOfTransactionPerWeek}}</td>
+                    </tr>
+                    <tr>
+                        <th>Maximum number of transaction per month</th>
+                        <td>{{demandDepositProductDetails.maxNumberOfTransactionPerMonth}}</td>
+                    </tr>
+                    <tr>
+                        <th>Maximum transaction ratio of balance</th>
+                        <td>{{demandDepositProductDetails.maxTransactionRatioOfBalance}}</td>
+                    </tr>
+                    <tr>
+                        <th>Maximum transaction amount</th>
+                        <td>{{demandDepositProductDetails.maxTransactionAmount}}</td>
+                    </tr>
+                </table>
+            </div>
+        </mat-card>
+    </div> -->
+
+    <!-- <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 3; margin-right: 5px;">
+            <mat-card-title>Balance:</mat-card-title>
+            <div class="ui-g">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Minimum balance overridable</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.minimumBalanceOverridable?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Enforce minimum required balance</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.minimumRequiredBalanceEnforced?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Minimum balance</th>
+                        <td>{{demandDepositProductDetails.minimumBalance}}</td>
+                    </tr>
+                    <tr>
+                        <th>Minimum required opening balance</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.minRequiredOpeningBalance?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Initial deposit</th>
+                        <td>{{demandDepositProductDetails.initialDeposit}}</td>
+                    </tr>
+                </table>
+            </div>
+        </mat-card>
+
+        <mat-card style="flex: 3;">
+            <mat-card-title>Dormancy rules:</mat-card-title>
+            <div class="ui-g">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Dormancy tracking active</th>
+                        <td align="center"><i class='material-icons'>
+                            {{demandDepositProductDetails.dormancyTrackingActive?"done":"close"}}</i></td>
+                    </tr>
+                    <tr>
+                        <th>Days to inactive</th>
+                        <td>{{demandDepositProductDetails.daysToInactive}}</td>
+                    </tr>
+                    <tr>
+                        <th>Days to dormancy</th>
+                        <td>{{demandDepositProductDetails.daysToDormancy}}</td>
+                    </tr>
+                    <tr>
+                        <th>Days to escheat</th>
+                        <td>{{demandDepositProductDetails.daysToEscheat}}</td>
+                    </tr>
+                </table>
+            </div>
+        </mat-card>
+    </div> -->
+
+    <div style="width: 100%;">
+        <mat-card style="flex: 1">
+            <mat-card-title>Other:</mat-card-title>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+
+                <div style="flex: 5; margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Eligible customer type</th>
+                            <td>{{productDetails.eligibleCustomerType?productDetails.eligibleCustomerType.join('
+                                , ').replace('_',' ').replace('_',' '):''}}</td>
+                        </tr>
+                        <tr>
+                            <th>Currency restriction</th>
+                            <td>
+                                {{ productDetails.currencyRestriction == 'LOCAL_CURRENCY' ? 'Local currency' : productDetails.currencyRestriction
+                                == 'MULTIPLE_CURRENCY' ? 'Multiple currency' : '' }}
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

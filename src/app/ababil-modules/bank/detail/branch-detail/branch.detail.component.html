@@ -1,0 +1,135 @@
+<!-- <verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <p-toolbar>
+                <div class="ui-toolbar-group-left">
+                    <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Branch Details</label>
+                </div>
+                <div class="ui-toolbar-group-right">
+                    <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+                    <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn"></button>
+                    <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+                </div>
+            </p-toolbar>
+            <br/>
+            <div class="row">
+                <div class="ui-g-12" *ngIf="isOwn">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{ownBranch.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Code</th>
+                                <td>{{ownBranch.code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Ad code</th>
+                                <td>{{ownBranch.adCode}}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone number</th>
+                                <td>{{ownBranch.phoneNumber}}</td>
+                            </tr>
+                            <tr>
+                                <th>Mobile number</th>
+                                <td>{{ownBranch.mobileNumber}}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ownBranch.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>Routing number</th>
+                                <td>{{ownBranch.routingNumber}}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{bank_address.addressLine}}, {{bank_address.upazilla}}, {{bank_address.district}}, {{bank_address.country}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Branch type</th>
+                                <td>{{ownBranch.branchType}}</td>
+                            </tr>
+                            <tr>
+                                <th>Swift code</th>
+                                <td>{{ownBranch.swiftCode}}</td>
+                            </tr>
+                            <tr>
+                                <th>Branch manager</th>
+                                <td>{{ownBranch.managerName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Branch manager designation</th>
+                                <td>{{ownBranch.managerDesignation}}</td>
+                            </tr>
+                            <tr>
+                                <th>Number of concurrent user</th>
+                                <td>{{ownBranch.swiftCode}}</td>
+                            </tr>
+                            <tr>
+                                <th>Online</th>
+                                <td>{{ownBranch.online}}</td>
+                            </tr>
+                            <tr>
+                                <th>Head office</th>
+                                <td>{{ownBranch.headOffice}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="ui-g-12" *ngIf="!isOwn">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{otherBranch.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Code</th>
+                                <td>{{otherBranch.code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Ad code</th>
+                                <td>{{otherBranch.adCode}}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone number</th>
+                                <td>{{otherBranch.phoneNumber}}</td>
+                            </tr>
+                            <tr>
+                                <th>Mobile number</th>
+                                <td>{{otherBranch.mobileNumber}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Address</th>
+                                <td>{{bank_address.addressLine}},
+                                    {{bank_address.upazilla}}, {{bank_address.district}}, {{bank_address.country}}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{otherBranch.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>Routing number</th>
+                                <td>{{otherBranch.routingNumber}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

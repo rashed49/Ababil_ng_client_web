@@ -1,0 +1,48 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-panel>
+
+            <p-header>
+                <div class="ui-helper-clearfix">
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">District Detail</span>
+
+                    <div class="ui-toolbar-group-right">
+
+                        <button pButton type="button" label="Edit" icon="ui-icon-plus" class="default-btn" (click)="edit()"></button>
+                        <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn"></button>
+                        <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="close()"></button>
+                    </div>
+                </div>
+            </p-header>
+            <p-dataTable selectionMode="single">
+
+                <p-column field="name" header="Name"></p-column>
+            </p-dataTable>
+        </p-panel>
+
+        <br>
+        <br>
+        <br>
+        <br>
+
+        <p-panel>
+            <p-header>
+                <div class="ui-helper-clearfix">
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Upazilla List</span>
+
+                    <div class="ui-toolbar-group-right">
+
+                        <button pButton type="button" label="Add" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+                        <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn"></button>
+                        <button pButton type="button" label="Close" icon="ui-icon-cancel" class="default-btn" (click)="close()"></button>
+                    </div>
+                </div>
+            </p-header>
+            <p-dataTable [value]="upazillas"  selectionMode="single" [(selection)]="selectedUpazilla">
+                
+                                <p-column field="name" header="Name"></p-column>
+                            </p-dataTable>
+
+        </p-panel>
+    </div>
+</div>

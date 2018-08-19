@@ -1,0 +1,62 @@
+<div class="ui-g">
+
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Bank Notice</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Create" icon="ui-icon-plus" class="default-btn" (click)="createNotice()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="close()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div style="width: 100%; ">
+    <mat-card style="flex: 1">
+        <div class="ui-g">
+
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Title</th>
+                    <td>{{demandDepositAccount.name}}</td>
+                </tr>
+                <tr>
+                    <th>Account No</th>
+                    <td>{{demandDepositAccount.number}}</td>
+                </tr>
+            </table>
+
+            <p-dataTable [value]="notices" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rows]="20" [paginator]="true"
+                [totalRecords]="totalRecords">
+                <p-column field="noticeDate" header="Notice Date" [style]="{'text-align':'center'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true" [style]="{'text-align':'center','width':'130px'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.noticeDate | date}}
+                    </ng-template>
+                </p-column>
+
+                <p-column field="startDate" header="Start Date" [style]="{'text-align':'center','width':'130px'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.startDate | date}}
+                    </ng-template>
+                </p-column>
+                <p-column field="expireDate" header="Expire Date" [style]="{'text-align':'center','width':'130px'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.expireDate | date}}
+                    </ng-template>
+                </p-column>
+                <p-column field="noticeAmount" header="Notice Amount" [style]="{'text-align':'right','width':'140px'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.noticeAmount | number:'1.2-4'}}
+                    </ng-template>
+                </p-column>
+                <p-column field="chequeNumber" header="Cheque Number" [style]="{'text-align':'center','width':'140px'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true"></p-column>
+                <p-column field="description" header="Description" [style]="{'text-align':'left'}" [filter]="true" filterPlaceholder="Search"
+                    [sortable]="true" ></p-column>
+            </p-dataTable>
+        </div>
+    </mat-card>
+</div>

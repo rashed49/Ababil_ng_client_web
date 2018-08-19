@@ -1,0 +1,262 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <p-splitButton label="Links" icon="ui-icon-device-hub" [model]="otherMenuItems" *ngIf="!editView"></p-splitButton>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<mat-card>
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Customer ID</th>
+                        <td class="ui-lg-3">{{demandDepositAccount.customerId}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{demandDepositAccount.number}}</td>
+                    </tr>
+                    <tr>
+                        <th>Account Title</th>
+                        <td>{{demandDepositAccount.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Product</th>
+                        <td>{{productDetails.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Product Code</th>
+                        <td>{{productDetails.code}}</td>
+                    </tr>
+                    <tr>
+                        <th>Product Description</th>
+                        <td>{{productDetails.description}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Currency</th>
+                        <td class="ui-lg-3">{{demandDepositAccount.currencyCode}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account Status</th>
+                        <td>{{demandDepositAccount.status}}</td>
+                    </tr>
+
+                   <tr>
+                        <th>Last Transaction Date</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lastClientTransactionDate | date:'medium')
+                            : "" }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <th>Open Date</th>
+                        <td>{{demandDepositAccount.openingDate | date:'medium'}}</td>
+                    </tr>
+                    <tr *ngIf="demandDepositAccount.closingDate">
+                        <th>Closing Date</th>
+                        <td>{{demandDepositAccount.closingDate | date:'medium'}}</td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div class="ui-g-12">
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Current Balance</th>
+                        <td class="ui-lg-3">{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.currentBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Clearing Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.clearingAmount | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Minimum Balance</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.minimumBalance | number:'1.2-2')
+                            :""}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Available Balance</th>
+                        <td class="ui-lg-3">{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.availableBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Block Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.blockAmount | number:'1.2-2') :""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Lien Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lienAmount | number:'1.2-2') :
+                            ""}}
+                        </td>
+                    </tr>
+                </table>
+                <br>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <h6>Nominees:</h6>
+                    <hr/>
+                </div>
+                <p-dataTable [value]="nominees" selectionMode="single" [(selection)]="selectedNominee" (onRowSelect)="navigateToNomineeDetail()"
+                    #dt>
+                    <p-column [style]="{'text-align':'left'}" field="individualId" header="Nominee Name">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            {{nomineeName(rowData.individualId)}}
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'text-align':'left','width':'200px'}" field="relationWithAccountHolder" header="Relation with account holder">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            {{rowData.relationWithAccountHolder}}
+                        </ng-template>
+                    </p-column>
+                    <p-column [style]="{'text-align':'center','width':'200px'}" field="sharePercentage" header="Share Percentage">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            {{rowData.sharePercentage}}%
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+                <br>
+                <br>
+            </div>
+
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <h6>Introducer account:</h6>
+                    <hr/>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Introducer account number</th>
+                            <td class="ui-lg-3">{{introducerDetail.number}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Introducer account name</th>
+                            <td class="ui-lg-3">{{introducerDetail.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <h6>Account opening information:</h6>
+                    <hr/>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Account opening purpose</th>
+                            <td class="ui-lg-3">{{demandDepositAccount.purpose}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Account opening channel</th>
+                            <td class="ui-lg-3">{{accountOpeningChannel.channelName}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Relationship manager</th>
+                            <td class="ui-lg-3">{{demandDepositAccount.relationshipManager}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <h6>Contact information and address:</h6>
+                    <hr/>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Phone number</th>
+                            <td class="ui-lg-3">{{contactInformation.phoneNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.mobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Alternate mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.alternateMobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Email</th>
+                            <td class="ui-lg-3">{{contactInformation.email}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Fax</th>
+                            <td class="ui-lg-3">{{contactInformation.fax}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Address</th>
+                            <td class="ui-lg-3">{{address.addressLine}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Country</th>
+                            <td class="ui-lg-3">{{country.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Division</th>
+                            <td class="ui-lg-3">{{division.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">District</th>
+                            <td class="ui-lg-3">{{district.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Upazilla</th>
+                            <td class="ui-lg-3">{{upazilla.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</mat-card>

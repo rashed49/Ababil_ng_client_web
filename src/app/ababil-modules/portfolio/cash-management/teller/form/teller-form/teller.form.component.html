@@ -1,0 +1,174 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<gl-account-lookup [display]="glAccountLookUpDisplay" [resultType]="glAccountLookUpMode" (onSelect)="onSearchResult($event)"
+    (onClose)="onSearchModalClose($event)"></gl-account-lookup>
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Tellers</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Submit" type="button" icon="ui-icon-save" class="default-btn" (click)="submit()" ></button>
+            <button pButton label="Back" icon="ui-icon-keyboard-arrow-left" type="button" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="tellerForm">
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <div class="ui-g">
+                    <mat-card-title>Basic information:</mat-card-title>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="branches | branchList" [autoWidth]="false" [filter]="true" filterBy="label" formControlName="branchId"
+                                    [style]="{'width':'100%','font-size':'14px'}"></p-dropdown>
+                                <label class="md-inputlabel-2">Branch</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="tellerTypes" [autoWidth]="false" formControlName="tellerType" [style]="{'width':'100%','font-size':'14px'}"></p-dropdown>
+                                <label class="md-inputlabel-2">Teller type</label>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="title" pInputText>
+                                <label>Title</label>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="code" pInputText>
+                                <label>Code</label>
+                                <div *ngIf="tellerForm.controls['code'].errors && !tellerForm.controls['code'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!tellerForm.controls['code'].errors.unique">Unique code is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" style="font-size: 14px;">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="currencyRestrictions" [autoWidth]="false" [style]="{'width':'100%','font-size':'14px'}" formControlName="currencyRestriction"
+                                    (onChange)="onChange($event)" (onFocus)="oldCurrencyRestriction=tellerForm.controls['currencyRestriction'].value"></p-dropdown>
+                                <label class="md-inputlabel-2">Currency restriction</label>
+                                <div *ngIf="(tellerForm.get('currencyRestriction').errors) && !(tellerForm.get('currencyRestriction').value === null)">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!tellerForm.get('currencyRestriction').errors.currencyMismatch">Currency restriction does not match with GL Account</div>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-7">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText [value]="selectedGLAccount.id?selectedGLAccount.name+'('+selectedGLAccount.code+')':''" name="selectedGLAccount"
+                                />
+                                <label>GL account</label>
+                                <div *ngIf="(tellerForm.get('glId').errors) && !(tellerForm.get('glId').value === null)">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!tellerForm.get('glId').errors.currencyMismatch">Currency restriction does not match with Teller</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-1">
+                            <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="searchGlAccount('GL_ACCOUNT')"></button>
+                            <button pButton type="button" icon="ui-icon-clear" class="default-btn" (click)="removeSelectedGL()"></button>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-3">
+                            <p-checkbox binary="true" formControlName="allowedGlTransaction" (onChange)="isAllowedGlTransaction($event)"></p-checkbox>
+                            <span>Allow GL transaction</span>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <p-checkbox binary="true"  formControlName="allowedClientTransaction" (onChange)="isAllowedClientTransaction($event)"></p-checkbox>
+                            <span>Allow client transaction</span>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <p-checkbox binary="true"  formControlName="denominationRequired" (onChange)="isDenominationRequired($event)"></p-checkbox>
+                            <span>Denomination required</span>
+                        </div>
+                        <div class="ui-g-12 ui-md-3">
+                            <p-checkbox binary="true"  formControlName="forceLimit" (onChange)="canForceLimit($event)"></p-checkbox>
+                            <span>Force limit</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+        </div>
+    </form>
+</div>
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+
+        <mat-card style="flex: 1">
+            <div class="ui-g-12 ui-md-2" style="float:right;">
+                <button pButton type="button" label="Add Currency" icon="ui-icon-add" class="default-btn" (click)="addCurrencyLimit()" style="float:right;"
+                    *ngIf="multipleCurrencyLimit"></button>
+            </div>
+            <mat-card-title>Currency & Teller Limit:</mat-card-title>
+
+            <p-dataTable [value]="tellerLimits" [editable]="true" [responsive]="true">
+                <p-column field="currencyCode" header="Currency" [editable]="tellerLimitEditable" header="Currency" [style]="{'text-align':'center'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <input type="text" pInputText [ngModel]="(currencyMap.get(data.currencyCode))" style="width: 100%;" readonly/>
+                    </ng-template>
+                    <ng-template let-col let-data="rowData" pTemplate="editor">
+                        <p-dropdown [(ngModel)]="data[col.field]" [options]="currencies | currencyPipe" [filter]="true" filterBy="label,value" [autoWidth]="false"
+                            [style]="{'width':'100%'}" appendTo="body" required="true" (input)="onEditValidation(data[col.field],index)"></p-dropdown>
+                    </ng-template>
+                </p-column>
+                <p-column field="cashReceiveLimit" [editable]="true" header="Cash receive limit" [style]="{'text-align':'center'}">
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                        <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" pInputText [(ngModel)]="data[col.field]"
+                        />
+                    </ng-template>
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                        <input  pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]"
+                            (input)="onEditValidation(data[col.field],index)" />
+                    </ng-template>
+                </p-column>
+
+                <p-column field="cashWithdrawLimit" [editable]="true" header="Cash withdraw limit" [style]="{'text-align':'center'}">
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                        <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" pInputText [(ngModel)]="data[col.field]"
+                        />
+                    </ng-template>
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                        <input  pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]"
+                            (input)="onEditValidation(data[col.field],index)" />
+                    </ng-template>
+                </p-column>
+
+                <p-column field="balanceLimit" [editable]="true" header="Balance limit" [style]="{'text-align':'center'}">
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                        <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" pInputText [(ngModel)]="data[col.field]"
+                        />
+                    </ng-template>
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                        <input  pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]"
+                            (input)="onEditValidation(data[col.field],index)" />
+                    </ng-template>
+                </p-column>
+                <p-column *ngIf="multipleCurrencyLimit" header="Delete">
+                    <ng-template let-rowIndexValue="rowIndex" pTemplate="body">
+                        <div align="center">
+                            <button type="text" (click)="onDeleteRow()" pButton icon="ui-icon-delete" *ngIf="rowIndexValue==(tellerLimits.length-1) && tellerLimits.length>1"></button>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </mat-card>
+    </div>
+</div>
+
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

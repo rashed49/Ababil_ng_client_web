@@ -1,0 +1,42 @@
+<form [formGroup]="occupationForm">
+    <div class="ui-g">
+    <div class="ui-g-12" *ngIf="!viewMode">
+        <div class="ui-g-12 ui-md-5">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="occupationTypes | occupationPipe" [autoWidth]="false"  formControlName="occupationId"></p-dropdown>
+                <label class="md-inputlabel-2">*Occupation</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-5">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="occupationDetails" maxlength="30" >
+                <label>Occupation Details</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-2">
+            <button pButton type="button" label="Add" class="default-btn" (click)="addOccupation()" ></button>
+        </div>
+    </div>
+    <div *ngIf="occupationRequired" class="ui-message ui-messages-error ui-corner-all">At least one occupation is required.</div>
+    <p-dataTable [value]="addedOccupations">
+        <p-column field="occupation" header="Occupation">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{occupationMap.get(data.occupationTypeId)}}
+            </ng-template>
+        </p-column>
+        <p-column field="occupationDetails" header="Occupation Details">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.description}}
+            </ng-template>
+
+        </p-column>
+        <p-column header="Delete" *ngIf="!viewMode">
+            <ng-template let-col let-i="rowIndex" let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <button type="button" pButton tooltipPosition="top" icon="ui-icon-delete" class="default-btn" (click)="deleteOccupation(i)"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</div>
+</form>

@@ -1,0 +1,26 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Charge Configuration List</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Charge Configuration" icon="ui-icon-plus" class="default-btn" (click)="createNewChargeConfiguration()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable selectionMode="single">
+            <p-column [sortable]="true" header=" Charge Category"></p-column>
+            <p-column [sortable]="true" header="Charge Name"></p-column>
+            <p-column [sortable]="true" header=" Charge Group "></p-column>
+            <p-column [sortable]="true" header="Slab Based?"></p-column>
+            <p-column [sortable]="true" header="Charge GL"></p-column>
+            <p-column [sortable]="true" header=" Is Fixed?"></p-column>
+            <p-column [sortable]="true" header="Charge Amount"></p-column>
+            <p-column [sortable]="true" header=" Min Charge"></p-column>
+            <p-column [sortable]="true" header=" Max Charge"></p-column>
+        </p-dataTable>
+    </div>
+</div>

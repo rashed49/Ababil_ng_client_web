@@ -1,0 +1,71 @@
+<div class="topbar clearfix">
+            <div class="topbar-left">            
+                <div><img width="200px" height="40px" src="assets/layout/images/logo2x.svg" alt=""></div>
+            </div>
+
+            <div class="topbar-right">
+                <a id="menu-button" href="#" (click)="app.onMenuButtonClick($event)">
+                    <i></i>
+                </a>
+                
+                <a id="rightpanel-menu-button" href="#" (click)="app.onRightPanelButtonClick($event)">
+                    <i class="material-icons">more_vert</i>
+                </a>
+                
+                <a id="topbar-menu-button" href="#" (click)="app.onTopbarMenuButtonClick($event)">
+                    <i class="material-icons">menu</i>
+                </a>
+                                
+                <ul class="topbar-items animated fadeInDown" [ngClass]="{'topbar-items-visible': app.topbarMenuActive}">
+                    <!-- <li>
+                    <div class="ui-g-12 ui-md-4" style="color: white">
+                        <p-dropdown id="dropdown" [options]="languages" [(ngModel)]="selectedLang" [autoWidth]="false" (onChange)="selectLanguage($event.value)"></p-dropdown>
+                    </div>
+                    </li>  -->
+                    <li #profile class="profile-item" *ngIf="app.profileMode==='top'||app.isHorizontal()"
+                        [ngClass]="{'active-top-menu':app.activeTopbarItem === profile}">
+
+                        <a href="#" (click)="app.onTopbarItemClick($event,profile)">                            
+                            <img class="profile-image" src="assets/layout/images/avatar.png" />
+                            <span class="topbar-item-name">Jane Williams</span>
+                        </a>
+                        
+                        <ul class="ultima-menu animated fadeInDown">
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">person</i>
+                                    <span>Profile</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">security</i>
+                                    <span>Privacy</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">settings_applications</i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a href="#">
+                                    <i class="material-icons">power_settings_new</i>
+                                    <span>Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>                   
+                    <!-- <li #search class="search-item" [ngClass]="{'active-top-menu':app.activeTopbarItem === search}"
+                        (click)="app.onTopbarItemClick($event,search)">
+                        <span class="md-inputfield">
+                            <i class="topbar-icon material-icons">send</i>
+                            <input type="text" pInputText placeholder="Go...">
+                            
+                           
+                        </span>
+                    </li> -->
+                </ul>
+            </div>
+</div>

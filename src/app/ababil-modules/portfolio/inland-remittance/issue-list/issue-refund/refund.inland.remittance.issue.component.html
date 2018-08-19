@@ -1,0 +1,40 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="ui-g-12 ui-md-12">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th style="min-width:100px">Inland Remittance Product</th>
+                    <td>{{inlandRemittanceInstrument.inlandRemittanceProduct.name}}</td>
+                </tr>
+                <tr>
+                    <th>Instrument No</th>
+                    <td>{{inlandRemittanceInstrument.instrumentNo}}</td>
+                </tr>
+                <tr>
+                    <th>Purchaser Name</th>
+                    <td>{{inlandRemittanceInstrument.purchaserName}}</td>
+                </tr>
+                <tr>
+                    <th>Purchaser NID</th>
+                    <td>{{inlandRemittanceInstrument.purchaserNid}}</td>
+                </tr>
+                <tr>
+                    <th>Purchase mobile</th>
+                    <td>{{inlandRemittanceInstrument.purchaserMobile}}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <form class="ui-g ui-fluid form-group" [formGroup]="refundIssueForm">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="refundRemark" pInputText>
+                        <label>Refund Remark</label>
+                    </span>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

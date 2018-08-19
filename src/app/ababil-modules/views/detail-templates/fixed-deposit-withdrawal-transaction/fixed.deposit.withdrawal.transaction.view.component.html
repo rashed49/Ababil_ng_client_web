@@ -1,0 +1,171 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)">
+</verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Fixed Deposit Transaction</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div class="ui-g ui-fluid">
+    <!-- <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Fixed Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Account No</th>
+                                <td>{{fixedDepositAccount.number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Account Status</th>
+                                <td>{{fixedDepositAccount.status}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Current Balance</th>
+                                <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                                    | number:'1.2-2') : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Lien Amount</th>
+                                <td>{{lienAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th>Quard Amonut</th>
+                                <td>{{quardAmount | number:'1.2-2' : ""}}</td>
+                            </tr>
+                            <tr>
+                                <th class="ui-lg-3">Withdrawable Amount</th>
+                                <td class="ui-lg-3">
+                                    {{withdrawalAmount | number:'1.2-2' : ""}}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div> -->
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex:3">
+            <mat-card-title>Fixed Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Lien Amount</th>
+                            <td>{{lienAmount | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th>Quard Amonut</th>
+                            <td>{{quardAmount | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Current Balance</th>
+                            <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                                | number:'1.2-2') : ""}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card style="margin-right: 5px;flex:3">
+            <mat-card-title>Demand Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{DemandDepositAccount.number}}</td>
+                        </tr>
+                        <tr>
+                            <th>Lien Amount</th>
+                            <td>{{((lienAmonut)?(lienAmonut):0) | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Current Balance</th>
+                            <td class="ui-lg-3">{{((availableBalance)?(availableBalance):0) | number:'1.2-2' : ""}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card style="margin-right: 10px;flex: 3">
+            <mat-card-title>Withdrawal Mapping Information</mat-card-title>
+
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Withdrawal Limit</th>
+                            <td>{{((withdrawalAdvice.withdrawalLimit) ?(withdrawalAdvice.withdrawalLimit):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Recovered Amount</th>
+                            <td class="ui-lg-3">{{((withdrawalAdvice.recoveredAmount) ?(withdrawalAdvice.recoveredAmount):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Withdrawal Amount</th>
+                            <td class="ui-lg-3">{{((withdrawalAdvice.withdrawnAmount) ?(withdrawalAdvice.withdrawnAmount):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Transactional Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Amount</th>
+                            <td>{{fixedDepositTransaction.transactionAmount | number:'1.2-2' : ""}} ({{amountInWords}})</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Voucher Number</th>
+                            <td class="ui-lg-3">{{fixedDepositTransaction.globalTxnNo}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Narration</th>
+                            <td class="ui-lg-3">{{fixedDepositTransaction.narration}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Cheque Number</th>
+                            <td class="ui-lg-3">{{fixedDepositTransaction.instrumentNumber}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Cheque Date</th>
+                            <td>{{fixedDepositTransaction.instrumentDate |date }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

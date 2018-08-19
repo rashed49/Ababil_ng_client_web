@@ -1,0 +1,23 @@
+    // import { Routes} from '@angular/router';
+    // import { ChequeComponent } from './cheque.component';
+
+    // import { ChequeDetailComponent } from './detail/cheque-detail/cheque.detail.component';
+    // import { CreateChequeBookFormComponent } from './form/cheque-form/create/create.cheque.form.component';
+    // import { ChequeBookFormComponent } from './form/cheque-form/cheque.form.component';
+    // // import { EditBankFormComponent } from './form/bank-form/edit/edit.bank.form.component';
+    // // import { BranchDetailComponent } from './detail/branch-detail/branch.detail.component';
+    // // import { CreateBranchFormComponent } from './form/branch-form/create/create.branch.form.component';
+    // // import { EditBranchFormComponent } from './form/branch-form/edit/edit.branch.form.component';
+
+
+    // export const ChequeRoutes: Routes = [
+    //     {path: ':id/', component: ChequeComponent},
+    //     {path: ':id/detail', component: ChequeDetailComponent, pathMatch: 'full'},
+    //     {path: ':id/create', component: CreateChequeBookFormComponent}
+    //     // {path: 'form', component:  ChequeBookFormComponent}
+    // // ,
+    // //    {path: 'detail/:id/edit', component: EditBankFormComponent, pathMatch: 'full' },
+    // //    {path: 'detail/:id/branches/:branchid', component: BranchDetailComponent },
+    // //     {path: 'detail/:id/branch/create', component: CreateBranchFormComponent },
+    // //     {path: 'detail/:id/branches/:branchid/edit', component: EditBranchFormComponent }
+    // ];

@@ -1,0 +1,34 @@
+<div class="ui-g">
+    <div class="ababil-toolbar" >
+        <span class="ababil-toolbar-header">Joint Customer: {{customer ? customer.name:""}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<mat-card *ngIf="subjects.length>0" class="ui-g" style="margin-top: 40px">
+    <mat-card-title>Joint Account Applicants </mat-card-title>
+<div *ngFor="let subject of subjects" class="ui-g-12 ui-md-6" style="margin-top: 20px">
+    <div class="ababil-custom-card">
+      <div >
+           <img src="{{imageApiUrl}}/{{subject.id}}/image" style="float: left;width: 10%;text-align: center;" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';">
+      </div>
+      <div class="ababil-custom-card-details">
+          <div class="ababil-custom-card-title-box">
+              <div class="ababil-custom-card-title">
+                 <h5>{{subject.name}}</h5>
+                 <br>
+                 {{getApplicationTypeDescriptionById(subject.applicantTypeId)}}
+              </div>
+
+          </div>
+          <div style="margin-top: 15px;">
+              <button pButton type="button" label="View" style="position: absolute;top: auto;left: auto;bottom: 8px;right: 40px; margin-right: 10px;" (click)=" editSubject(subject.id) "></button>
+          </div>  
+      </div>        
+    </div>
+</div>
+</mat-card>

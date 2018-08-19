@@ -1,0 +1,49 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Organization Customer: {{customer ? customer.name:""}}</span>
+        <div class="ababil-toolbar-button-group">
+            <!-- <button pButton type="button" label="Summary Detail" icon="ui-icon-note" class="default-btn" (click)="viewDetail($event)"></button> -->
+            <p-splitButton label="Options" icon="ui-icon-device-hub" [model]="addAccountItems" *ngIf="!isInactive"></p-splitButton>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div>
+    <div class="ui-g ui-g-fluid">
+        <div style="display: flex;flex-direction: row;width:100%;">
+            <mat-card style="margin-right: 5px;flex: 1.4;flex-wrap:wrap">
+                <div style="display: flex;align-content: center;justify-content: center;padding-top: 10px;">
+                    <img mat-card-image src="assets/layout/images/org.png" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                        #individualImage style="width: 150px; height: 150px;border-radius: 50%">
+                </div>
+                <mat-card-header style="align-content: center;justify-content: center; display:flex">
+                    <mat-card-title style="font-size: 14px !important">
+                        {{organizationFormData?(organizationFormData.name?organizationFormData.name:'N/A'):'N/A'}}
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-actions style="align-content: center;justify-content: center; display:flex;padding-top: 0px;">
+                    <div>
+                        <button mat-button style="color:teal" (click)="editOrganization()">Edit</button>
+                        <!-- <button mat-button style="color:teal">Existing</button> -->
+                    </div>
+                </mat-card-actions>
+                <hr/>
+                <mat-card-content style="width: 165px;word-wrap: break-word;font-size: 13px;">
+                    <p>
+                        Status: {{customer?((customer.active)? 'ACTIVE':'INACTIVE'):'N/A'}}
+                        <br/> Mobile No: {{organizationFormData?(organizationFormData.contactInformation.mobileNumber?organizationFormData.contactInformation.mobileNumber:'N/A'):'N/A'}}
+                        <br/> Email: {{organizationFormData?(organizationFormData.contactInformation.email?organizationFormData.contactInformation.email:'N/A'):'N/A'}}
+                        <br/> Fax: {{organizationFormData?(organizationFormData.contactInformation.fax?organizationFormData.contactInformation.fax:'N/A'):'N/A'}}
+                    </p>
+                </mat-card-content>
+            </mat-card>
+            <div style="flex: 8;height: 100%">
+                <cis-dashboard-accounts [customerId]="customerId"></cis-dashboard-accounts>
+            </div>
+        </div>
+    </div>
+</div>

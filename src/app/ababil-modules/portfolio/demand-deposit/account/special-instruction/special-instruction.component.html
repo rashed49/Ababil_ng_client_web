@@ -1,0 +1,65 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Special instruction</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Add new" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton type="button" label="Withdraw" class="red-btn" (click)="onWithdrawClick()"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="fetchSpecialInstructions()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="close()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <table class="table table-bordered">
+            <tr>
+                <th>Account Number</th>
+                <td>{{account.number}}</td>
+            </tr>
+
+            <tr>
+                <th>Name</th>
+                <td>{{account.name}}</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <p-dataTable [value]="specialInstructions" #dt [(selection)]="selectedSpecialInstruction" selectionMode="single" (onRowSelect)="onRowSelect($event)"
+            reorderableColumns="true" sortField="userName" sortOrder="-1">
+
+            <p-column field="specialInstructionType.code" header="Instruction Code" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="specialInstructionType.name" header="Instruction Name" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="description" header="Description" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="lienAmount" header="Amount" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="chequeNumber" header="Cheque Number" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+
+            <p-column field="chequeAmount" header="Cheque Amount" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="specialInstructionStatus" header="Status" [filter]="true" [sortable]="true" filterPlaceholder="Search"></p-column>
+
+        </p-dataTable>
+
+    </div>
+</div>
+
+<p-dialog [(visible)]="display">
+    <p-header>
+        <span class="ui-panel-title" style="font-size:18px;display:inline-block;margin-top:2px">Withdraw Special Instruction</span>
+    </p-header>
+    <br>
+    <div>
+        <p>Are you sure you want to withdraw the Special Instruction?</p>
+    </div>
+    <br>
+    <div class="" style="margin: 0 auto;">
+        <button pButton type="button" label="Cancel" icon="ui-icon-update" class="default-btn" (click)="cancel()"></button>
+        <button pButton type="button" label="Withdraw" class="red-btn" (click)="onWithdraw()"></button>
+    </div>
+
+</p-dialog>

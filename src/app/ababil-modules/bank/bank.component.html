@@ -1,0 +1,24 @@
+
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+      <div class="card card-w-title">                 
+              <p-toolbar>
+                  <div class="ui-toolbar-group-left">
+                      <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Banks</label>
+                  </div>  
+                  <div class="ui-toolbar-group-right">
+                      <button pButton type="button" label="New Bank" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+                      <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="fetchBanks()"></button>
+                  </div>
+              </p-toolbar>
+ 
+              <p-dataTable [value]="Banks" selectionMode="single" (onRowSelect)="onRowSelect($event)"#dt>               
+                <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="ownBank" header="Own bank?" [filter]="true" filterPlaceholder="Search"></p-column>
+              </p-dataTable>
+
+        </div>
+    </div>      
+</div>    

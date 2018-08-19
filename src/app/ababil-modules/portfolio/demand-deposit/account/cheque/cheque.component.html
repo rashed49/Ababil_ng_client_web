@@ -1,0 +1,24 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Cheque books</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="New chequeBook" icon="ui-icon-plus" class="default-btn" (click)="create($event)"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="fetchChequeBookByAccountId()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="chequeBook" selectionMode="single" (onRowSelect)="onRowSelect($event)" #dt>
+            <!-- <p-column field="id" header="Check book ID" [filter]="true" filterPlaceholder="Search"></p-column> -->
+            <p-column field="chequePrefix" header="Cheque prefix" [filter]="true" filterPlaceholder="Search" *ngIf="chequePrefixPresent"></p-column>
+            <p-column field="startLeafNumber" header="Start leaf number" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="endLeafNumber" header="End leaf number" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="chequeBookStatus" header="Chequebook status" [filter]="true" filterPlaceholder="Search"></p-column>
+        </p-dataTable>
+    </div>
+</div>

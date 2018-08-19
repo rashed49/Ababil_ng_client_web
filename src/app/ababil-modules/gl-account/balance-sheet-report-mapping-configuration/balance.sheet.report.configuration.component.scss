@@ -1,0 +1,29 @@
+.toolbar-buttons{
+    margin-top: 2px; 
+    margin-bottom: 2px;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-input{
+    color:white; 
+    border-color: white;
+}
+
+.custom-input:focus{
+   border-color: white; 
+}
+
+.custom-input::placeholder { 
+    color: white;
+    opacity: 1; 
+}
+
+.custom-button{
+    background-color: #cddc39; 
+    color:black;
+}
+
+.custom-button:hover{
+    color: white;
+}

@@ -1,0 +1,51 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approval flow mappings</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton ype="button" icon="ui-icon-search" (click)="op.show($event)"></button>
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="updateCommandApprovalMappings()"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refresh()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+
+<p-overlayPanel #op>
+    <br/>
+    <div [formGroup]="searchForm">
+
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="name" maxLength="60">
+                    <label>Name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="group" maxLength="60">
+                    <label>Group</label>
+                </span>
+            </div>
+        </div>
+
+        <button pButton type="button" label="Search" class="primary-btn" (click)="search();op.hide($event)"></button>
+    </div>
+
+</p-overlayPanel>
+
+<br/>
+
+<p-dataTable [resizableColumns]="true" [tableStyle]="{'table-layout':'auto'}" [value]="allCommands" dataKey="id" [lazy]="true"
+    [rows]="20" [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadCommandMappingsLazy($event)" #dt>
+    <p-column field="command" header="Command"></p-column>
+    <p-column field="name" header="Name"></p-column>
+    <p-column field="group" header="Group"></p-column>
+    <p-column field="approvalFlowId" header="Approval flow" [style]="{'overflow':'visible','text-align':'center'}">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+            <p-dropdown [options]="approvalFlows" [(ngModel)]="data[col.field]" [autoWidth]="true" (onChange)="handleValueChange(data)" appendTo="body"></p-dropdown>
+        </ng-template>
+    </p-column>
+</p-dataTable>

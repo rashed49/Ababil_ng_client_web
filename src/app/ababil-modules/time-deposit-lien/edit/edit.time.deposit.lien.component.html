@@ -1,0 +1,165 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Lien Details</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="updateTimedepositLien()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<form class="ui-g-12 ui-fluid all" [formGroup]="editTimeDepositLienForm">
+    <div class="ui-g ui-fluid">
+        <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+            <mat-card style="flex:1">
+                <mat-card-title>Basic Information</mat-card-title>
+                <div class="ui-g-12 ui-md-3">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [value]="referenceType.referenceType" readonly>
+                            <label>Reference Type</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText [value]="timeDepositLien.lienReferenceNumber" readonly>
+                            <label>Reference Number</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-5">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="note">
+                            <label>Remarks*</label>
+                            <div *ngIf="editTimeDepositLienForm.controls['note'].errors && !editTimeDepositLienForm.controls['note'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!editTimeDepositLienForm.controls['note'].errors.required">Remarks is required.</div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+            <mat-card style="flex:1">
+                <mat-card-title>Lien Impose List</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-4">
+                        <div class="ui-g-12 ui-md-3">
+                            <span class="md-inputfield-2">
+                                <input name="skip" style="opacity: 1" enter type="text" pInputText [(ngModel)]="branchCode" [ngModelOptions]="{standalone: true}"
+                                    (blur)="formatBranchCodeToShow()" [maxLength]="branchCodeLength" (keyup.enter)="formatBranchCodeToShow()"
+                                    [attr.disabled]="true">
+                                <label class="md-inputlabel-2">Br. code</label>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-9">
+                            <span class="md-inputfield-2">
+                                <input name="skip" enter type="text" pInputText [(ngModel)]="accountNumberWithProductCode" [ngModelOptions]="{standalone: true}"
+                                    (blur)="formatAccountNumberToShow()" [maxLength]="accountNumberLengthWithProductCode" (keyup.enter)="formatAccountNumberToShow()">
+                                <label class="md-inputlabel-2">Account number</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-4">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="lienBalance">
+                                <label>Lien Balance</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-4">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="eligibleLienAmount">
+                                <label>Eligible Amount</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-4" style="margin-top:18px">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" ababil-currency [fractionSize]="2" [negativeAllowed]="false" pInputText formControlName="imposeAmount"
+                                    (keyup.enter)="addLienImpose()">
+                                <label>Impose Amount*</label>
+                                <div *ngIf="editTimeDepositLienForm.controls['imposeAmount'].errors && !editTimeDepositLienForm.controls['imposeAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!editTimeDepositLienForm.controls['imposeAmount'].errors.required">Impose amount is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-8">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <textarea style="opacity: 1;" pInputTextarea [(ngModel)]="amountInWords" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                                    placeholder="Amount in Words"></textarea>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-11"></div>
+                        <div class="ui-g-12 ui-md-1">
+                            <button pButton type="button" icon="ui-icon-plus" label="Add" class="default-btn" pTooltip="Add lien impose" tooltipPosition="top"
+                                (click)="addLienImpose()"></button>
+                        </div>
+                    </div>
+                    <p-dataTable [value]="timeDepositLienDetails" [responsive]="false" [editable]="true">
+                        <p-column header="Account Number">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{data.id?(accountTypeMap.get(data.accountId)):(data.accountNumber)}}
+                            </ng-template>
+                        </p-column>
+                        <p-column header="Lien Balance">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{data.lienBalance}}
+                            </ng-template>
+                        </p-column>
+                        <p-column header="Eligible Amount">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{data.eligibleLienAmount | number:'1.2-2': ""}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="imposeAmount" header="Impose Amount" [editable]="true">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="data.withdrawalAmount > 0"
+                                />
+                            </ng-template>
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                    [disabled]="data.withdrawalAmount > 0" />
+                            </ng-template>
+                        </p-column>
+                        <p-column field="withdrawalAmount" header="Recovered Amount" [editable]="true">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [disabled]="data.imposeAmount > 0"
+                                />
+                            </ng-template>
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                    [maxlength]="balanceLength" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"
+                                    [disabled]="data.imposeAmount > 0" />
+                            </ng-template>
+                        </p-column>
+                        <p-column header="Delete">
+                            <ng-template let-col let-i="rowdata" let-data="rowData" pTemplate="body">
+                                <div align="center">
+                                    <button type="button" pButton tooltipPosition="top" icon="ui-icon-delete" class="default-btn" (click)="deleteTimeDepositLienDetail()"
+                                        *ngIf="!data.id"></button>
+                                </div>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</form>

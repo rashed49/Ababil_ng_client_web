@@ -1,0 +1,58 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: {{menuTitle()}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label={{saveButtonLabel()}} icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="margin-top:15px;">
+            <mat-card-title style="display: flex;flex-direction: row">
+                <div style="flex:1">Basic information:</div>
+                <!-- <div align="right">
+                            <b>
+                                <p>{{fixedDepositProductDetails.status}}</p>
+                            </b>
+                        </div> -->
+            </mat-card-title>
+            <mat-card-content>
+                <div style="display:flex; flex-direction:row">
+                    <div style="flex: 2; margin-right: 3px;">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Account Name</th>
+                                <td>{{account.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Account No</th>
+                                <td>{{account.number}}</td>
+                            </tr>
+                            <tr>
+                                <th>Reason</th>
+                                <!-- <td>{{freezeAccountDetails.object}}</td> -->
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+    </div>
+
+</div>
+
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

@@ -1,0 +1,120 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Nominee detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" (click)="edit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="ui-g-6">
+    <mat-card>
+        <mat-card-title>Account Information:</mat-card-title>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" value={{accountDetails.name}} readonly pInputText>
+                    <label>Account name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" value={{accountDetails.number}} readonly pInputText>
+                    <label>Account number</label>
+                </span>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<div class="ui-g-6">
+    <mat-card>
+        <mat-card-title>Contact Information:</mat-card-title>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" [value]="individualDetails.contactInformation.mobileNumber?individualDetails.contactInformation.mobileNumber:' '"
+                        readonly pInputText>
+                    <label>Mobile number</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <span class="md-inputfield">
+                        <input type="text" [value]="individualDetails.contactInformation.email?individualDetails.contactInformation.email:' '" readonly
+                            pInputText>
+                        <label>Email address</label>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<div class="ui-g-12">
+    <mat-card>
+        <mat-card-title>Nominee Information:</mat-card-title>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <input type="text" value="{{individualsFullName}}" readonly pInputText>
+                        <label>Nominee name</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <span class="md-inputfield">
+                            <input type="text" [value]="nominee.relationWithAccountHolder?nominee.relationWithAccountHolder:' '" readonly pInputText>
+                            <label>Relation With Account Holder</label>
+                        </span>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <span class="md-inputfield">
+                            <input type="text" [value]="nominee.sharePercentage+'%'" readonly pInputText>
+                            <label>Share percentage</label>
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12" style="padding-bottom: -0px;">
+                <div class="ui-g-12 ui-md-10"></div>
+                <div class="ui-g-12 ui-md-2">
+                    <button pButton type="button" label="View Detail" icon="ui-icon-info" (click)="shortInduvidualDetails(nominee.id)"></button>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<!-- <div class="ui-g-12" *ngIf="nominee.guardianId || (!nominee.id && nomineeIsMinor)">
+    <mat-card>
+        <mat-card-title>Guardian Information:</mat-card-title>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" [value]="guardiansFullName" readonly pInputText>
+                    <label>Guardian Name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <span class="md-inputfield">
+                        <input type="text" [value]="nominee.relationWithGuardian" readonly pInputText>
+                        <label>Relation With Nominee</label>
+                    </span>
+                </span>
+            </div>
+        </div>
+    </mat-card>
+</div> -->

@@ -1,0 +1,121 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Charge configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+<mat-card style="margin-bottom: 15px;">
+    <mat-card-title>Basic charge configuration</mat-card-title>
+    <div class="ui-g ui-fluid form-group">
+        <div class="ui-g-12 ui-md-12">
+
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Name</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <p-dropdown appendTo="body" [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <p-dropdown appendTo="body" [autoWidth]="false"></p-dropdown>
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-2" style="padding-top: 10px;">
+                <p-checkbox binary="true" [(ngModel)]="check"></p-checkbox>
+                <span>Is slab based?</span>
+            </div>
+            <div *ngIf="!check">
+                <div class="ui-g-12 ui-md-1" style="padding-top: 10px;">
+                    <p-checkbox binary="true" [(ngModel)]="fixed"></p-checkbox>
+                    <span>Is fixed?</span>
+                </div>
+                <div class="ui-g-12 ui-md-3">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText>
+                        <label>Charge amount</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" *ngIf="!fixed">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText>
+                        <label>Minimum charge</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" *ngIf="!fixed">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText>
+                        <label>Maximum charge</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<mat-card *ngIf="check" style="margin-bottom: 15px;">
+    <mat-card-title>Slab Based Charge configuration</mat-card-title>
+    <div class="ui-g ui-fluid form-group">
+        <div class="ui-g-12 ui-md-12">
+
+            <div class="ui-g-12 ui-md-3">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Amount range to</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-1" style="padding-top: 10px;">
+                <p-checkbox binary="true" [(ngModel)]="fixed"></p-checkbox>
+                <span>Is fixed?</span>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Charge amount</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-2" *ngIf="!fixed">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Minimum charge</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-2" *ngIf="!fixed">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Maximum charge</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-1">
+                <button pButton type="button" label="Add Slab" icon="ui-icon-plus" class="default-btn" style="margin-top:-10px;">
+                </button>
+            </div>
+
+        </div>
+    </div>
+</mat-card>
+
+<mat-card *ngIf="check">
+    <mat-card-title>Slab based charge configuration list</mat-card-title>
+
+    <p-dataTable selectionMode="single">
+        <p-column [sortable]="true" header="From amount"></p-column>
+        <p-column [sortable]="true" header="To amount"></p-column>
+        <p-column [sortable]="true" header="is fixed?"></p-column>
+        <p-column [sortable]="true" header="charge amount"></p-column>
+        <p-column [sortable]="true" header=" Min Charge"></p-column>
+        <p-column [sortable]="true" header=" Max Charge"></p-column>
+    </p-dataTable>
+</mat-card>

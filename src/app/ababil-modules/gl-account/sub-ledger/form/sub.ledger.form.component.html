@@ -1,0 +1,80 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<!-- <div *ngIf="!taskId"> -->
+<mat-card style="margin-top: 0px">
+    <div style="display: flex; flex-direction: row; width: 100%;">
+
+        <div style="flex: 4; margin-right: 10px;" >
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="name" size="60"/>
+                <label>Name</label>
+            </span>
+        </div>
+
+        <div style="flex: 4; margin-right: 10px;" *ngIf="local">
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="currencyCode" readonly />
+                <label>Currency code</label>
+            </span>
+
+        </div>
+    </div>
+
+    <br/>
+    <div class="ui-g ui-fluid form-group" [formGroup]="subLedgerForm">
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+
+            <div style="flex: 4; margin-right: 10px;">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="code" readonly>
+                    <label>Code</label>
+                </span>
+            </div>
+            <div style="flex: 4; margin-right: 10px;" *ngIf="!branchAllowed&&!editMode">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="branchId">
+                    <label>Branch id</label>
+                </span>
+            </div>
+
+            <div style="flex: 4; margin-right: 10px;" *ngIf="!branchAllowed&&editMode">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="branchId" readonly>
+                    <label>Branch id</label>
+                </span>
+            </div>
+
+            <div style="flex: 3; margin-right: 10px;">
+                <p-checkbox binary="true" formControlName="areAllBranchAllowed"></p-checkbox>
+                <span>All branch allowed</span>
+            </div>
+
+  
+
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+
+
+                <div style="flex: 4; margin-right: 10px;" *ngIf="!local">
+                        <span class="md-inputfield"> Currency code
+                        </span>
+                        <p-dropdown [options]="currencies" [autoWidth]="false" formControlName="currencyCode"></p-dropdown>
+                        <!-- <div *ngIf="subLedgerForm.controls['currencyCode'].errors && !subLedgerForm.controls['currencyCode'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!subLedgerForm.controls['currencyCode'].errors.required">Currency code is required.</div>
+                                </div> -->
+                    </div>
+
+            <div style="flex: 4; margin-right: 10px;">
+                <p-checkbox binary="true" formControlName="isNegativeBalanceAllowed"></p-checkbox>
+                <span>Negative Balance Allowed</span>
+            </div>
+
+            <div style="flex: 3; margin-right: 10px;">
+                <p-checkbox binary="true" formControlName="isOnlineTxnAllowed"></p-checkbox>
+                <span>Online Txn Allowed</span>
+            </div>
+        </div>
+    </div>
+</mat-card>

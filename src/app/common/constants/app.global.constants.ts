@@ -1,0 +1,2 @@
+export const SUBJECT_LIST='SUBJECT_LIST';
+export const ADD_SUBJECT='ADD_SUBJECT';

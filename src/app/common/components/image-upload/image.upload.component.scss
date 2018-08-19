@@ -1,0 +1,49 @@
+.image-upload > input {
+    display: none;
+}
+
+.attach-doc {
+    cursor: pointer;
+}
+
+.button {
+    background-color:#f5f5f5;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 2px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+    padding: 5px;
+    height: 27px;
+    min-width: 54px;
+    outline: 0;
+    color: #444;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color:#f8f8f8;
+    color:#333;
+    box-shadow: none;
+    background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+    border: 1px solid #dcdcdc;
+}
+ 
+.cropper-container {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100%;
+}
+  
+image-cropper {
+    max-height: 400px;
+}
+
+.container {
+    height: 370px;
+    overflow: hidden;
+}

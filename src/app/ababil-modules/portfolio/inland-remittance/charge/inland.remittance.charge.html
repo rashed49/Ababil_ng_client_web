@@ -1,0 +1,137 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Inland remittance charge</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Activate" icon="ui-icon-check-circle" class="default-btn" (click)="activate()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <div class="ui-g-12 ui-md-4">
+            <mat-card>
+                <mat-card-title style="display: flex;flex-direction: row">
+                    <div style="flex:1">Charge information:</div>
+                    <div align="right">
+                        <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add charge info" tooltipPosition="top" (click)="op.show($event);resetChargeInfoForm()"></button>
+                    </div>
+                </mat-card-title>
+
+                <p-dataTable [value]="inlandRemittanceChargeInfos" [responsive]="true" selectionMode="single" [(selection)]="selectedInfoItem"
+                    (onRowSelect)="onChargeInfoRowSelect($event)">
+                    <p-column field="chargeName" header="Charge name"></p-column>
+
+                    <p-column [style]="{'width':'70px','text-align':'center'}">
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <button mat-icon-button [matMenuTriggerFor]="menu">
+                                <mat-icon class="mat-icon-button-custom">more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item (click)="op.show($event);editChargeInfo(data)">
+                                    <mat-icon>create</mat-icon>
+                                    <span>Edit</span>
+                                </button>
+                                <button mat-menu-item (click)="deleteChargeInfo(data)">
+                                    <mat-icon>delete</mat-icon>
+                                    <span>Delete</span>
+                                </button>
+                            </mat-menu>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </mat-card>
+        </div>
+
+        <div class="ui-g-12 ui-md-8">
+            <mat-card>
+                <mat-card-title style="display: flex;flex-direction: row">
+                    <div style="flex:1">Charge configuration:</div>
+                    <div align="right" *ngIf="showChargeConfigurationButton">
+                        <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add charge configuration" (click)="addChargeConfiguration()"></button>
+                    </div>
+                </mat-card-title>
+
+                <p-dataTable [value]="inlandRemittanceChargeConfigurations" [responsive]="true" selectionMode="single" [(selection)]="selectedConfigurationItem">
+                    <p-column field="inlandRemittanceProduct.name" header="Product name">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            {{rowData.defaultConfiguration? rowData.inlandRemittanceProduct.name+' (Default)' : rowData.inlandRemittanceProduct.name}}
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="currencyCode" header="Currency code" [style]="{'text-align':'center'}"></p-column>
+                    <p-column field="chargeGl" header="Charge GL" [style]="{'text-align':'center'}"></p-column>
+                    <p-column field="vatGl" header="VAT GL" [style]="{'text-align':'center'}"></p-column>
+
+                    <!-- <p-column field="amountSlabApplicable" header="Amount slab applicable" [style]="{'text-align':'center'}">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            <div align="center">
+                                <i class='material-icons-done-close'> {{rowData.amountSlabApplicable? "done":"close"}}</i>
+                            </div>
+                        </ng-template>
+                    </p-column> -->
+
+                    <p-column field="active" header="Active" [style]="{'width':'70px','text-align':'center'}">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            <div align="center">
+                                <i class='material-icons-done-close'> {{rowData.active? "done":"close"}}</i>
+                            </div>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column header="Edit" [style]="{'width':'70px','text-align':'center'}">
+                        <ng-template let-data="rowData" pTemplate="body">
+                            <div align="center">
+                                <button type="button" pButton (click)="editConfiguration(data)" icon="ui-icon-create"></button>
+                            </div>
+                        </ng-template>
+                    </p-column>
+
+                    <p-column field="sendToActivate" header="Send for activation">
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                            <div align="center" *ngIf="!data.active">
+                                <p-checkbox [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" binary="true"></p-checkbox>
+                            </div>
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <div align="center" *ngIf="!data.active">
+                                <p-checkbox [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" binary="true"></p-checkbox>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </mat-card>
+        </div>
+    </div>
+</div>
+
+<!-- Charge Info -->
+<p-overlayPanel #op [style]="{'width':'350px'}">
+    <div [formGroup]="chargeInfoForm">
+        <br/>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-12">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="chargeName">
+                    <label>Charge name</label>
+                    <div *ngIf="chargeInfoForm.controls['chargeName'].errors && !chargeInfoForm.controls['chargeName'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeInfoForm.controls['chargeName'].errors.required">Charge name is required.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!chargeInfoForm.controls['chargeName'].errors.pattern">Charge name is invalid.</div>
+                    </div>
+                </span>
+            </div>
+        </div>
+
+        <div align="right">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveInlandRemittanceChargeInfo()"></button>
+            <button pButton type="button" label="Close" icon="ui-icon-cancel" class="default-btn" (click)="op.hide($event);resetChargeInfoForm()"></button>
+        </div>
+    </div>
+</p-overlayPanel>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

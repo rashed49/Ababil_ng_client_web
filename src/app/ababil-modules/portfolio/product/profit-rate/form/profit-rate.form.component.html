@@ -1,0 +1,172 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Profit rate of {{productDetails.name}}</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button [disabled]="isFormInvalid()" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card style="margin-bottom: 5px;">
+    <div class="ui-g ui-fluid form-group" [formGroup]="profitRateForm">
+        <div class="ui-g-12 ui-md-6" *ngIf="!multipleCurrency">
+            <span class="md-inputfield">
+                <input type="text" pInputText maxlength="15" [ngModel]="currencyCode" [ngModelOptions]="{standalone: true}" readonly="readonly">
+                <label>Currency code</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6" *ngIf="multipleCurrency">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="currencies" [autoWidth]="false" formControlName="currencyCode" pInputText></p-dropdown>
+                <label class="md-inputlabel-2">Currency code*</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield">
+                <p-calendar placeholder="From Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                    utc="true" formControlName="fromDate"></p-calendar>
+                <label>From Date</label>
+            </span>
+        </div>
+        <!-- <div class="ui-g-12 ui-md-6" *ngIf="!slabApplicable">
+            <span class="md-inputfield">                
+                <p-calendar placeholder="End Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050"
+                readonlyInput="true" utc="true" formControlName="endDate"></p-calendar>
+                <label>End Date</label>
+            </span>
+        </div> -->
+
+
+        <div class="ui-g-12 ui-md-6" *ngIf="!slabApplicable && apr">
+            <span class="md-inputfield">
+                <input type="number" formControlName="annualProvisionalRate" pInputText pKeyFilter="pnum">
+                <label>Annual provisional rate</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6" *ngIf="!slabApplicable && psr">
+            <span class="md-inputfield">
+                <input type="number" formControlName="psr" pInputText pKeyFilter="pnum">
+                <label>Profit sharing ratio</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6" *ngIf="!slabApplicable && weightage">
+            <span class="md-inputfield">
+                <input type="number" formControlName="weightage" pInputText pKeyFilter="pnum">
+                <label>Weightage</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <p-checkbox binary="true" formControlName="slabApplicable"></p-checkbox>
+            <span class="task-name">Slab applicable</span>
+        </div>
+        <br/>
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" formControlName="description" pInputText>
+                <label>Description</label>
+            </span>
+        </div>
+        <br/>
+
+        <div class="ui-g-12 ui-md-10" *ngIf="slabApplicable"></div>
+
+        <div class="ui-g-12 ui-md-2" *ngIf="slabApplicable">
+            <button [disabled]="!addButton" pButton type="button" label="Add slab" icon="ui-icon-plus" class="default-btn" (click)="addSlab()"></button>
+        </div>
+    </div>
+
+
+
+    <p-dataTable [value]="ddProfitSlabs" [editable]="true" *ngIf="slabApplicable" (onRowSelect)="console.log($event)">
+
+        <p-column field="tenorType" header="Tenor type" [editable]="true" *ngIf="slabApplicable && notDemandDepositType">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.tenorType}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <p-dropdown [options]="tenorTypes" [autoWidth]="true" pInputText [(ngModel)]="data[col.field]"></p-dropdown>
+            </ng-template>
+        </p-column>
+
+        <p-column field="fromTenor" header="From tenor" [editable]="true" *ngIf="slabApplicable && notDemandDepositType">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{isNumber(data.fromTenor)? (data.fromTenor):(data.fromTenor)}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="toTenor" header="To tenor" [editable]="true" *ngIf="slabApplicable && notDemandDepositType">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{isNumber(data.toTenor)? (data.toTenor):(data.toTenor)}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="amountRangeFrom" header="Amount range from" [editable]="true" *ngIf="slabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.amountRangeFrom | number:'1.2-4'}}
+            </ng-template>
+        </p-column>
+        <p-column field="amountRangeTo" header="Amount range to" [editable]="true" *ngIf="slabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{isNumber(data.amountRangeTo)? (data.amountRangeTo | number:'1.2-4'):(data.amountRangeTo)}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="annualProvisionalRate" header="Annual provision rate" [editable]="true" *ngIf="apr">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.annualProvisionalRate}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+        <p-column field="psr" header="Profit sharing ratio" [editable]="true" *ngIf="psr">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.psr}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+        <p-column field="weightage" header="Weightage" [editable]="true" *ngIf="weightage">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.weightage}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="number" pInputText pKeyFilter="pnum" [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index)" [disabled]="index!=ddProfitSlabs.length-1 && ddProfitSlabs.length>1"
+                />
+            </ng-template>
+        </p-column>
+        <p-column *ngIf="slabApplicable" header="Delete">
+            <ng-template let-rowIndexValue="rowIndex" pTemplate="body">
+                <div align="center">
+                    <button type="text" (click)="onDeleteRow()" pButton icon="ui-icon-delete" *ngIf="rowIndexValue==(ddProfitSlabs.length-1) && ddProfitSlabs.length>1"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</mat-card>

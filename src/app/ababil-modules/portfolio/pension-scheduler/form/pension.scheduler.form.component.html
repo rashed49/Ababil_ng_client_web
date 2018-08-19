@@ -1,0 +1,70 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Pension Schedule Generator</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <!-- <button pButton label="Generate Schedule" type="button" icon="ui-icon-date-range" class="default-btn" (click)="submit()"></button> -->
+                <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<mat-card style="margin-top: 0px">
+    <div style="display: flex; flex-direction: row; width: 100%;">
+
+        <div style="flex: 2; margin-right: 10px;">
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="principal" size="35"/>
+                <label>Principal</label>
+                <br/>
+                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!principalRequired">Principal is required.</div>
+
+            </span>
+        </div>
+
+        <div style="flex: 2; margin-right: 10px;">
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="rate" size="35"/>
+                <label>Rate</label>
+                <br/>
+                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!rateRequired">Rate is required.</div>
+
+            </span>
+
+        </div>
+
+        <div style="flex: 6; margin-right: 10px;">
+            <span class="md-inputfield">
+                <input type="text" pInputText [(ngModel)]="tenor" size="35"/>
+                <label>Tenor</label>
+                <br/>
+                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!tenorRequired">Tenor is required.</div>
+
+            </span>
+
+        </div>
+        <div style="flex: 12; margin-right: 10px;">
+        <button pButton label="Generate Schedule" type="button" icon="ui-icon-date-range" class="default-btn" (click)="submit()"></button>
+</div>
+
+    </div>
+
+    <div class="ui-g-12" *ngIf=!pensionScheduleEmpty>
+
+    
+            <p-dataTable [value]="pensionSchedule" [style]="{'margin-top':'50px'}">
+            <p-column field="installmentNumber" header="Installment number" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+            <p-column field="installmentAmount" header="Installment amount" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+            <p-column field="installmentDate" header="Installment date" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+            <p-column field="installmentPrincipal" header="Installment principal" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+            <p-column field="installmentProfit" header="Installment profit" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+            <p-column field="principalOutstanding" header="Principal outstanding" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+
+
+        </p-dataTable>
+    </div>
+
+</mat-card>

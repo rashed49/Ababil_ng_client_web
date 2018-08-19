@@ -1,0 +1,215 @@
+<mat-tab-group [selectedIndex]="0">
+    <mat-tab label="Basic information">
+        <div class="ui-g-12">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Customer ID</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.customerId}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{fixedDepositAccount.number}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Product Code</th>
+                            <td>{{productDetails.code}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Currency</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.currencyCode}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Account Status</th>
+                            <td>{{fixedDepositAccount.status}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Product Description</th>
+                            <td>{{productDetails.description}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+            </div>
+            
+        <div class="ui-g-12">
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Balance</th>
+                        <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                            | number:'1.2-2') : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Principal debit</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.principalDebit
+                            | number:'1.2-2') : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Principal credit</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.principalCredit
+                            | number:'1.2-2') :""}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Lien amount</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.lienAmount
+                            | number:'1.2-2') : ""}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Quard amount</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.quardAmount
+                            | number:'1.2-2') : ""}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Profit debit</th>
+                        <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.profitDebit
+                            | number:'1.2-2') : ""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Profit credit</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.profitCredit
+                            | number:'1.2-2') :""}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Withdrawable principal</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.withdrawablePrincipal
+                            | number:'1.2-2') : ""}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Withdrawable profit</th>
+                        <td>{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.withdrawableProfit
+                            | number:'1.2-2') : ""}}
+                        </td>
+                    </tr>
+                </table>
+                <br>
+            </div>
+        </div>
+        </div>
+    </mat-tab>
+    <mat-tab label="Tenor">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Tenor Type</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.tenorType}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Tenor</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.tenor}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Initial Deposit</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.initialDeposit}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Renewal Tenor</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.renewalTenor}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Renewal Option</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.renewalOption}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Renewal Principal</th>
+                            <td class="ui-lg-3">{{fixedDepositAccount.renewalPrincipal}}</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+
+
+    <mat-tab label="Contact information">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Phone number</th>
+                            <td class="ui-lg-3">{{contactInformation.phoneNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.mobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Alternate mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.alternateMobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Email</th>
+                            <td class="ui-lg-3">{{contactInformation.email}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Fax</th>
+                            <td class="ui-lg-3">{{contactInformation.fax}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Address</th>
+                            <td class="ui-lg-3">{{address.addressLine}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Country</th>
+                            <td class="ui-lg-3">{{country.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Division</th>
+                            <td class="ui-lg-3">{{division.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">District</th>
+                            <td class="ui-lg-3">{{district.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Upazilla</th>
+                            <td class="ui-lg-3">{{upazilla.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+
+    <mat-tab-group>

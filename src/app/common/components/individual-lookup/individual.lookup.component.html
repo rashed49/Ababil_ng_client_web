@@ -1,0 +1,87 @@
+<p-dialog header="Individual lookup" [(visible)]="display" modal="modal" width="500" [responsive]="true" [positionTop]="50"
+    [draggable]="false" [contentStyle]="{'height': '450px'}">
+
+    <div>
+        <div class="ui-g ui-fluid form-group" [formGroup]="searchIndividualForm">
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="name">
+                    <label>Name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="email">
+                    <label>Email</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="mobileNumber">
+                    <label>Mobile number</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="tin">
+                    <label>TIN</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="nid">
+                    <label>NID</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-2">
+                <button type="button" pButton (click)="search(); hideDataList=false" label="Search"></button>
+            </div>
+
+        </div>
+    </div>
+
+    <p-dataList [value]="individuals" [paginator]="true" [rows]="20" [totalRecords]="totalRecords" [hidden]="hideDataList">
+        <ng-template let-individual pTemplate="item">
+
+            <div class="ui-g ui-fluid border-bottom-datalist select-datalist" (click)="selectIndividual(individual.id)">
+                <div class="ui-g-12 ui-md-3" style="text-align:center">
+                    <img src="{{imageApiUrl}}/individuals/{{individual.id}}/image" width="70">
+                </div>
+                <div class="ui-g-12 ui-md-9 car-details">
+                    <div class="ui-g">
+                        <div class="ui-g-4 ui-sm-6 no-padding">Name: </div>
+                        <div class="ui-g-8 ui-sm-6 no-padding">
+                            {{ getFullName(individual.firstName, individual.middleName, individual.lastName )}}
+                        </div>
+
+                        <div class="ui-g-4 ui-sm-6 no-padding">Father's name: </div>
+                        <div class="ui-g-8 ui-sm-6 no-padding">
+                            {{ getFullName(individual.fathersFirstName, individual.fathersMiddleName, individual.fathersLastName )}}
+                        </div>
+
+                        <div class="ui-g-4 ui-sm-6 no-padding">Mother's name: </div>
+                        <div class="ui-g-8 ui-sm-6 no-padding">
+                            {{ getFullName(individual.mothersFirstName, individual.mothersMiddleName, individual.mothersLastName )}}
+                        </div>
+
+                        <div class="ui-g-4 ui-sm-6 no-padding">Mobile number: </div>
+                        <div class="ui-g-8 ui-sm-6 no-padding">{{ individual.contactInformation ? individual.contactInformation.mobileNumber : '' }}</div>
+
+                        <div class="ui-g-4 ui-sm-6 no-padding">Email address: </div>
+                        <div class="ui-g-8 ui-sm-6 no-padding">{{ individual.contactInformation ? individual.contactInformation.email : '' }}</div>
+                    </div>
+                </div>
+            </div>
+
+        </ng-template>
+    </p-dataList>
+
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-close" (click)="display=false" label="Close"></button>
+    </p-footer>
+</p-dialog>

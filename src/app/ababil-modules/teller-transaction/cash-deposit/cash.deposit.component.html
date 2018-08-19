@@ -1,0 +1,364 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Cash Deposit</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Deposit" icon="ui-icon-call-received" class="default-btn" (click)="deposit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1">
+            <mat-card-title>Teller information:</mat-card-title>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="flex: 4; margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <td>{{teller.title}}</td>
+                        </tr>
+                        <tr>
+                            <th>Cash receive limit</th>
+                            <td>{{tellerLimit.cashReceiveLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="flex: 4;margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Balance</th>
+                            <td>{{tellerBalance.balance | number:'1.2-4'}}</td>
+                        </tr>
+                        <tr>
+                            <th>Cash withdraw limit</th>
+                            <td>{{tellerLimit.cashWithdrawLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="flex: 4;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Currency</th>
+                            <td>{{tellerBalance.currencyCode}}</td>
+                        </tr>
+                        <tr>
+                            <th>Balance limit</th>
+                            <td>{{tellerLimit.balanceLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>
+<form class=" form-group" [formGroup]="cashDepositForm">
+    <div style="display: flex;" class="ui-g ui-fluid">
+        <!-- <mat-card class="ui-g ui-fluid" style="font-size: 12px; flex: 1"> -->
+        <!-- <div class="ui-g ui-fluid"> -->
+        <mat-card style="flex:1">
+            <mat-card-title>Account infromation:</mat-card-title>
+
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4 md-inputfield" style="font-size: 16px;">
+                    <p-selectButton [options]="accountTypes" (onChange)="onAccountTypeChange()" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAccountType"></p-selectButton>
+                </div>
+                <div class="ui-g-12 ui-md-4"></div>
+                <div class="ui-g-12 ui-md-4 md-inputfield" style="font-size: 16px;" *ngIf="selectedAccountType!='GL'">
+                    <p-selectButton [options]="transactionTypes" (onChange)="onTransactionTypeChange()" [ngModelOptions]="{standalone: true}"
+                        [(ngModel)]="transactionType"></p-selectButton>
+                </div>
+                <div class="ui-g-12 ui-md-12"></div>
+                <div class="ui-g-12 ui-md-12">
+
+                    <!-- <div class="ui-g-12 ui-md-4" style="margin-top: 10px">
+                        <span class="md-inputfield-2">
+                            <p-dropdown [options]="accountTypes" [autoWidth]="false" [(ngModel)]="selectedAccountType" [ngModelOptions]="{standalone: true}"
+                                required (onChange)="onAccountTypeChange()"></p-dropdown>
+                            <label class="md-inputlabel-2">Account type</label>
+                        </span>
+                    </div> -->
+
+                    <div class="ui-g-12 ui-md-4" *ngIf="accountTxn" style="margin-top: 10px">
+                        <span class="md-inputfield-2 ">
+                            <p-dropdown [options]="accountSubTypes" [autoWidth]="false" required [(ngModel)]="selectedSubAccountType" [ngModelOptions]="{standalone: true}"
+                                (onChange)="onAccountSubTypeChange()"></p-dropdown>
+                            <label class="md-inputlabel-2">Sub account types</label>
+                        </span>
+                        <div *ngIf="selectedSubAccountTypeChecker">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!selectedSubAccountTypeChecker">Sub account type is required</div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4" *ngIf="accountTxn && selectedSubAccountType!=''">
+                        <div class="ui-g-12 ui-md-3">
+                            <span class="md-inputfield-2">
+                                <input name="skip" style="opacity: 1" enter type="text" pInputText [(ngModel)]="branchCode" [ngModelOptions]="{standalone: true}"
+                                    (blur)="formatBranchCodeToShow()" [maxLength]="branchCodeLength" (keyup.enter)="formatBranchCodeToShow()" [attr.disabled]="transactionChecker ? transactionChecker: null">
+                                <label class="md-inputlabel-2">Br. code</label>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-9">
+                            <span class="md-inputfield-2">
+                                <!-- (ngModelChange)="onAccountNumberChange($event) -->
+                                <input name="skip" enter type="text" pInputText [(ngModel)]="accountNumberWithProductCode" [ngModelOptions]="{standalone: true}"
+                                    (blur)="formatAccountNumberToShow()" [maxLength]="accountNumberLengthWithProductCode" (keyup.enter)="formatAccountNumberToShow()">
+                                <label class="md-inputlabel-2">Account number</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-2" style="margin-left: 5px" *ngIf="accountTxn && selectedSubAccountType!=''">
+                        <button name="skip" icon="ui-icon-account-circle" pButton type="button" label="Account detail" class="default-btn" (click)="showAccountDetail()"></button>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-4" style="margin-top: 10px;" *ngIf="glTxn">
+                        <span class="md-inputfield-2">
+                            <p-dropdown [options]="allowedGls" [autoWidth]="false" required [(ngModel)]="selectedGlMapCode" [ngModelOptions]="{standalone: true}"
+                                (onChange)="onGLCodeChange()"></p-dropdown>
+                            <label class="md-inputlabel-2">GL code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-4" *ngIf="subglTxn">
+                        <div class="ui-g-12 ui-md-3">
+                            <span class="md-inputfield-2">
+                                <input name="skip" style="opacity: 1" enter type="text" pInputText [(ngModel)]="branchCode" [ngModelOptions]="{standalone: true}"
+                                    (blur)="formatBranchCodeToShow()" [maxLength]="branchCodeLength" (keyup.enter)="formatBranchCodeToShow()" [attr.disabled]="transactionChecker ? transactionChecker: null">
+                                <label class="md-inputlabel-2">Br. code</label>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-9" >
+                            <span class="md-inputfield-2">
+                                <input enter type="text" pInputText [(ngModel)]="subglCodeWithCode" [maxLength]="SUBGLCodeLength - branchCodeLength" [ngModelOptions]="{standalone: true}" (blur)="formatSUBGLCodeToShow()" (keyup.enter)="formatSUBGLCodeToShow()">
+                                <label class="md-inputlabel-2">Sub GL code*</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12"></div>
+                <div class="ui-g-12 ui-md-4" style="font-size: 16px !important; opacity: 1 !important;">
+                    <span class="md-inputfield">
+                        <input enter type="text" pInputText [(ngModel)]="accountName" [ngModelOptions]="{standalone: true}" readOnly>
+                        <label>Account name</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4" style="font-size: 16px !important; opacity: 1 !important;">
+                    <span class="md-inputfield">
+                        <input enter type="text" pInputText [(ngModel)]="currency" (ngModelChange)="onSelectedCurrencyChange($event)" [ngModelOptions]="{standalone: true}"
+                            readonly>
+                        <label>Currency code</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4" style="font-size: 16px !important; opacity: 1 !important;" *ngIf="selectedAccountType!='GL'">
+                    <span class="md-inputfield">
+                        <input enter type="text" currencyMask pInputText [options]="currencyOption" [ngModel]="availableBalance ? availableBalance : 0 | number:'1.2-4'"
+                            [ngModelOptions]="{standalone: true}" readonly>
+                        <label>Available balance</label>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <mat-card class="ui-g ui-fluid" style="font-size: 12px; margin-top: 5px">
+        <mat-card-title>Transaction infromation:</mat-card-title>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [disabled]="!showExchangeRate" [options]="exchangeRateTypes" [autoWidth]="false" formControlName="exchangeRateTypeId"></p-dropdown>
+                        <label class="md-inputlabel-2">Exchange rate type*</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <input enter type="number" pInputText formControlName="exchangeRate" readonly>
+                        <label>Exchange rate</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <span>
+                        <p-checkbox binary=true [formControl]="cashDepositForm.controls['bearerTransaction']"></p-checkbox>
+                        <label>Bearer Transaction</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <button pButton type="button" icon="ui-icon-people" label="Bearer info" class="default-btn" (click)="showBearerInfo()" [disabled]="bearerTransactionChecker"></button>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12"></div>
+                <div class="ui-g-12 ui-md-4" style="margin-top: 18px">
+                    <span class="md-inputfield">
+                        <input currencyMask [options]="currencyOption" pInputText formControlName="amountCcy" [maxLength]="amountMaxLength" [attr.disabled]="amountVisible ? amountVisible : null">
+                        <label>Amount*</label>
+                        <div *ngIf="cashDepositForm.controls['amountCcy'].errors && !cashDepositForm.controls['amountCcy'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['amountCcy'].errors.required">AmountCcy is required.</div>
+                        </div>
+                    </span>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <textarea style="opacity: 1;" pInputTextarea [(ngModel)]="amountCCYInWords" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                            placeholder="Amount in words"></textarea>
+                        <!-- <label>Amount in words</label> -->
+                    </span>
+                </div>
+                <div class="ui-g-2 ui-md-2" style="margin-top: 18px">
+                    <button pButton type="button" icon="ui-icon-widgets" label="Denomination" class="default-btn" (click)="showDenomination()"
+                        [disabled]="denominationChecker"></button>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12" *ngIf="!isBaseCurrency">
+                <div class="ui-g-12 ui-md-12"></div>
+                <div class="ui-g-12 ui-md-4" style="margin-top: 18px">
+                    <span class="md-inputfield">
+                        <input currencyMask [options]="{ prefix: '', allowNegative: false, align: 'left', precision: 2 }" pInputText formControlName="amountLcy">
+                        <label>Amount LCY</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-8">
+                    <span class="md-inputfield">
+                        <textarea pInputTextarea style="opacity: 1;" [(ngModel)]="amountLCYInWords" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                            placeholder="Amount LCY in words"></textarea>
+                        <!-- <label>Amount LCY in words</label> -->
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12"></div>
+
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <input enter type="text" pInputText formControlName="sourceOfFund">
+                        <label>Source of fund</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-8">
+                    <span class="md-inputfield">
+                        <input enter type="text" pInputText formControlName="narration" >
+                        <label>Narration*</label>
+                        <div *ngIf="cashDepositForm.controls['narration'].errors && !cashDepositForm.controls['narration'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['narration'].errors.required">Narration is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['narration'].errors.pattern">Narration format is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </mat-card>
+    <mat-card *ngIf="selectedAccountType == 'GL' && ibta_Required" class="ui-g ui-fluid" style="font-size: 12px; margin-top: 5px">
+        <mat-card-title>IBTA infromation</mat-card-title>
+
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <span>
+                    <p-checkbox binary="true" formControlName="originating"></p-checkbox>
+                    <label class="md-inputlabel-2">Originating</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield">
+                    <input enter type="text" pInputText formControlName="adviceNumber" (blur)="onAdviceNumberChange()">
+                    <label>Advice number</label>
+                    <div *ngIf="ibta_Required && cashDepositForm.controls['adviceNumber'].errors && !cashDepositForm.controls['adviceNumber'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['adviceNumber'].errors.required">Advice number is required.</div>
+                    </div>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2" style="margin-top: 4px">
+                    <p-dropdown [options]="ibtaTxnParticulars" [autoWidth]="false" [filter]="true" filterBy="label,value" formControlName="ibtaTrCode"></p-dropdown>
+                    <label class="md-inputlabel-2">Transaction particular</label>
+                    <div *ngIf="ibta_Required && cashDepositForm.controls['ibtaTrCode'].errors && !cashDepositForm.controls['ibtaTrCode'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['ibtaTrCode'].errors.required">Transaction particular is required</div>
+                    </div>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-12" style="margin-top:22px">
+                <div class="ui-g-12 ui-md-4" *ngIf="!originatingChecker">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="branches | branchList" [autoWidth]="false" [filter]="true" filterBy="label" formControlName="originatingBranchId"
+                            [style]="{'width':'100%','font-size':'14px'}"></p-dropdown>
+                        <label class="md-inputlabel-2">Originating branch</label>
+                        <div *ngIf="ibta_Required && cashDepositForm.controls['originatingBranchId'].errors && !cashDepositForm.controls['originatingBranchId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['originatingBranchId'].errors.required">Originating branch is required.</div>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <p-calendar formControlName="originatingDate"></p-calendar>
+                        <label class="md-inputlabel-2">Originating date</label>
+                        <div *ngIf="ibta_Required && cashDepositForm.controls['originatingDate'].errors && !cashDepositForm.controls['originatingDate'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['originatingDate'].errors.required">Originating date is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="branches | branchList" [autoWidth]="false" [filter]="true" filterBy="label" formControlName="respondingBranchId"
+                            [style]="{'width':'100%','font-size':'14px'}"></p-dropdown>
+                        <label class="md-inputlabel-2">Responding branch</label>
+                        <div *ngIf="ibta_Required && cashDepositForm.controls['respondingBranchId'].errors && !cashDepositForm.controls['respondingBranchId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!cashDepositForm.controls['respondingBranchId'].errors.required">Responding branch is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</form>
+<p-dialog header="Denomination of Amount CCY" [(visible)]="denominationDisplay" modal="true" responsive="true" appendTo="body"
+    [minHeight]="550" closable="false" [width]="1000">
+    <denominatorComponent [previousTransactionDenominations]="previousTransactionDenominations" [tellerDenominationBalances]="tellerDenominationBalances"
+        [denominationStatus]="denominationStatus" [tellerCurrencyCode]="tellerCurrencyCode" #denominatorComponent></denominatorComponent>
+    <div style="float: right; margin-top: 10px">
+        <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveDenomination()"></button>
+        <button pButton type="button" label="Close" icon="ui-icon-close" class="default-btn" (click)="closeDenomination()"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="demandDepositAccountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>
+
+
+
+<p-dialog header="Fixed deposit account detail" [(visible)]="fixedDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-fixed-account-detail [fixedDepositAccountId]="fixedDepositAccountId"></common-fixed-account-detail>
+</p-dialog>
+
+
+<p-dialog header="Reccuring deposit account detail" [(visible)]="recurringDepositdisplay" [width]="1000" [minHeight]="800"
+    modal="true" closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-recurring-deposit-account-details [recurringDepositAccountId]="recurringDepositAccountId"></common-recurring-deposit-account-details>
+</p-dialog>
+
+<p-dialog header="Bearer information" [(visible)]="bearerdisplay" [width]="1000" [closable]="false" modal="true" appendTo="body"
+    maximizable="true">
+    <bearer-information [bearerInfo]="bearerInfo" #bearerComponent></bearer-information>
+    <div class="margin-bottom:10px;">
+        <button style="float: right;" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveBearer()"></button>
+        <button style="float: right; margin-right: 5px;" pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn"
+            (click)="cancelBearer()"></button>
+    </div>
+</p-dialog>
+
+<p-confirmDialog header="TP Viloation Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

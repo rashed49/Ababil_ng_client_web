@@ -1,0 +1,17 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Individual Information</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveIndividualInformation()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+
+<br/>
+
+<div>
+    <individual-form [visible]="true" [formData]="individualInfoFormData" #individualForm>
+    </individual-form>
+</div>

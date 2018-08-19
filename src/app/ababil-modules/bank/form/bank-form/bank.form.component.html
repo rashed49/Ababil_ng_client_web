@@ -1,0 +1,56 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <div class="card card-w-title">
+            <p-toolbar>
+                <div class="ui-toolbar-group-left">
+                    <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Bank Profile</label>
+                </div>
+                <div class="ui-toolbar-group-right">
+                    <button type="button" label="Save" icon="ui-icon-plus" class="default-btn" (click)="submit()" pButton></button>
+                    <button type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()" pButton></button>
+                </div>
+            </p-toolbar>
+
+            <br/>
+
+            <form class="ui-g ui-fluid form-group" [formGroup]="bankForm">
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="code" pInputText>
+                        <label>Code</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="name" pInputText>
+                        <label>Name</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="centralBankCode" pInputText>
+                        <label>centralBankCode</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="swiftCode" pInputText>
+                        <label>swift Code</label>
+                    </span>
+                </div>
+                <div style="width:100%; margin-bottom: 10px;">
+                    <span>Address:</span>
+                    <address-component [address]='address' #addressComponent></address-component>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <p-checkbox binary="false" label="Own Bank" formControlName="ownBank"></p-checkbox>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

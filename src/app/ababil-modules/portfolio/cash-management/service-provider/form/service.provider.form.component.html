@@ -1,0 +1,116 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Service provider:</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Submit" type="button" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton label="Back" icon="ui-icon-keyboard-arrow-left" type="button" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<form class="ui-fluid form-group" [formGroup]="providerForm">
+
+    <mat-card style="margin-top:50px">
+        <mat-card-title>Basic information:</mat-card-title>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-4 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" formControlName="providerName" pInputText>
+                        <label class="md-inputlabel-2">Name</label>
+                    </span>
+                </div>
+                <div class="ui-g-4 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" formControlName="shortName" pInputText>
+                        <label class="md-inputlabel-2">Short name</label>
+                    </span>
+                </div>
+                <div class="ui-g-4 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <span class="md-inputfield-2">
+                            <p-dropdown [options]="billCollectionAccountTypes" [autoWidth]="false" formControlName="billCollectionAccountType"></p-dropdown>
+                            <label class="md-inputlabel-2">BillCollection Account Type</label>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" formControlName="accountId" pInputText>
+                        <label class="md-inputlabel-2">Account ID</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" formControlName="vatGlAccountId" pInputText>
+                        <label class="md-inputlabel-2">VAT GL ID</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <button pButton label="Upload" (click)="uploadLogo()"></button>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <p-checkbox binary="true" formControlName="isStampChargeApplicable"></p-checkbox>
+                        <span>Stamp charge applicable</span>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <p-checkbox binary="true" formControlName="isIntegrated"></p-checkbox>
+                        <span>Integrated with provider</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+
+    <mat-card style="margin-top: 5px">
+        <mat-card-title>Branch allocation</mat-card-title>
+        <div class="ui-fluid ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText>
+                        <label class="md-inputlabel-2">Branch name</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText>
+                        <label class="md-inputlabel-2">Branch ID</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <button pButton label="Search" icon="ui-icon-search" (click)="showOwnBranches()" responsive="true" appendTo="body"></button>
+                </div>
+            </div>
+        </div>
+        <p-dataTable [value]="branches" selectionMode="single">
+            <p-column field="name" header="Branch name"></p-column>
+            <p-column field="address.addressLine" header="Branch address"></p-column>
+            <p-column field="code" header="Branch code"></p-column>
+            <p-column header="Delete">
+                <ng-template let-rowIndexValue="rowIndex" let-data="rowData" pTemplate="body">
+                    <div align="center">
+                        <button type="text" (click)="deleteBranch(rowIndexValue)" pButton icon="ui-icon-delete"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </mat-card>
+
+</form>
+
+<p-dialog header="Branch Lookup" [(visible)]="branchLookupDisplay" modal="true" [width]="1000" modal="true" closeOnEscape="true"
+    dismissableMask="true" responsive="true" appendTo="body" maximizable="true" [minHeight]="800">
+    <own-branch-lookup (rowClick)="onRowClick($event)" #ownBranch></own-branch-lookup>
+</p-dialog>
+
+<ababil-image-upload (onDone)="setImage($event)" #ababilImage></ababil-image-upload>

@@ -1,0 +1,47 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Service provider detail:</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Edit" type="button" icon="ui-icon-edit" class="default-btn" (click)="edit()"></button>
+            <button pButton label="Back" icon="ui-icon-keyboard-arrow-left" type="button" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+
+<mat-card style="margin-top:50px">
+    <mat-card-title>Service provider detail:</mat-card-title>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Provider name</th>
+            <td>{{providerDetail.providerName}}</td>
+            <th>Short name</th>
+            <td>{{providerDetail.shortName}}</td>
+        </tr>
+
+        <tr>
+            <th>Account ID</th>
+            <td>{{providerDetail.accountId}}</td>
+            <th>VAT GL account ID</th>
+            <td>{{providerDetail.vatGlAccountId}}</td>
+        </tr>
+
+        <tr>
+            <th>Stamp charge applicable</th>
+            <td>
+                <i class='material-icons'>{{ providerDetail.isStampChargeApplicable == true ? 'done' : 'clear' }}</i>
+            </td>
+            <th>Integrated</th>
+            <td>
+                <i class='material-icons'>{{ providerDetail.isIntegrated == true ? 'done' : 'clear' }}</i>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Bill collection account type</th>
+            <td>{{providerDetail.billCollectionAccountType}}</td>
+            <th>Logo</th>
+            <!-- <td>isIntegrated</td> -->
+        </tr>
+    </table>
+</mat-card>

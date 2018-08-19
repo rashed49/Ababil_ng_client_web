@@ -1,0 +1,84 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+  <div class="ababil-toolbar">
+    <span class="ababil-toolbar-header">Cheque book details</span>
+    <div class="ababil-toolbar-button-group">
+      <button pButton type="button" label="Correct" icon="ui-icon-create" class="default-btn" (click)="correct()"></button>
+      <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+
+
+<mat-card>
+  <div class="ui-g">
+    <div class="ui-g-12">
+
+      <div class="row">
+
+        <div class="ui-g-6">
+          <table class="table table-bordered table-striped">
+
+            <tr>
+              <th>Account number</th>
+              <td>{{demandDepositAccount.number}}</td>
+            </tr>
+            <tr>
+              <th>Account name</th>
+              <td>{{demandDepositAccount.name}}</td>
+            </tr>
+            <tr>
+              <th>Product ID</th>
+              <td>{{demandDepositAccount.productId}}</td>
+            </tr>
+
+            <tr>
+              <th>Cheque book ID</th>
+              <td>{{chequeBook.id}}</td>
+            </tr>
+
+          </table>
+        </div>
+
+        <div class="ui-g-6">
+          <table class="table table-bordered table-striped">
+
+            <tr>
+              <th>Start leaf number</th>
+              <td>{{chequeBook.startLeafNumber}}</td>
+            </tr>
+            <tr>
+              <th>End leaf number</th>
+              <td>{{chequeBook.endLeafNumber}}</td>
+            </tr>
+            <tr>
+              <th>Cheque book status</th>
+              <td>{{chequeBook.chequeBookStatus}}</td>
+            </tr>
+
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>Cheques</mat-card-title>
+  <p-dataTable [value]="cheques" [lazy]="true" selectionMode="single" [rows]="20" [paginator]="true" [totalRecords]="totalRecords"
+    (onLazyLoad)="loadChequesLazily($event)">
+    <!-- <p-column field="id" header="ID" [filter]="true" filterPlaceholder="Search"></p-column> -->
+    <!-- <p-column field="bookId" header="Book ID" [filter]="true" filterPlaceholder="Search"></p-column> -->
+    <!-- <p-column field="accountId" header="Account ID" [filter]="true" filterPlaceholder="Search"></p-column> -->
+
+    <p-column field="chequePrefix" header="Cheque prefix" [filter]="true" filterPlaceholder="Search" *ngIf="chequePrefixPresent"></p-column>
+    <p-column field="chequeNumber" header="Cheque number" [filter]="true" filterPlaceholder="Search"></p-column>
+    <p-column field="chequeStatus" header="Cheque status" [filter]="true" filterPlaceholder="Search"></p-column>
+
+    <!-- <p-column field="globaltxno" header="Global TXNo" [filter]="true" filterPlaceholder="Search"></p-column> -->
+  </p-dataTable>
+</mat-card>

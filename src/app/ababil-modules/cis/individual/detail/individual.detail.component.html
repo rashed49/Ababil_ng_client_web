@@ -1,0 +1,72 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <p-panel>
+            <p-header>
+                <div class="ui-helper-clearfix">
+
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Profile: {{profile.firstName}} {{profile.middleName}} {{profile.lastName}}</span>
+
+                    <div class="ui-toolbar-group-right">
+                        <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+                    </div>
+                </div>
+            </p-header>
+
+            <br/>
+            <div class="row">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{profile.firstName}} {{profile.middleName}} {{profile.lastName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Father's Name</th>
+                                <td>{{profile.fathersFirstName}} {{profile.fathersMiddleName}} {{profile.fathersLastName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Mother's Name</th>
+                                <td>{{profile.mothersFirstName}} {{profile.mothersMiddleName}} {{profile.mothersLastName}}</td>
+                            </tr>
+                            <tr>
+                                <th>Present Address</th>
+                                <td>{{idividual_present_address.addressLine}}</td>
+                            </tr>
+                            <tr>
+                                <th>Permanent Address</th>
+                                <td>{{idividual_permanent_address.addressLine}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Marital Status</th>
+                                <td>{{profile.maritalStatus}}</td>
+                            </tr>
+                            <tr>
+                                <th>Date of Birth</th>
+                                <td>{{profile.dateOfBirth}}</td>
+                            </tr>
+                            <tr>
+                                <th>Residence Status</th>
+                                <td>{{profile.residenceStatus}}</td>
+                            </tr>
+                            <tr>
+                                <th>Gender</th>
+                                <td>{{profile.gender}}</td>
+                            </tr>
+                            <tr>
+                                <th>Professional Address</th>
+                                <td>{{idividual_professional_address.addressLine}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+        </p-panel>
+        <br/>
+     </div>
+</div>

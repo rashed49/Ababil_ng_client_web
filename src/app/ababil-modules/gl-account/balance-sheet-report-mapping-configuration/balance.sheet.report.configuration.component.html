@@ -1,0 +1,123 @@
+<p-contextMenu #cm [model]="contextMenu"></p-contextMenu>
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Balance sheet report configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="onSubmit()" ></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="row">
+
+    <div class="ui-g-12">     
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g ui-fluid form-group">
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <!-- <input type="text" pInputText acc-number [(ngModel)]="accountNumber" [ngModelOptions]="{standalone: true}"> -->
+                                <acc-number [(ngModel)]="accountNumber" [ngModelOptions]="{standalone: true}"></acc-number>
+                                <label class="md-inputlabel-2">Account number*</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            {{accountNumber}}
+                        </div>
+
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">                               
+                               <p-selectButton [options]="balanceSheetMappingTypes" [(ngModel)]="selectedBalanceSheetType" (onChange)="loadBalanceSheetMappings(true)"></p-selectButton>                               
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+
+                        </div>    
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                               <p-selectButton [options]="accountNatures" [(ngModel)]="selectedAccountNature" (onChange)="loadBalanceSheetMappings(true)"></p-selectButton>
+                            </span>
+                        </div>
+
+                        <hr/>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <div style="display: flex;flex-direction: row;width:100%;">
+
+                                <div style="flex: 4;padding-bottom: 0px;">                                    
+
+                                    <div class="ui-inputgroup">
+                                        <span class="md-inputfield">
+                                           <input type="text" pInputText  pKeyFilter="pint" [(ngModel)]="glLevel">
+                                           <label>General ledger level</label>                                                            
+                                        </span>                                                   
+                                        <button pButton type="button" label="Load" class="default-btn" (click)="loadGlAccountsByGlLevel()" ></button>         
+                                    </div>
+
+                                    <br/>
+
+                                    <p-tree [loading]="loading" draggableNodes="true" droppableNodes="true" (onNodeDrop)="onRemoveBalanceSheetMapping($event)" [value]="glAccounts" selectionMode="multiple" [style]="{'width':'600px','height':'400px'}"></p-tree>
+                                </div>
+
+                                <div style="flex: 1;padding-bottom: 0px;margin-top:190px">
+                                    <br/>
+                                    
+                                    <!-- <div class="toolbar-buttons">                
+                                           <button pButton type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="moveSelectedNodesLeft()"></button>
+                                    </div>
+                                    
+                                    <div class="toolbar-buttons">                
+                                           <button pButton type="button" icon="ui-icon-keyboard-arrow-right" class="default-btn" (click)="moveSelectedNodesRight()"></button>
+                                    </div> -->
+
+                                </div> 
+
+                                <div style="flex: 4;padding-bottom: 0px;">                                    
+                                    <button pButton type="button" label="Add Group" class="default-btn" style="margin-bottom: 18px;width:100px" (click)="addGroup()"></button>
+                                    <br/>
+                                    <p-tree draggableNodes="true" droppableNodes="true" [value]="balanceSheetMappings" selectionMode="single" [(selection)]="selectedBalanceSheetMappingConfig" [style]="{'width':'600px','height':'400px'}"></p-tree>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>               
+            </div>       
+    </div>
+</div>
+
+
+
+<p-dialog header="Add group" [(visible)]="showAddGroupModal" modal="modal" width="400" [responsive]="true" [positionTop]="50"
+    [draggable]="false" [contentStyle]="{'height': '100px'}" (onHide)="closeAddGroupModal()">
+
+    <div>
+        <div class="ui-g ui-fluid form-group" [formGroup]="addGroupForm">
+
+            <div class="ui-g-12 ui-md-12">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="name">
+                    <label>Name</label>
+                </span>
+            </div>           
+
+        </div>
+    </div>
+
+    <p-footer>
+        <button pButton type="button" label="Add" class="default-btn" (click)="onAddGroup()"></button>
+        <button pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn" (click)="closeAddGroupModal()"></button>
+    </p-footer>
+
+</p-dialog>    

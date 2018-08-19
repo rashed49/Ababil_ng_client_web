@@ -1,0 +1,71 @@
+<form class="ui-g ui-fluid form-group" [formGroup]="bearerForm">
+
+    <div class="ui-g-12">
+        <div class="ui-g-6">
+            <h6>Basic information</h6>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText formControlName="name">
+                        <label class="md-inputlabel-2">Name*</label>
+                    </span>
+                    <div *ngIf="bearerForm.controls['name'].errors && !bearerForm.controls['name'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!bearerForm.controls['name'].errors.required">Name is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!bearerForm.controls['name'].errors.pattern">Name is invalid.</div>
+                        </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText formControlName="fatherName">
+                        <label class="md-inputlabel-2">Father's name</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText formControlName="motherName">
+                        <label class="md-inputlabel-2">Mother's name</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText formControlName="address">
+                        <label class="md-inputlabel-2">Address*</label>
+                    </span>
+                    <div *ngIf="bearerForm.controls['address'].errors && !bearerForm.controls['address'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!bearerForm.controls['address'].errors.required">Address is required.</div>
+                        </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pKeyFilter="pnum" pInputText formControlName="nid">
+                        <label class="md-inputlabel-2">NID number*</label>
+                    </span>
+                    <div *ngIf="bearerForm.controls['nid'].errors && !bearerForm.controls['nid'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!bearerForm.controls['nid'].errors.required">NID number is required.</div>
+                        </div>
+                </div>
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText formControlName="relationship">
+                        <label class="md-inputlabel-2">Relationship with the account holder</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-g-6">
+            <h6>Contact information</h6>
+            <contact-information [contactInformation]="contactInformation" #contactInformationComponent></contact-information>
+        </div>
+    </div>
+</form>

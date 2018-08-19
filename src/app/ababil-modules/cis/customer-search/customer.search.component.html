@@ -1,0 +1,75 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Customer Search</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<mat-card style="margin-bottom: 15px;">
+    <mat-card-title style="margin:0px">Search Criteria</mat-card-title>
+    <div class="ui-g ui-fluid form-group">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Customer ID</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Customer Title</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <p-dropdown [options]='CustomerType' [autoWidth]="false"></p-dropdown>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-3">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>A/C Number</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Mobile No</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <p-dropdown [options]='IdentityType' [autoWidth]="false"></p-dropdown>
+            </div>
+            <div class="ui-g-12 ui-md-3">
+                <span class="md-inputfield">
+                    <input type="text" pInputText>
+                    <label>Identity Number</label>
+                </span>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-md-12" style="padding-bottom:0px; padding-top:0px">
+            <div style="float:right">
+                <button pButton type="button" label="Search" icon="ui-icon-search" class="default-btn" (click)="searchCustomer()"></button>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<mat-card *ngIf="search">
+    <mat-card-title>Customer Search List</mat-card-title>
+    <p-dataTable selectionMode="single">
+        <p-column [sortable]="true" header="ID" [style]="{'text-align':'right','width':'120px'}"></p-column>
+        <p-column [sortable]="true" header="Title"></p-column>
+        <p-column [sortable]="true" header="Type" [style]="{'text-align':'center','width':'100px'}"></p-column>
+        <p-column [sortable]="true" header="Status" [style]="{'text-align':'center','width':'100px'}"></p-column>
+    </p-dataTable>
+</mat-card>
+<!-- <joint-customer-view></joint-customer-view> -->
+<!-- <joint-applicant-view></joint-applicant-view> -->
+<!-- <short-individual-form></short-individual-form> -->

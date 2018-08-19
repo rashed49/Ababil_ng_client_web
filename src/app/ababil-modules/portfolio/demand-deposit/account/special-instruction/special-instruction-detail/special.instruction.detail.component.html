@@ -1,0 +1,29 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Special instruction detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Withdraw" icon="ui-icon-delete" class="red-btn"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="secondary-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="card card-w-title">
+            <table class="table table-bordered">
+                <tr>
+                    <th>Name</th>
+                    <td>{{instruction.name}}</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+                    <td>{{instruction.specialInstructionStatus}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

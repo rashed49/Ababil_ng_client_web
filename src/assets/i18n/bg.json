@@ -1,0 +1,29 @@
+{
+  "menu.all" : "সব",
+  "menu.favorites": "প্রিয়",
+
+  "workflow.save.success":"কাজ প্রবাহ সফলভাবে সংরক্ষিত",
+  "workflow.update.success":"কাজ প্রবাহ সফলভাবে আপডেট করা হয়েছে",
+  "workflow.task.save.success":"কাজ প্রবাহ কার্যকারিতা সফলভাবে সংরক্ষিত হয়েছে",
+  "workflow.task.update.success":"কাজ প্রবাহ কার্যকারিতা আপডেট করা হয়েছে",
+  "workflow.comman.mapping.save.succes":"কাজ প্রবাহ কমান্ড ম্যাপিং সফলভাবে সংরক্ষিত",
+
+  "glaccount.save.success":"জিএল অ্যাকাউন্ট সফলভাবে সংরক্ষিত",
+  "glaccount.update.success":"জিএল অ্যাকাউন্ট সফলভাবে আপডেট করা হয়েছে",
+
+  "global.unhandled.error":"Unhandled error! Please contact your administrator.",
+
+  "bank.notice.save.success":"Bank notice saved successfully.",
+
+  "draft.save.success": "Draft save hoiche",
+  "customer.save.success":"Customer application submitted successfully.",
+  "customer.update.success":"Customer application submitted successfully.",
+  "owner.save.success":"Owner saved successfully.",
+  "owner.update.success":"Owner updated successfully.",
+
+  "applicant.type.used":"Applicant type already assigned.",
+
+  "customer":"গ্রাহক",
+  "message.error.execution":"Unhandled error occured. Please contact your administrator.",
+  "document.createtion.success":"নথিটি সফলভাবে সংরক্ষিত  হয়েছে"
+}

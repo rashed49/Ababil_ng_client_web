@@ -1,0 +1,72 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Special instruction( Account: {{account.number}} )</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Impose" icon="ui-icon-plus" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="secondary-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+            <div class="ui-g-12 ui-md-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <td>{{account.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{account.number}}</td>
+                        </tr>
+                    </table>
+                </div>
+        <div class="ui-g-12">
+
+            <div class="ui-g ui-fluid form-group">
+                <div class="ui-g-12 ui-md-12">
+                    <p-dropdown [options]="instructionTypes | instructionTypePipe" [autoWidth]="false" [(ngModel)]="specialInstruction.specialInstructionType"
+                        name="specialInstructionType"></p-dropdown>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [(ngModel)]="specialInstruction.description" name="description">
+                        <label>Description</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-12" *ngIf="showLienInputs()">
+                    <span class="md-inputfield">
+                        <input type="number" pInputText [(ngModel)]="specialInstruction.lienAmount" name="lienAmount">
+                        <label>Lien Amount</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6" *ngIf="showChequeInputs()">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [(ngModel)]="specialInstruction.chequeNumberFrom" name="chequeNumberFrom">
+                        <label>Cheque Number From</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6" *ngIf="showChequeInputs()">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [(ngModel)]="specialInstruction.chequeNumberTo" name="chequeNumberTo">
+                        <label>Cheque Number To</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-12" *ngIf="showChequeInputs()">
+                    <span class="md-inputfield">
+                        <input type="number" pInputText [(ngModel)]="specialInstruction.chequeAmount" name="chequeAmount">
+                        <label>Cheque Amount</label>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

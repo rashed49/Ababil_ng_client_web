@@ -1,0 +1,330 @@
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1">
+            <mat-card-title>FATCA checklist:</mat-card-title>
+            <p-dataTable [value]="fatcaDescriptions" #dt>
+                <p-column field="id" header="Serial number" [style]="{'width':'150px','text-align':'center'}">
+                    <ng-template let-i="rowIndex" pTemplate="body">
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+
+                <p-column field="description" header="Description"></p-column>
+
+                <p-column field="isChecked" header="No/Yes" [style]="{'width':'150px'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <div align="center">
+                            {{data[col.field]}}
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%;" [hidden]="!displayFatcaForm()">
+        <mat-card style="flex: 1">
+            <mat-card-title>FATCA:</mat-card-title>
+            <form class="ui-fluid form-group">
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 2.15; margin-right: 5px;">
+                        <mat-card-title>Residential address:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.street" [ngModelOptions]="{standalone: true}"  pInputText readonly>
+                                        <label>Street</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.buildingIdentifier" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Building identifier</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.suitIdentifier" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Suit identifier</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.floorIdentifier" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Floor identifier</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.districtName" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>District name</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.poBoxNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>P.O. Box number</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.postCode" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Post code</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.cityOrTown" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>City/Town</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.stateOrProvince" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>State/Province</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6" style="margin-top:4px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown name="country" [options]="countries | fatcaCountryPipe" [autoWidth]="false" [filter]="true" [ngModelOptions]="{standalone: true}" filterBy="label" [(ngModel)]="fatcaCisIndividualInformation.residentialAddress.country" [disabled]="true"></p-dropdown>
+                                        <label class="md-inputlabel-2">Country</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1;">
+                       <mat-card-title>Contact information:</mat-card-title>
+                       <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g ui-fluid form-group">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="fatcaCisIndividualInformation.contactInformation.phoneNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Phone Number</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="fatcaCisIndividualInformation.contactInformation.mobileNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Mobile Number*</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="fatcaCisIndividualInformation.contactInformation.alternateMobileNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Alternate Mobile Number</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="fatcaCisIndividualInformation.contactInformation.email" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Email</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="fatcaCisIndividualInformation.contactInformation.fax" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Fax</label>                                               
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 1; margin-right: 5px;">
+                        <mat-card-title>Passport & Visa:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.passportNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Passport number</label>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.placeOfIssue" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Place of issue</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.visaIssuingAuthority" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Visa issuing authority</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" [ngModelOptions]="{standalone: true}" readonlyInput="true" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.issuanceDateOfPassport" [disabled]="true"></p-calendar>
+                                        <label>Date of issue</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" [ngModelOptions]="{standalone: true}" readonlyInput="true" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.issuanceDateOfVisa" [disabled]="true"></p-calendar>
+                                        <label>Issuance date of Visa</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" [ngModelOptions]="{standalone: true}" readonlyInput="true" [(ngModel)]="fatcaCisIndividualInformation.passportAndVisaInfo.expiryDateOfVisa" [disabled]="true"></p-calendar>
+                                        <label>Expiry date of Visa</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1; margin-right: 5px;">
+                        <mat-card-title>US TIN</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.usTinInformation.socialSecurityNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Social security number (SSN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.usTinInformation.individualTaxpayerIdentificationNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Individual taxpayer identification number (ITIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.usTinInformation.prepareTaxpayerIdentificationNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Prepare taxpayer identification number (PTIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.usTinInformation.employerIdentificationNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Employer identification number (EIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.usTinInformation.adoptionTaxpayerIdentificationNumber" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Adoption taxpayer identification number (ATIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1;">
+                        <mat-card-title>Other:</mat-card-title>
+                        <div class="ui-g">
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" [(ngModel)]="fatcaCisIndividualInformation.permanentResidenceOrGreenCardNo" [ngModelOptions]="{standalone: true}" pInputText readonly>
+                                        <label>Permanent residence/Green card number</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" [showIcon]="true" yearNavigator="true" yearRange="1900:2050" [ngModelOptions]="{standalone: true}" readonlyInput="true"
+                                            [(ngModel)]="fatcaCisIndividualInformation.dateOfBirth" [disabled]="true"></p-calendar>
+                                        <label>Date of birth</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="countries | fatcaCountryPipe" [(ngModel)]="fatcaCisIndividualInformation.birthCountry" [ngModelOptions]="{standalone: true}" [autoWidth]="false" [disabled]="true"></p-dropdown>
+                                        <label class="md-inputlabel-2">Birth country</label>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown name="entityTypes" [options]="entityTypes | fatcaEntityTypePipe" [autoWidth]="false" [(ngModel)]="fatcaCisIndividualInformation.fatcaId" [ngModelOptions]="{standalone: true}" [disabled]="true"></p-dropdown>
+                                        <label class="md-inputlabel-2">Entity type</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="occupationTypes | occupationPipe" [autoWidth]="false" [(ngModel)]="fatcaCisIndividualInformation.occupationId" [ngModelOptions]="{standalone: true}" [disabled]="true"></p-dropdown>
+                                        <label class="md-inputlabel-2">*Occupation</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>

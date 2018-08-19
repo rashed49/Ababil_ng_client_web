@@ -1,0 +1,1 @@
+export const FETCH_TOKEN = '/oauth/stored_token';

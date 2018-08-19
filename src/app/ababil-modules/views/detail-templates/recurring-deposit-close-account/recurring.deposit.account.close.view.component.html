@@ -1,0 +1,145 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<mat-card style="margin-bottom: 10px;">
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{recurringDepositAccount.number}}
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Current Balance</th>
+                        <td class="ui-lg-3">{{ (recurringDepositAccount.balance) ? (recurringDepositAccount.balance.currentBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account Title</th>
+                        <td>{{recurringDepositAccount.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Lien Amount</th>
+                        <td>{{ (recurringDepositAccount.balance) ? (recurringDepositAccount.balance.lienAmount | number:'1.2-2') :
+                            ""}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: rigth;">
+                <button pButton type="button" label="Account detail" class="default-btn" (click)="showAccountDetail()" style="float: right;"></button>
+                <button pButton type="button" style="float: right;" label="Signature" class="default-btn" (click)="showSignature()"></button>
+
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 6; margin-right:5px;">
+                <mat-card-title>Charges:</mat-card-title>
+                <div class="ui-g">
+                    <p-dataTable [value]="charges" #dt>
+                        <p-column [style]="{'text-align':'left'}" field="chargeName" header="Name">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.chargeName}}
+                            </ng-template>
+                        </p-column>
+                        <p-column [style]="{'text-align':'left','width':'200px'}" field="chargeAmount" header="Amount">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.chargeAmount}}
+                            </ng-template>
+                        </p-column>
+                        <p-column [style]="{'text-align':'left','width':'200px'}" field="vatAmount" header="VAT">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.vatAmount}}
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 6">
+                <mat-card-title>Transactions:</mat-card-title>
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profit" pInputText readonly> 
+                                    <label>Provisional profit</label>
+                                    <div *ngIf="accountClosingForm.controls['profit'].errors && !accountClosingForm.controls['profit'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['profit'].errors.moreThanProvisionedProfitError">Profit can not be more than provisioned profit {{recurringDepositAccount.provisionalProfit}}.</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profitTaxAmount" pInputText readonly>
+                                    <label>Tax on profit</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="netPayable" pInputText readonly>
+                                    <label>Net payable</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <p-dropdown [options]="creditAccountTypes" [autoWidth]="false" formControlName="destinationAccountType" [disabled]="true"></p-dropdown>
+                                    <label class="md-inputlabel-2">Credit account type</label>
+                                </span>
+                            </div>
+ 
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.number" [ngModelOptions]="{standalone: true}" readonly>
+                                    <label class="md-inputlabel-2">Account/ instrument number</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                <span class="md-inputfield">
+                                    <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.name" [ngModelOptions]="{standalone: true}" [disabled]="true">
+                                    <label>Account title</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+
+
+
+<p-dialog header="Instalment deposit account signature" [(visible)]="recurringDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="accountId" [customerId]="customerId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Instalment deposit account detail" [(visible)]="recurringDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-recurring-deposit-account-details [recurringDepositAccountId]="accountId" ></common-recurring-deposit-account-details>
+</p-dialog>

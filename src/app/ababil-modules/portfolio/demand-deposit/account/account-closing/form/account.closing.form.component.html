@@ -1,0 +1,287 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Account closing</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+
+<mat-card style="margin-bottom: 10px;">
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{demandDepositAccount.number}}
+                        </td>
+
+                    </tr>
+                    <tr>
+                            <th>Currency code</th>
+                            <td>{{demandDepositAccount.currencyCode}}
+                            </td>
+    
+                        </tr>
+                    <tr>
+                        <th class="ui-lg-3">Current Balance</th>
+                        <td class="ui-lg-3">{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.currentBalance | number:'1.2-2')
+                            : ""}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account Title</th>
+                        <td>{{demandDepositAccount.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Lien Amount</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lienAmount | number:'1.2-2') :
+                            ""}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: rigth;">
+                <button pButton type="button" label="Account detail" class="default-btn" (click)="showAccountDetail()" style="float: right;"></button>
+                <button pButton type="button" style="float: right;" label="Signature" class="default-btn" (click)="showSignature()"></button>
+
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<mat-card>
+    <mat-tab-group dynamicHeight (selectedTabChange)="tabChanged($event)">
+        <mat-tab label="Transactions">
+
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="width: 100%; margin-bottom: 10px;">
+                    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                        <mat-card style="flex: 6;margin-right: 5px;">
+                            <mat-card-title>Debit & Credit:</mat-card-title>
+
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pInputText pKeyFilter="money" formControlName="profit">
+                                                <label>Provisional profit</label>
+                                                <div *ngIf="accountClosingForm.controls['profit'].errors && !accountClosingForm.controls['profit'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['profit'].errors.moreThanProvisionedProfitError">Profit can not be more than provisioned profit {{demandDepositAccount.provisionalProfit}}.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pInputText pKeyFilter="money"  formControlName="profitTaxAmount" readonly>
+                                                <label>Tax on profit</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pInputText pKeyFilter="money" currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" [(ngModel)]="chargeTable.totalChargeAmount"
+                                                    [ngModelOptions]="{standalone: true}" [disabled]="true">
+                                                <label>Total charge</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input enter type="text" pInputText [(ngModel)]="accountBalance" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Account current balance</label>
+                                            </span>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                        <mat-card style="flex: 6">
+                            <mat-card-title>Transactions:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText pKeyFilter="money" formControlName="netPayable" pInputText readOnly>
+                                                <label>Net payable</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown [options]="creditAccountTypes" [autoWidth]="false" formControlName="destinationAccountType"  appendTo="body"></p-dropdown>
+                                                <label class="md-inputlabel-2">Credit account type</label>
+                                            </span>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                            <span class="md-inputfield-2">
+                                                <input enter type="text" pInputText [(ngModel)]="transactionAccountNumber" (ngModelChange)="onAccountNumberChange($event)"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                <label class="md-inputlabel-2">Account number</label>
+                                                <div *ngIf="accountClosingForm.controls['destinationAccountId'].errors">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['destinationAccountId'].errors.currencyMismatch">Destination account currecy does not match with the account.</div>
+                                                </div>
+                                                <div *ngIf="accountClosingForm.controls['destinationAccountId'].errors">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['destinationAccountId'].errors.accountNumberLengthError">Account number cannot be more than 13 digits.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                            <span class="md-inputfield">
+                                                <input enter type="text" pInputText [(ngModel)]="transactionAccountTitle" [ngModelOptions]="{standalone: true}" [disabled]="true">
+                                                <label>Account title</label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </div>
+            </div>
+
+
+        </mat-tab>
+
+
+        <mat-tab label="Charges">
+            <common-charge-table #chargeTable [charges]="charges" (onChargeChange)="onChargeChange()" [editable]="true"></common-charge-table>
+        </mat-tab>
+    </mat-tab-group>
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+
+
+
+<p-dialog header="Demand deposit account signature" [(visible)]="demandDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="accountId" [customerId]="customerId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="accountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 6; margin-right:5px;">
+                <mat-card-title>Charges:</mat-card-title>
+                <div class="ui-g">
+                    <p-dataTable [value]="charges" [editable]="true" [responsive]="true">
+                        <p-column [style]="{'text-align':'left'}" field="chargeName" header="Name">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                {{rowData.chargeName}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="modifiedChargeAmount" [editable]="true" header="Charge amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" pInputText [(ngModel)]="data[col.field]"
+                                />
+                            </ng-template>
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                <input pInputText pKeyFilter="money" [(ngModel)]="data['modifiedChargeAmount']" (input)="onEditValidation2(col.field,data['modifiedChargeAmount'],index)"
+                                />
+                            </ng-template>
+                        </p-column>
+                        <p-column field="modifiedVatAmount" [editable]="true" header="VAT amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" pInputText [(ngModel)]="data[col.field]"
+                                />
+                            </ng-template>
+                            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                                <input pInputText pKeyFilter="money" [(ngModel)]="data['modifiedVatAmount']" (input)="onEditValidation2(col.field,data['modifiedVatAmount'],index)"
+                                />
+                            </ng-template>
+                        </p-column>
+
+                    </p-dataTable>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 6">
+                <mat-card-title>Transactions:</mat-card-title>
+
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <div class="ui-g ui-fluid form-group" [formGroup]="accountClosingForm">
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profit" pInputText>
+                                    <label>Provisional profit</label>
+                                    <div *ngIf="accountClosingForm.controls['profit'].errors && !accountClosingForm.controls['profit'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!accountClosingForm.controls['profit'].errors.moreThanProvisionedProfitError">Profit can not be more than provisioned profit {{demandDepositAccount.provisionalProfit}}.</div>
+                                    </div>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="profitTaxAmount" pInputText>
+                                    <label>Tax on profit</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="netPayable" pInputText>
+                                    <label>Net payable</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <p-dropdown [options]="creditAccountTypes" [autoWidth]="false" formControlName="destinationAccountType"></p-dropdown>
+                                    <label class="md-inputlabel-2">Credit account type</label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield-2">
+                                    <input enter type="text" pInputText [(ngModel)]="accountNumber" (ngModelChange)="onAccountNumberChange($event)" [ngModelOptions]="{standalone: true}">
+                                    <label class="md-inputlabel-2">Account/ instrument number</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6" *ngIf="!accountTitleDisable">
+                                <span class="md-inputfield">
+                                    <input enter type="text" pInputText [(ngModel)]="selectedAccountForTransaction.name" [ngModelOptions]="{standalone: true}"
+                                        [disabled]="true">
+                                    <label>Account title</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</div> -->

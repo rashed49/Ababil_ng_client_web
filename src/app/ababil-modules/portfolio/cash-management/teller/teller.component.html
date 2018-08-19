@@ -1,0 +1,54 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Teller setup</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="op.show($event)"></button>
+            <button pButton label="Create" type="button" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<p-overlayPanel #op>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-10" style="padding-top: 15px">
+            <span class="md-inputfield">
+                <input type="text" #branch pInputText (keyup.enter)="fetchTellers(null,branch.value)" />
+                <label>Branch wise search</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-2">
+            <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="fetchTellers(null,branch.value)"></button>
+        </div>
+    </div>
+</p-overlayPanel>
+
+
+<mat-card>
+    <mat-card-title>Set up tellers:</mat-card-title>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-2" style="padding-top: 15px">
+            <span class="md-inputfield">
+                <input style="width: 100%" type="text" #branch pInputText (keyup.enter)="fetchTellers(null,branch.value)" />
+                <label>Branch wise search</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-2">
+            <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="fetchTellers(null,branch.value)"></button>
+        </div>
+        <div class="ui-g-12 ui-md-8"></div>
+
+        <div class="ui-g-12">
+            <p-dataTable [value]="tellers" selectionMode="single" [lazy]="true" (onRowSelect)="onRowSelect($event)" [paginator]="true"
+                [totalRecords]="totalRecords" (onLazyLoad)="loadTellersLazily($event)" [rows]="20" #dt>
+
+                <p-column field="title" header="Teller Title"></p-column>
+                <p-column field="tellerType" header="Teller Type"></p-column>
+                <p-column field="branchId" header="Branch"></p-column>
+
+            </p-dataTable>
+        </div>
+    </div>
+</mat-card>

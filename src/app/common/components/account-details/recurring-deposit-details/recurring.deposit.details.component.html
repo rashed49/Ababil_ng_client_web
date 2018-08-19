@@ -1,0 +1,167 @@
+<mat-tab-group [selectedIndex]="0">
+    <mat-tab label="Basic information">
+        <div class="ui-g-12">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Customer ID</th>
+                            <td class="ui-lg-3">{{recurringDepositAccount.customerId}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Account number</th>
+                            <td>{{recurringDepositAccount.number}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Product code</th>
+                            <td>{{recurringDepositProduct.code}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Tenor type</th>
+                            <td>{{recurringDepositAccount.tenorType}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Currency code</th>
+                            <td class="ui-lg-3">{{recurringDepositAccount.currencyCode}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Account status</th>
+                            <td>{{recurringDepositAccount.status}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Product description</th>
+                            <td>{{recurringDepositProduct.description}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Instalment amount</th>
+                            <td>{{recurringDepositAccount.instalmentAmount}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+            <div class="ui-g-12">
+                <div class="ui-g-12 ui-md-12">
+                    <h6>Account balance:</h6>
+                    <hr/>
+                </div>
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Balance</th>
+                            <td class="ui-lg-3">{{ (recurringDepositAccount.recurringDepositAccountBalance) ? (recurringDepositAccount.recurringDepositAccountBalance.balance
+                                | number:'1.2-2') : 0}}</td>
+                        </tr>
+    
+                        <tr>
+                            <th>Lien amount</th>
+                            <td>{{ (recurringDepositAccount.recurringDepositAccountBalance) ? (recurringDepositAccount.recurringDepositAccountBalance.lienAmount
+                                | number:'1.2-2') : 0}}</td>
+                        </tr>
+    
+                        <tr>
+                            <th>Due installment</th>
+                            <td>{{ (recurringDepositAccount.recurringDepositAccountBalance) ? (recurringDepositAccount.recurringDepositAccountBalance.dueInstallment
+                                | number:'1.2-2') :0}}
+                            </td>
+                        </tr>
+    
+                    </table>
+                </div>
+    
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Advance installment</th>
+                            <td>{{ (recurringDepositAccount.recurringDepositAccountBalance) ? (recurringDepositAccount.recurringDepositAccountBalance.advanceInstallment
+                                | number:'1.2-2') : 0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Given installment</th>
+                            <td>{{ (recurringDepositAccount.recurringDepositAccountBalance) ? (recurringDepositAccount.recurringDepositAccountBalance.givenInstallment
+                                | number:'1.2-2') : 0}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Remaining installment</th>
+                            <td>{{ (recurringDepositAccount.recurringDepositAccountBalance) ? ((recurringDepositAccount.recurringDepositAccountBalance.totalInstallment)
+                                - (recurringDepositAccount.recurringDepositAccountBalance.givenInstallment + recurringDepositAccount.recurringDepositAccountBalance.advanceInstallment)
+                                | number:'1.2-2') : 0}}
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="Contact information">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Phone number</th>
+                            <td class="ui-lg-3">{{contactInformation.phoneNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.mobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Alternate mobile number</th>
+                            <td class="ui-lg-3">{{contactInformation.alternateMobileNumber}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Email</th>
+                            <td class="ui-lg-3">{{contactInformation.email}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Fax</th>
+                            <td class="ui-lg-3">{{contactInformation.fax}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="ui-g-6">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Address</th>
+                            <td class="ui-lg-3">{{address.addressLine}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Country</th>
+                            <td class="ui-lg-3">{{country.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Division</th>
+                            <td class="ui-lg-3">{{division.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">District</th>
+                            <td class="ui-lg-3">{{district.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Upazilla</th>
+                            <td class="ui-lg-3">{{upazilla.name}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </mat-tab>
+
+        </mat-tab-group>

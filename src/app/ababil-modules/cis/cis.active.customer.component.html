@@ -1,0 +1,133 @@
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header" style="background-color:rgba(0, 0, 0, 0.03)">
+        <h4 class="modal-title">Customer Information File</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="card-block">
+            <form class="ui-g ui-fluid form-group" [formGroup]="customerAppForm">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" formControlName="name" pInputText maxlength="50">
+                        <label>Name*</label>
+                        <div *ngIf="customerAppForm.controls['name'].errors && !customerAppForm.controls['name'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!customerAppForm.controls['name'].errors.required">Customer name is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!customerAppForm.controls['name'].errors.pattern">Customer name is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="customerTypes" formControlName="customerType" [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select Customer Type"></p-dropdown>
+                        <div *ngIf="customerAppForm.controls['customerType'].errors && !customerAppForm.controls['customerType'].pristine">
+                            <div class="dropdown-error-msg" [hidden]="!customerAppForm.controls['customerType'].errors.required">Customer type is required.</div>
+                            <div class="dropdown-error-msg" [hidden]="!customerAppForm.controls['customerType'].errors.pattern">Customer type is invalid.</div>
+                        </div>
+                        <label class="md-inputlabel-2">Customer Type*</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="relationshipOfficers" formControlName="relationshipOfficer" [autoWidth]="false" [style]="{'width':'100%'}"
+                            placeholder="Select Relationship Officer"></p-dropdown>
+                        <div *ngIf="customerAppForm.controls['relationshipOfficer'].errors && !customerAppForm.controls['relationshipOfficer'].pristine">
+                            <div class="dropdown-error-msg" [hidden]="!customerAppForm.controls['relationshipOfficer'].errors.required">Relationship Officer is required.</div>
+                            <div class="dropdown-error-msg" [hidden]="!customerAppForm.controls['relationshipOfficer'].errors.pattern">Relationship Officer is invalid.</div>
+                        </div>
+                        <label class="md-inputlabel-2">Relationship Officer</label>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="c('Close click')">Close</button>
+        <button type="button" class="btn btn-success" (click)="c('submit')" [disabled]="customerAppForm.invalid">Submit</button>
+    </div>
+</ng-template>
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Customer</span>
+        <div class="ababil-toolbar-button-group">
+            <button type="button" pButton icon="ui-icon-search" (click)="op.show($event)"></button>
+            <button pButton type="button" label="New Customer" icon="ui-icon-plus" class="default-btn" (click)="open(content)"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+
+<p-overlayPanel #op [style]="{'width':'800px'}">
+    <div [formGroup]="searchForm">
+        <br/>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pKeyFilter="pint" pInputText formControlName="cusid">
+                    <label>Customer #ID</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="title">
+                    <label>Title</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="customerTypes" formControlName="customerType" [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select customer type"></p-dropdown>
+                    <label class="md-inputlabel-2">Customer type</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pKeyFilter="pint" pInputText formControlName="accountnumber">
+                    <label>Account number</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pKeyFilter="pint" pInputText formControlName="phone" [maxLength]="13">
+                    <label>Phone</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pKeyFilter="pint" pInputText formControlName="tradeLicence">
+                    <label>Trade licence</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="identity">
+                    <label>Identity</label>
+                </span>
+            </div>
+        </div>
+
+        <button pButton type="button" label="Search" class="primary-btn" (click)="search(null);op.hide($event)"></button>
+    </div>
+</p-overlayPanel>
+
+<br/>
+
+<p-dataTable [value]="customers" [lazy]="true" selectionMode="single" (onRowSelect)="onRowSelect($event)" [rows]="20" [paginator]="true"
+    [totalRecords]="totalRecords" (onLazyLoad)="loadCustomerLazily($event)" #dt>
+    <p-column field="id" [style]="{'width':'100px','text-align':'left'}" header="Customer ID"></p-column>
+    <p-column field="name" header="Title"></p-column>
+    <p-column field="customerType" [style]="{'width':'70px','text-align':'center'}" header="Type">
+        <ng-template let-col let-customer="rowData" pTemplate="body">
+            <i class='material-icons'>{{ customer[col.field] == 'INDIVIDUAL_SINGLE' ? 'person' : customer[col.field] == 'INDIVIDUAL_JOINT' ? 'people'
+                : 'domain' }}
+            </i>
+        </ng-template>
+    </p-column>
+
+</p-dataTable>

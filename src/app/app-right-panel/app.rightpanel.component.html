@@ -1,0 +1,110 @@
+<div class="layout-rightpanel" [ngClass]="{'layout-rightpanel-active': app.rightPanelActive}" (click)="app.onRightPanelClick()">
+    <div #rightPanelMenuScroller class="nano">
+        <div class="nano-content right-panel-scroll-content">
+            <div class="layout-rightpanel-header">
+                <div class="weather-day">{{day}}</div>
+                <div class="weather-date">{{date | date:'dd-MM-yyyy'}}</div>
+            </div>
+
+            <div class="layout-rightpanel-content">
+                <h1>Pending tasks</h1>
+                <h2>AIBL, Dhaka</h2>
+
+                <div class="weather-today">
+                    <div *ngIf="havePendingTasks" class="weather-today-value">
+                        <span>{{totalTasks}} pending tasks</span>
+                    </div>
+                    <div>
+                        <div *ngIf="!havePendingTasks" class="noTaskMessegeToDsiplay">
+                            <span>No pending tasks</span>
+                        </div>
+
+                        <ul class="weekly-weather">
+                            <!-- <li *ngFor="let task of pendingTasks">
+                                <a (click)="onPendingTaskLinkClick(task); app.onRightPanelButtonClick($event)">
+                                {{task.activity}}
+                            </a>
+                            <i class="material-icons">call_missed_outgoing</i>
+                            </li> -->
+                            <!-- <li>
+                                Friday
+                                <img src="assets/layout/images/dashboard/weather-icon-3.svg"/>
+                                <span class="weekly-weather-value">19</span>
+                            </li>
+                            <li>
+                                Saturday
+                                <img src="assets/layout/images/dashboard/weather-icon-4.svg"/>
+                                <span class="weekly-weather-value">15</span>
+                            </li>
+                            <li>
+                                Sunday
+                                <img src="assets/layout/images/dashboard/weather-icon-1.svg"/>
+                                <span class="weekly-weather-value">24</span>
+                            </li>
+                            <li>
+                                Monday
+                                <img src="assets/layout/images/dashboard/weather-icon-2.svg"/>
+                                <span class="weekly-weather-value">21</span>
+                            </li>
+                            <li>
+                                Tuesday
+                                <img src="assets/layout/images/dashboard/weather-icon-3.svg"/>
+                                <span class="weekly-weather-value">20</span>
+                            </li> -->
+                        </ul>
+
+                        <!-- <p-dataList [value]="pendingTasks" [paginator]="true" [rows]="5"> -->
+                                <!-- <p-header>
+                                    List of Cars
+                                </p-header> -->
+                                <!-- <ng-template let-task pTemplate="item">
+                                    <div class="ui-g ui-fluid car-item">
+                                        <div class="ui-g-12 ui-md-3" style="text-align:center">
+                                            <img src="assets/showcase/images/demo/car/{{car.brand}}.png">
+                                        </div>
+                                        <div class="ui-g-12 ui-md-9 car-details">
+                                            <div class="ui-g">
+                                                <div class="ui-g-2 ui-sm-6">Activity: </div>
+                                                <div class="ui-g-10 ui-sm-6">{{car.vin}}</div>
+                                                
+                                                <div class="ui-g-2 ui-sm-6">Year: </div>
+                                                <div class="ui-g-10 ui-sm-6">{{car.year}}</div>
+                                                
+                                                <div class="ui-g-2 ui-sm-6">Brand: </div>
+                                                <div class="ui-g-10 ui-sm-6">{{car.brand}}</div>
+                                                
+                                                <div class="ui-g-2 ui-sm-6">Color: </div>
+                                                <div class="ui-g-10 ui-sm-6">{{car.color}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-dataList> -->
+
+
+
+
+
+
+
+                    </div>
+                    <div class="noTaskMessege" *ngIf="!havePendingTasks">
+                        <i class="material-icons">assignment_turned_in</i>
+                    </div>
+                    <span class="weather-today-value"></span>
+                    <!-- <img src="assets/layout/images/dashboard/weather-icon-2.svg" width="60"/> -->
+                </div>
+                
+                <ul class="weekly-weather">
+                    <li *ngFor="let task of pendingTasks">
+                        <a href="">
+                            {{task.activity}}
+                        </a>
+                        <i class="material-icons">call_missed_outgoing</i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>

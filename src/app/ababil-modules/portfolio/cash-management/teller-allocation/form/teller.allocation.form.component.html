@@ -1,0 +1,102 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ababil-toolbar">
+    <span class="ababil-toolbar-header">Teller allocation setup</span>
+    <div class="ui-toolbar-group-right">
+        <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="submit()" [disabled]="formsInvalid()"></button>
+        <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+    </div>
+</div>
+
+<div class="ui-g" style="margin-top: 30px">
+    <div class="ui-g-12">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>
+                    Teller allocation information
+                </mat-card-title>
+            </mat-card-header>
+
+            <br/>
+
+            <div class="ui-g ui-fluid form-group" [formGroup]='tellerAllocationForm'>
+                <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                                <input enter type="text" pInputText [(ngModel)]="userActiveBranchName" [ngModelOptions]="{standalone: true}" readOnly>
+                                <label>Branch name</label>
+                            </span>
+                    <!-- <span class="md-inputfield-2">
+                        <p-dropdown appendTo="body" [options]="branches" [(ngModel)]="userActiveBranch" [ngModelOptions]="{standalone: true}" (ngModelChange)=onBranchChange($event)
+                            [filter]="true" filterBy="label" [autoWidth]="false" [style]="{'width':'100%'}" required="true"></p-dropdown>
+                        <label class="md-inputlabel-2">Branch name</label>
+                    </span> -->
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield-2">
+                    <p-dropdown [options]="tellers | tellerPipe" [autoWidth]="false" formControlName="teller"></p-dropdown>
+                    <label class="md-inputlabel-2">Teller name</label>
+                </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield-2">
+                        <!-- <input type="text" pInputText formControlName="allocatedTo"> -->
+                        <p-dropdown [options]="allowedUsers" [autoWidth]="false" formControlName="allocatedTo"></p-dropdown>
+                        <label class="md-inputlabel-2">Allocated user</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <p-checkbox binary="true" formControlName="autoAllocate"></p-checkbox>
+                    <span>Auto allocation</span>
+                </div>
+            </div>
+
+        </mat-card>
+    </div>
+</div>
+
+
+
+<!-- <p-dialog header="Teller Allocation" [(visible)]="display" modal="modal" width="500" [responsive]="true" [positionTop]="50"
+    [draggable]="false" [contentStyle]="{'height': '450px'}">
+                  <p-header>
+                            <div class="ui-helper-clearfix">
+                                <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Teller Allocation</span>
+            
+                                <div class="ui-toolbar-group-right">
+                                    <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()" ></button>
+                                    <button pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn" (click)="cancel()"></button>
+                                </div>
+                            </div>
+                        </p-header>
+    <div>
+        <div class="ui-g ui-fluid form-group" [formGroup]="tellerAllocationForm">
+
+                                     <div class="ui-g-12 ui-md-6">
+                                    <p-dropdown appendTo="body" [options]="branches"  [(ngModel)]="selectedBranchId" [ngModelOptions]="{standalone: true}" (ngModelChange)=onBranchChange($event) [filter]="true" filterBy="label" [autoWidth]="false" [style]="{'width':'100%'}"
+                                    required="true"></p-dropdown>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <p-dropdown [options]="tellers | tellerPipe" [autoWidth]="false" formControlName="teller"></p-dropdown>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="allocatedTo">
+                                    <label>Allocate To</label>
+                                </span>
+                            </div>
+                            <div class="ui-g-12 ui-md-6">
+            
+                                <p-checkbox binary="true" label="Auto Allocation" formControlName="autoAllocate"></p-checkbox>
+            
+                            </div>
+
+        </div>
+    </div>
+
+
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-close" (click)="display=false" label="Close"></button>
+    </p-footer>
+
+    <comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+</p-dialog> -->

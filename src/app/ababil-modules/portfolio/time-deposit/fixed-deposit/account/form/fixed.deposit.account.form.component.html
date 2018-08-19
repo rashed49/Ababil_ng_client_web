@@ -1,0 +1,258 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Fixed deposit account</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="fixedDepositAccountForm">
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <mat-card-title>Customer detail:</mat-card-title>
+                <customer-details [customer]="customer"></customer-details>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Account detail:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="name" pInputText [attr.disabled]="(accountDetailFieldDisable && !this.createMode) ? 'disabled' : null">
+                                <label>Account title*</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown name="productId" [options]="fixedDepositProducts | fixedDepositProductPipe" [autoWidth]="false" formControlName="productId"
+                                    (onChange)="onFixedDepositProductChange(true)"  [disabled]="accountDetailFieldDisable && !this.createMode"></p-dropdown>
+                                <label class="md-inputlabel-2">Product*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['productId'].errors && !fixedDepositAccountForm.controls['productId'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['productId'].errors.required">Product is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="number" pInputText [attr.disabled]="(accountDetailFieldDisable  && !this.createMode)? 'disabled' : null" readOnly>
+                                <label>Account number*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['number'].errors && !fixedDepositAccountForm.controls['number'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['number'].errors.required">Account number is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-1 ui-md-2">
+                            <button pButton type="button" icon="ui-icon-keyboard-arrow-up" class="default-btn" [disabled]="true"></button>
+                            <button pButton type="button" icon="ui-icon-settings-backup-restore" class="default-btn" (click)="generateAccountNumber()"
+                                [disabled]="disableAccountNumberGenerateButton()"></button>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6" *ngIf="!multipleCurrency">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="currencyCode" pInputText [attr.disabled]="'disabled'">
+                                <label>Currency code*</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6" *ngIf="multipleCurrency">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="currencies" [autoWidth]="false" formControlName="currencyCode"  [disabled]="accountDetailFieldDisable"></p-dropdown>
+                                <label class="md-inputlabel-2">Currency code*</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Tenor and deposit:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="tenors" [autoWidth]="false" formControlName="tenor" [disabled]="accountDetailFieldDisable"></p-dropdown>
+                                <label class="md-inputlabel-2">Tenor</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['tenor'].errors && !fixedDepositAccountForm.controls['tenor'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['tenor'].errors.required">Tenor is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="initialDeposit" pKeyFilter="money" pInputText [attr.disabled]="accountDetailFieldDisable ? 'disabled' : null"> 
+                                <label>Initial deposit*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['initialDeposit'].errors && !fixedDepositAccountForm.controls['initialDeposit'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['initialDeposit'].errors.required">Initial deposit is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6" *ngIf="!autoRenewalOverridable">
+                            <p-checkbox binary="true" formControlName="isAutoRenewalAllowed" [disabled]="true"></p-checkbox>
+                            <span class="task-name">Auto renewal allowed</span>
+                            
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6" *ngIf="autoRenewalOverridable">
+                            <p-checkbox binary="true" formControlName="isAutoRenewalAllowed" (onChange)="hasAutoRenewalAllowed($event)" [disabled]="true"></p-checkbox>
+                            <span class="task-name">Auto renewal allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf=autoRenewAllowed>
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="tenors" [autoWidth]="false" formControlName="renewalTenor"></p-dropdown>
+                                <label class="md-inputlabel-2">Renewal tenor*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['renewalTenor'].errors && !fixedDepositAccountForm.controls['renewalTenor'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['renewalTenor'].errors.required">Renewal tenor is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown name="renewalOption" [options]="renewalOptions" [autoWidth]="false" formControlName="renewalOption" pInputText
+                                    (onChange)="hasOtherAmount()"></p-dropdown>
+                                <label class="md-inputlabel-2">Renewal option*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['renewalOption'].errors && !fixedDepositAccountForm.controls['renewalOption'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['renewalOption'].errors.required">Renewal option is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="autoRenewAllowed && isOtherAmount">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="renewalPrincipal" pInputText pKeyFilter="money">
+                                <label>Renewal principal*</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['renewalPrincipal'].errors && !fixedDepositAccountForm.controls['renewalPrincipal'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['renewalPrincipal'].errors.required">Renewal principal is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1; margin-right: 5px;">
+                <mat-card-title>Other:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="introducerAccountId" pInputText>
+                                <label>Introducer account number{{fixedDepositProductDetails.hasIntroducer?'*':''}}</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['introducerAccountId'].errors && !fixedDepositAccountForm.controls['introducerAccountId'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['introducerAccountId'].errors.required">Introducer account number is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="introducerName" pInputText [disabled]="true">
+                                <label>Introducer name</label>
+                            </span>
+                        </div>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="linkAccountId">
+                                <label>Link account number</label>
+                                <div *ngIf="fixedDepositAccountForm.controls['linkAccountId'].errors && !fixedDepositAccountForm.controls['linkAccountId'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositAccountForm.controls['linkAccountId'].errors.required">Link account number is required.</div>
+                                </div>
+
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="linkAccountName" [disabled]="true">
+                                <label>Link account name</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="purpose" pInputText>
+                                <label>Account opening purpose</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown name="accountOpeningChannelId" [options]="accountOpeningChannels | accountOpeningChannelPipe" [autoWidth]="false"
+                                    formControlName="accountOpeningChannelId"></p-dropdown>
+                                <label class="md-inputlabel-2">Account opening channel</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="relationshipManager" pInputText>
+                                <label>Relationship manager</label>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Contact information:</mat-card-title>
+                <contact-information [contactInformation]="contactInformation" #contactInformationComponent></contact-information>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Contact address:</mat-card-title>
+                <address-component [address]="contactAddress" #contactAddressComponent></address-component>
+            </mat-card>
+        </div>
+
+    </form>
+</div>
+<p-footer>
+    * indicates required field.
+</p-footer>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

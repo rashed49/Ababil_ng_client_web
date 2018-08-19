@@ -1,0 +1,43 @@
+<p-dialog header="Sub GL Search" [(visible)]="display" modal="modal" width="800" [responsive]="true" [positionTop]="50"
+    [draggable]="false" [contentStyle]="{'height': '450px'}" (onHide)="close(); dt.reset();">
+
+    <div>
+        <div class="ui-g ui-fluid form-group" [formGroup]="subLedgerSearchForm">
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="subGlName">
+                    <label>Name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="subGlCode">
+                    <label>Code</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="generalLedgerAccountId">
+                    <label>General ledger account id</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-2">
+                <button type="button" pButton (click)="dt.reset();searchSubLedgers(0);" label="Search"></button>
+                <!-- <button type="button" pButton (click)="clear()" label="Clear"></button> -->
+            </div>
+
+        </div>
+    </div>
+
+    <p-dataTable [rows]="20" [paginator]="true" [totalRecords]="totalRecords" [lazy]="true" [value]="subLedgersSearchResults" selectionMode="single" 
+         [(selection)]="selectedSubLedger" (onRowSelect)="handleSubLedgerSelect($event)" (onLazyLoad)="fetchSubLedgerLazily($event)" #dt>
+        <p-column field="name" header="Name"></p-column>
+        <p-column field="code" header="Code"></p-column>
+        <p-column field="generalLedgerAccountId" header="General ledger account id"></p-column>
+    </p-dataTable>
+
+</p-dialog>    

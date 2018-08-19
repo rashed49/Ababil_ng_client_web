@@ -1,0 +1,359 @@
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1">
+            <mat-card-title>FATCA checklist:</mat-card-title>
+            <p-dataTable [value]="fatcaDescriptions" #dt>
+                <p-column field="id" header="Serial number" [style]="{'width':'150px','text-align':'center'}">
+                    <ng-template let-i="rowIndex" pTemplate="body">
+                        {{i+1}}
+                    </ng-template>
+                </p-column>
+
+                <p-column field="description" header="Description"></p-column>
+
+                <p-column field="isChecked" header="No/Yes" [style]="{'width':'150px'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        <div align="center">
+                            <p-inputSwitch [(ngModel)]="data[col.field]"></p-inputSwitch>
+                        </div>
+                    </ng-template>
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                        <div align="center">
+                            <p-inputSwitch [(ngModel)]="data[col.field]"></p-inputSwitch>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%;" [hidden]="!displayFatcaForm()">
+        <mat-card style="flex: 1">
+            <mat-card-title>FATCA:</mat-card-title>
+            <form class="ui-fluid form-group" [formGroup]="fatcaForm">
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 2.15; margin-right: 5px;">
+                        <mat-card-title>Residential address:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="street" maxlength="40" pInputText>
+                                        <div *ngIf="fatcaForm.controls['street'].errors && !fatcaForm.controls['street'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['street'].errors.required">Street is required.</div>
+                                        </div>
+                                        <label>Street</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="buildingIdentifier" maxlength="40" pInputText>
+                                        <label>Building identifier</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="suitIdentifier" maxlength="40" pInputText>
+                                        <label>Suit identifier</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="floorIdentifier" maxlength="40" pInputText>
+                                        <label>Floor identifier</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="districtName" maxlength="40" pInputText>
+                                        <label>District name</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="poBoxNumber" maxlength="40" pInputText>
+                                        <label>P.O. Box number</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="postCode" maxlength="16" pInputText>
+                                        <div *ngIf="fatcaForm.controls['postCode'].errors && !fatcaForm.controls['postCode'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['postCode'].errors.required">Post code is required.</div>
+                                        </div>
+                                        <label>Post code</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="cityOrTown" maxlength="40" pInputText>
+                                        <div *ngIf="fatcaForm.controls['cityOrTown'].errors && !fatcaForm.controls['cityOrTown'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['cityOrTown'].errors.required">City/Town is required.</div>
+                                        </div>
+                                        <label>City/Town</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="stateOrProvince" maxlength="40" pInputText>
+                                        <label>State/Province</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-6 ui-md-6" style="margin-top:4px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown name="country" [options]="countries | fatcaCountryPipe" [autoWidth]="false" [filter]="true" filterBy="label" formControlName="country"></p-dropdown>
+                                        <div *ngIf="fatcaForm.controls['country'].errors && !fatcaForm.controls['country'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['country'].errors.required">Country is required.</div>
+                                        </div>
+                                        <label class="md-inputlabel-2">Country</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1;">
+                        <mat-card-title>Contact information:</mat-card-title>
+                        <contact-information [contactInformation]="contactInformation" #contactInformationComponent></contact-information>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                    <mat-card style="flex: 1; margin-right: 5px;">
+                        <mat-card-title>Passport & Visa:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="passportNumber" pInputText>
+                                        <div *ngIf="fatcaForm.controls['passportNumber'].errors && !fatcaForm.controls['passportNumber'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['passportNumber'].errors.required">Passport number is required.</div>
+                                        </div>
+                                        <label>Passport number</label>
+                                    </span>
+                                </div>
+                            </div>
+
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="placeOfIssue" maxlength="40" pInputText>
+                                        <div *ngIf="fatcaForm.controls['placeOfIssue'].errors && !fatcaForm.controls['placeOfIssue'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['placeOfIssue'].errors.required">Place of issue is required.</div>
+                                        </div>
+                                        <label>Place of issue</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="visaIssuingAuthority" maxlength="40" pInputText>
+                                        <div *ngIf="fatcaForm.controls['visaIssuingAuthority'].errors && !fatcaForm.controls['visaIssuingAuthority'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['visaIssuingAuthority'].errors.required">Visa issuing authority is required.</div>
+                                        </div>
+                                        <label>Visa issuing authority</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true" formControlName="issuanceDateOfPassport"></p-calendar>
+                                        <div *ngIf="fatcaForm.controls['issuanceDateOfPassport'].errors && !fatcaForm.controls['issuanceDateOfPassport'].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fatcaForm.controls['issuanceDateOfPassport'].errors.required">Issuance date of passport is required.</div>
+                                        </div>
+                                        <label>Issuance date of passport</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true" formControlName="issuanceDateOfVisa"></p-calendar>
+                                        <div *ngIf="fatcaForm.controls['issuanceDateOfVisa'].errors && !fatcaForm.controls['issuanceDateOfVisa'].pristine">
+                                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fatcaForm.controls['issuanceDateOfVisa'].errors.required">Issuance date of visa is required.</div>
+                                            </div>
+                                        <label>Issuance date of Visa</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true" formControlName="expiryDateOfVisa"></p-calendar>
+                                        <div *ngIf="fatcaForm.controls['expiryDateOfVisa'].errors && !fatcaForm.controls['expiryDateOfVisa'].pristine">
+                                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fatcaForm.controls['expiryDateOfVisa'].errors.required">Expiry date of visa is required.</div>
+                                            </div>
+                                        <label>Expiry date of Visa</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1; margin-right: 5px;">
+                        <mat-card-title>US TIN</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="socialSecurityNumber" maxlength="9" pKeyFilter="pint" pInputText>
+                                        <div *ngIf="fatcaForm.controls['socialSecurityNumber'].errors && !fatcaForm.controls['socialSecurityNumber'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['socialSecurityNumber'].errors.required">Social security number is required.</div>
+                                                <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['socialSecurityNumber'].errors.minlength">Social security number is 9 digits long.</div>
+
+                                            </div>
+                                        <label>Social security number (SSN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" pKeyFilter="pint" maxlength="9" formControlName="individualTaxpayerIdentificationNumber" pInputText>
+                                        <div *ngIf="fatcaForm.controls['individualTaxpayerIdentificationNumber'].errors && !fatcaForm.controls['individualTaxpayerIdentificationNumber'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['individualTaxpayerIdentificationNumber'].errors.required">Individual taxpayer identification number is required.</div>
+                                                <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['individualTaxpayerIdentificationNumber'].errors.minlength">Individual taxpayer identification number is 9 digits long.</div>
+
+                                            </div>
+                                        <label>Individual taxpayer identification number (ITIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" maxlength="8" pKeyFilter="pint" formControlName="prepareTaxpayerIdentificationNumber" pInputText>
+                                        <div *ngIf="fatcaForm.controls['prepareTaxpayerIdentificationNumber'].errors && !fatcaForm.controls['prepareTaxpayerIdentificationNumber'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['prepareTaxpayerIdentificationNumber'].errors.required">Prepare taxpayer identification number is required.</div>
+                                                <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['prepareTaxpayerIdentificationNumber'].errors.minlength">Prepare taxpayer identification number is 8 digits long.</div>
+
+                                            </div>
+                                        <label>Prepare taxpayer identification number (PTIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" maxlength="9" pKeyFilter="pint" formControlName="employerIdentificationNumber" pInputText>
+                                        <div *ngIf="fatcaForm.controls['employerIdentificationNumber'].errors && !fatcaForm.controls['employerIdentificationNumber'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['employerIdentificationNumber'].errors.required">Employer identification number is required.</div>
+                                                <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['employerIdentificationNumber'].errors.minlength">Employer identification number is 9 digits long.</div>
+
+                                            </div>
+                                        <label>Employer identification number (EIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12"></div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+
+                                    <span class="md-inputfield">
+                                        <input type="text" maxlength="9" pKeyFilter="pint" formControlName="adoptionTaxpayerIdentificationNumber" pInputText>
+                                        <div *ngIf="fatcaForm.controls['adoptionTaxpayerIdentificationNumber'].errors && !fatcaForm.controls['adoptionTaxpayerIdentificationNumber'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['adoptionTaxpayerIdentificationNumber'].errors.required">Adoption taxpayer identification number is required.</div>
+                                                <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['adoptionTaxpayerIdentificationNumber'].errors.minlength">Adoption taxpayer identification number is 9 digits long.</div>
+                                            </div>
+                                        <label>Adoption taxpayer identification number (ATIN)</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+
+                    <mat-card style="flex: 1;">
+                        <mat-card-title>Other:</mat-card-title>
+                        <div class="ui-g">
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <input type="text"  maxlength="9" pKeyFilter="pint" formControlName="permanentResidenceOrGreenCardNo" pInputText>
+                                        <div *ngIf="fatcaForm.controls['permanentResidenceOrGreenCardNo'].errors && !fatcaForm.controls['permanentResidenceOrGreenCardNo'].pristine">
+                                            <div class="dropdown-error-msg" *ngIf="fatcaForm.controls['permanentResidenceOrGreenCardNo'].errors.minlength">Permanent residence or Green Card Number number is 9 digits long.</div>
+                                        </div>
+                                        <label>Permanent residence/Green card number</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12">
+                                    <span class="md-inputfield">
+                                        <p-calendar [showIcon]="true" monthNavigator="true" [showIcon]="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                                            formControlName="dateOfBirth"></p-calendar>
+                                            <div *ngIf="fatcaForm.controls['dateOfBirth'].errors && !fatcaForm.controls['dateOfBirth'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fatcaForm.controls['dateOfBirth'].errors.required">Date of birth is required.</div>
+                                                </div>
+                                        <label>Date of birth</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="countries | fatcaCountryPipe" formControlName="birthCountry" [autoWidth]="false"></p-dropdown>
+                                        <div *ngIf="fatcaForm.controls['birthCountry'].errors && !fatcaForm.controls['birthCountry'].pristine">
+                                                <div class="dropdown-error-msg" [hidden]="!fatcaForm.controls['birthCountry'].errors.required">Birth country is required.</div>
+                                            </div>
+                                        <label class="md-inputlabel-2">Birth country</label>
+                                    </span>
+                                </div>
+                            </div>
+
+
+
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown name="entityTypes" [options]="entityTypes | fatcaEntityTypePipe" [autoWidth]="false" formControlName="fatcaId"></p-dropdown>
+                                        <label class="md-inputlabel-2">Entity type</label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="ui-g-12">
+                                <div class="ui-g-12 ui-md-12" style="margin-top:6px ">
+                                    <span class="md-inputfield-2">
+                                        <p-dropdown [options]="occupationTypes | occupationPipe" [autoWidth]="false" formControlName="occupationId"></p-dropdown>
+                                        <label class="md-inputlabel-2">*Occupation</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </form>
+        </mat-card>
+    </div>
+</div>

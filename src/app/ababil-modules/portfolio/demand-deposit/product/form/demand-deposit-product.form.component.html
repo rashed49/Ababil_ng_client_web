@@ -1,0 +1,441 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Create demand deposit product</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Save" type="button" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="demandDepositProductForm">
+
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <mat-card-title>Basic information:</mat-card-title>
+                <div class="ui-g">
+
+                    <div class="ui-g-12 ui-md-12">
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="name">
+                                <label>Name*</label>
+                                <div *ngIf="demandDepositProductForm.controls['name'].errors && !demandDepositProductForm.controls['name'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['name'].errors.required">Product name is required.</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['name'].errors.pattern">Product name format is invalid.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="description">
+                                <label>Description</label>
+                                <div *ngIf="demandDepositProductForm.controls['description'].errors && !demandDepositProductForm.controls['description'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['description'].errors.pattern">Description format is invalid.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="code">
+                                <label>Code*</label>
+                                <div *ngIf="demandDepositProductForm.controls['code'].errors && !demandDepositProductForm.controls['code'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['code'].errors.required">Code is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <p-checkbox formControlName="hasIntroducer" binary="true"></p-checkbox>
+                                <span class="task-name">Account introducer required</span>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <p-checkbox formControlName="hasCheque" binary="true"></p-checkbox>
+                                <span class="task-name">Cheque required</span>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <p-checkbox formControlName="isChequePrefixRequired" binary="true" [disabled]="disableChequePrefixRequired"></p-checkbox>
+                                <span [ngClass]="enableChequePrefixStyle?'task-name':'ui-state-disabled'">Cheque prefix required</span>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Profit earning criteria:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-inputSwitch formControlName="isProfitBearing"></p-inputSwitch>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="savingsProfitApplyFrequency" [autoWidth]="false" formControlName="savingsProfitApplyFrequency" [disabled]="disableProfitEarningCriteria"></p-dropdown>
+                                <label class="md-inputlabel-2">Savings profit apply frequency*</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="savingsProductCalculationType" [autoWidth]="false" formControlName="savingsProductCalculationType"
+                                    [disabled]="disableProfitEarningCriteria"></p-dropdown>
+                                <label class="md-inputlabel-2">Savings product calculation type*</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="savingsDailyProductCalculationBasedOn" [autoWidth]="false" formControlName="savingsDailyProductCalculationBasedOn"
+                                    [disabled]="disableDailyCalculation"></p-dropdown>
+                                <label class="md-inputlabel-2">Savings daily product calculation type*</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="savingsMonthlyProductCalculationBasedOn" [autoWidth]="false" formControlName="savingsMonthlyProductCalculationBasedOn"
+                                    [disabled]="disableMonthlyCalculation"></p-dropdown>
+                                <label class="md-inputlabel-2">Savings monthly product calculation type*</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g-12 ui-md-12">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="minimumBalanceForProfitCalculation" [attr.disabled]="disableProfitEarningCriteria ? 'disabled' : null">
+                                    <label>Minimum balance for profit calculation*</label>
+                                    <div *ngIf="demandDepositProductForm.controls['minimumBalanceForProfitCalculation'].errors && !demandDepositProductForm.controls['minimumBalanceForProfitCalculation'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['minimumBalanceForProfitCalculation'].errors.required">Minimum balance for profit calculation is required.</div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g-12 ui-md-12">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="money" formControlName="minimumProfitToApply" [attr.disabled]="disableProfitEarningCriteria ? 'disabled' : null">
+                                    <label>Minimum profit to apply*</label>
+                                    <div *ngIf="demandDepositProductForm.controls['minimumProfitToApply'].errors && !demandDepositProductForm.controls['minimumProfitToApply'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['minimumProfitToApply'].errors.required">Minimum profit to apply is required.</div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+    
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="individualMaxProfitableBalance" [attr.disabled]="disableProfitEarningCriteria ? 'disabled' : null">
+                                <label>Individual maximum profitable balance</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="jointMaxProfitableBalance" [attr.disabled]="disableProfitEarningCriteria ? 'disabled' : null">
+                                <label>Joint maximum profitable balance</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="orgMaxProfitableBalance" [attr.disabled]="disableProfitEarningCriteria ? 'disabled' : null">
+                                <label>Organization maximum profitable balance</label>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Transaction rules:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-inputSwitch formControlName="isTransactionRuleEnforced"></p-inputSwitch>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="canTransactionRuleOverride" binary="true" [disabled]="disableTransactionRule"></p-checkbox>
+                            <span [ngClass]="enableTransactionRuleStyle?'task-name':'ui-state-disabled'">Can transaction rule override</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="canTransactionRuleOverridableByNotice" binary="true" [disabled]="disableTransactionRule"></p-checkbox>
+                            <span [ngClass]="enableTransactionRuleStyle?'task-name':'ui-state-disabled'">Can transaction rule override by notice</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="maximumNumberOfTransactionPerWeek" [attr.disabled]="disableTransactionRule ? 'disabled' : null">
+                                <label>Maximum number of transaction per week*</label>
+                                <div *ngIf="demandDepositProductForm.controls['maximumNumberOfTransactionPerWeek'].errors && !demandDepositProductForm.controls['maximumNumberOfTransactionPerWeek'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['maximumNumberOfTransactionPerWeek'].errors.required">Maximum number of transaction per week is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="maximumNumberOfTransactionPerMonth" [attr.disabled]="disableTransactionRule ? 'disabled' : null">
+                                <label>Maximum number of transaction per month*</label>
+                                <div *ngIf="demandDepositProductForm.controls['maximumNumberOfTransactionPerMonth'].errors && !demandDepositProductForm.controls['maximumNumberOfTransactionPerMonth'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['maximumNumberOfTransactionPerMonth'].errors.required">Maximum number of transaction per month is required.</div>
+                                    <!-- <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['maximumNumberOfTransactionPerMonth'].errors.pattern">Maximum number of transaction per month is invalid.</div> -->
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="maximumTransactionRatioOfBalance" [attr.disabled]="disableTransactionRule ? 'disabled' : null">
+                                <label>Maximum transaction ratio of balance*</label>
+                                <div *ngIf="demandDepositProductForm.controls['maximumTransactionRatioOfBalance'].errors && !demandDepositProductForm.controls['maximumTransactionRatioOfBalance'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['maximumTransactionRatioOfBalance'].errors.required">Maximum transaction ratio of balance is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="maximumTransactionAmount" [attr.disabled]="disableTransactionRule ? 'disabled' : null">
+                                <label>Maximum transaction amount*</label>
+                                <div *ngIf="demandDepositProductForm.controls['maximumTransactionAmount'].errors && !demandDepositProductForm.controls['maximumTransactionAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['maximumTransactionAmount'].errors.required">Maximum transaction amount is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Balance:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isMinimumRequiredBalanceEnforced" binary="true"></p-checkbox>
+                            <span class="task-name">Enforce minimum required balance</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="minimumBalance" [attr.disabled]="disableMinimumRequiredBalance ? 'disabled' : null">
+                                <label>Minimum balance</label>
+                                <div *ngIf="demandDepositProductForm.controls['minimumBalance'].errors && !demandDepositProductForm.controls['minimumBalance'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['minimumBalance'].errors.required">Minimum balance is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isMinimumBalanceOverridable" binary="true" [disabled]="disableMinimumRequiredBalance"></p-checkbox>
+                            <span [ngClass]="enableMinimumBalanceStyle?'task-name':'ui-state-disabled'">Minimum balance overridable</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <p-checkbox formControlName="hasMinimumRequiredOpeningBalance" binary="true"></p-checkbox>
+                            <span class="task-name">Minimum required opening balance</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="initialDeposit" [attr.disabled]="disableInitialDeposit ? 'disabled' : null">
+                                <label>Initial deposit</label>
+                                <div *ngIf="demandDepositProductForm.controls['initialDeposit'].errors && !demandDepositProductForm.controls['initialDeposit'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['initialDeposit'].errors.required">Initial deposit is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+
+            <mat-card style="flex:3; margin-right: 5px;">
+                <mat-card-title>Dormancy rules:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-inputSwitch formControlName="isDormancyTrackingActive"></p-inputSwitch>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="daysToInactive" [attr.disabled]="disableDormancyTracking ? 'disabled' : null">
+                                <label>Days to inactive*</label>
+                                <div *ngIf="demandDepositProductForm.controls['daysToInactive'].errors && !demandDepositProductForm.controls['daysToInactive'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['daysToInactive'].errors.required">Days to inactive is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="daysToDormancy" [attr.disabled]="disableDormancyTracking ? 'disabled' : null">
+                                <label>Days to dormancy*</label>
+                                <div *ngIf="demandDepositProductForm.controls['daysToDormancy'].errors && !demandDepositProductForm.controls['daysToDormancy'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['daysToDormancy'].errors.required">Days to dormancy is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="daysToEscheat" [attr.disabled]="disableDormancyTracking ? 'disabled' : null">
+                                <label>Days to escheat*</label>
+                                <div *ngIf="demandDepositProductForm.controls['daysToEscheat'].errors && !demandDepositProductForm.controls['daysToEscheat'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['daysToEscheat'].errors.required">Days to escheat is required.</div>
+                                </div>
+                                <div *ngIf="displayDormancyErrorMessage">
+                                    <div class="ui-message ui-messages-error ui-corner-all">Inactive
+                                        <Dormancy<Escheat</div>
+                                    </div>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+            </mat-card>
+
+            <mat-card style="flex:3; margin-right: 5px;">
+                <mat-card-title>Currency:</mat-card-title>
+                <br/>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="currencyRestriction" [autoWidth]="false" formControlName="currencyRestriction" (onChange)="onCurrencyChange()"></p-dropdown>
+                                <label class="md-inputlabel-2">Currency restriction*</label>
+                                <div *ngIf="demandDepositProductForm.controls['currencyRestriction'].errors && !demandDepositProductForm.controls['currencyRestriction'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['currencyRestriction'].errors.required">Currency restriction is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12" *ngIf="multipleCurrency">
+                            <span class="md-inputfield-2">
+                                <p-multiSelect [options]="currencies" formControlName="currencies"></p-multiSelect>
+                                <label class="md-inputlabel-2">Currencies*</label>
+                                <div *ngIf="demandDepositProductForm.controls['currencies'].errors && !demandDepositProductForm.controls['currencies'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['currencies'].errors.required">Currencies required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex:3;">
+                <mat-card-title>Other:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isSweepInAllowed" binary="true"></p-checkbox>
+                            <span class="task-name">Sweep in allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isSweepOutAllowed" binary="true"></p-checkbox>
+                            <span class="task-name">Sweep out allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-6 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="daysInYear" [autoWidth]="false" formControlName="daysInYear"></p-dropdown>
+                                <label class="md-inputlabel-2">Days in year*</label>
+                                <div *ngIf="demandDepositProductForm.controls['daysInYear'].errors && !demandDepositProductForm.controls['daysInYear'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['daysInYear'].errors.required">Days in year is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield-2">Eligible customer type*</span>
+                            <p-multiSelect [options]="eligibleCustomerType" [filter]="false" formControlName="eligibleCustomerType"></p-multiSelect>
+                            <div *ngIf="demandDepositProductForm.controls['eligibleCustomerType'].errors && !demandDepositProductForm.controls['eligibleCustomerType'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!demandDepositProductForm.controls['eligibleCustomerType'].errors.required">Eligible customer type is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+            </div>
+
+    </form>
+    </div>
+    <p-footer>
+        * indicates required field.
+    </p-footer>
+    <comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

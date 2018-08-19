@@ -1,0 +1,224 @@
+<div class="ui-g">
+  <div class="ababil-toolbar">
+    <span class="ababil-toolbar-header">Teller Detail</span>
+    <div class="ababil-toolbar-button-group">
+      <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+      <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+    </div>
+  </div>
+</div>
+<br/>
+<br/>
+<div style="display: flex; flex-direction: column; width: 100%;">
+  <div style="width: 100%; margin-bottom: 10px;">
+    <mat-card style="flex: 1">
+      <mat-card-title style="display: flex;flex-direction: row">
+        <div style="flex:1">Basic information:</div>
+        <div align="right">
+          <b>
+            <p>{{teller.tellerStatus}}</p>
+          </b>
+        </div>
+      </mat-card-title>
+      <div style="display: flex; flex-direction: row; width: 100%;">
+        <div style="flex: 5; margin-right: 3px;">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <th>Title</th>
+              <td>{{teller.title}}</td>
+            </tr>
+            <tr>
+              <th>GL account</th>
+              <td>{{GLAccountName}}</td>
+            </tr>
+            <tr>
+              <th>Code</th>
+              <td>{{teller.code}}</td>
+            </tr>
+            <tr>
+              <th>Branch</th>
+              <td>{{branchName}}</td>
+            </tr>
+            <tr>
+              <th>Currency restriction</th>
+              <td>{{teller.currencyRestriction | sentenceCasePipe}}</td>
+            </tr>
+          </table>
+        </div>
+        <div style="flex: 5;">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <th>Type</th>
+              <td>{{teller.tellerType}}</td>
+            </tr>
+            <tr>
+              <th>Status</th>
+              <td>{{teller.tellerStatus}}</td>
+            </tr>
+            <tr>
+              <th>GL transaction allowed</th>
+              <td align="left">
+                <i class='material-icons-done-close'>
+                  {{teller.allowedGlTransaction? "done":"close"}}</i>
+              </td>
+            </tr>
+            <tr>
+              <th>Client transaction allowed</th>
+              <td align="left">
+                <i class='material-icons-done-close'>
+                  {{teller.allowedClientTransaction? "done":"close"}}</i>
+              </td>
+            </tr>
+            <tr>
+              <th>Denomination required</th>
+              <td align="left">
+                <i class='material-icons-done-close'>
+                  {{teller.denominationRequired? "done":"close"}}</i>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+  <mat-card style="flex: 1">
+    <mat-card-title>Currency & Teller Limit:</mat-card-title>
+    <p-dataTable [value]="tellerLimit" [responsive]="true">
+      <p-column field="currencyCode" header="Currency" header="Currency" [style]="{'text-align':'center'}">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+          {{data.currencyCode}}
+        </ng-template>
+      </p-column>
+      <p-column field="cashReceiveLimit" header="Cash receive limit" [style]="{'text-align':'center'}">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+          {{data.cashReceiveLimit | number:'1.2-4'}}
+        </ng-template>
+      </p-column>
+      <p-column field="cashWithdrawLimit" header="Cash withdraw limit" [style]="{'text-align':'center'}">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+          {{data.cashWithdrawLimit | number:'1.2-4'}}
+        </ng-template>
+      </p-column>
+      <p-column field="balanceLimit" header="Balance limit" [style]="{'text-align':'center'}">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+          {{data.balanceLimit | number:'1.2-4'}}
+        </ng-template>
+      </p-column>
+    </p-dataTable>
+  </mat-card>
+</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- <div class="ui-g">
+  <div class="ui-g-12">
+
+    <p-panel>
+      <p-header>
+        <div class="ui-helper-clearfix">
+          <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Teller Details</span>
+
+          <div class="ui-toolbar-group-right">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+            <button pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn" (click)="cancel()"></button>
+          </div>
+        </div>
+      </p-header>
+      <br/>
+      <div class="row">
+        <div class="ui-g-12">
+          <div class="ui-g-6">
+            <table class="table table-bordered table-striped" style="text-align:right;">
+              <tr>
+                <th>Title</th>
+                <td>{{teller.title}}</td>
+              </tr>
+              <tr>
+                <th>GL Account</th>
+                <td>{{GLAccountName}}</td>
+              </tr>
+              <tr>
+                <th>Code</th>
+                <td>{{teller.code}}</td>
+              </tr>
+              <tr>
+                <th>Branch</th>
+                <td>{{branchName}}</td>
+              </tr>
+              <tr>
+                <th>Currency restriction</th>
+                <td>{{teller.currencyRestriction | sentenceCasePipe}}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="ui-g-6">
+            <table class="table table-bordered table-striped" style="text-align:right;">
+              <tr>
+                <th>Teller Type</th>
+                <td>{{teller.tellerType}}</td>
+              </tr>
+              <tr>
+                <th>Teller status</th>
+                <td>{{teller.tellerStatus}}</td>
+              </tr>
+              <tr>
+                <th>GL Transaction Allowed</th>
+                <td align="right">
+                  <i class='material-icons-done-close'>
+                    {{teller.allowedGlTransaction? "done":"close"}}</i>
+                </td>
+              </tr>
+              <tr>
+                <th>Client transaction allowed</th>
+                <td align="right">
+                  <i class='material-icons-done-close'>
+                    {{teller.allowedClientTransaction? "done":"close"}}</i>
+                </td>
+              </tr>
+              <tr>
+                <th>Denomination required</th>
+                <td align="right">
+                  <i class='material-icons-done-close'>
+                    {{teller.denominationRequired? "done":"close"}}</i>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <mat-card>
+        <mat-card-title>Currency & Teller Limit:</mat-card-title>
+        <p-dataTable [value]="tellerLimit" [responsive]="true">
+          <p-column field="currencyCode" header="Currency" header="Currency" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+              {{data.currencyCode}}
+            </ng-template>
+          </p-column>
+          <p-column field="cashReceiveLimit" header="Cash receive limit" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+              {{data.cashReceiveLimit | number:'1.2-4'}}
+            </ng-template>
+          </p-column>
+          <p-column field="cashWithdrawLimit" header="Cash withdraw limit" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+              {{data.cashWithdrawLimit | number:'1.2-4'}}
+            </ng-template>
+          </p-column>
+          <p-column field="balanceLimit" header="Balance limit" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+              {{data.balanceLimit | number:'1.2-4'}}
+            </ng-template>
+          </p-column>
+        </p-dataTable>
+      </mat-card>
+    </p-panel>
+  </div>
+</div> -->

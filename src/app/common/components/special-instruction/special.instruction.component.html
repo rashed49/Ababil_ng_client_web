@@ -1,0 +1,39 @@
+
+<div class="ui-g">
+    <div class="ui-g-12">
+ 
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account Number</th>
+                <td>{{account.number}}</td>
+            </tr>
+
+            <tr>
+                <th>Name</th>
+                <td>{{account.name}}</td>
+            </tr>
+        </table>
+
+        <br>
+
+        <p-dataTable [value]="specialInstructions" #dt [rows]="20" [paginator]="true" reorderableColumns="true" sortField="userName" sortOrder="-1">
+
+            <p-column field="specialInstructionType.code" header="Instruction Code" [filter]="true"  filterPlaceholder="Search"></p-column>
+            
+            <p-column field="specialInstructionType.name" header="Instruction Name" [filter]="true"  filterPlaceholder="Search"></p-column>
+           
+            <p-column field="description" header="Description" [filter]="true"  filterPlaceholder="Search"></p-column>
+            
+            <p-column field="lienAmount" header="Amount" [filter]="true"  filterPlaceholder="Search"></p-column>
+            
+            <p-column field="chequeNumber" header="Cheque Number" [filter]="true"  filterPlaceholder="Search"></p-column>
+
+            <p-column field="chequeAmount" header="Cheque Amount" [filter]="true"  filterPlaceholder="Search"></p-column>
+            
+            <p-column field="specialInstructionStatus" header="Status" [filter]="true"  filterPlaceholder="Search"></p-column>
+
+        </p-dataTable>
+
+    </div>
+</div>
+

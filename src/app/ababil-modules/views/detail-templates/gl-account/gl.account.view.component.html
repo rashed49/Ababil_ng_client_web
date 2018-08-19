@@ -1,0 +1,197 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve task:(GL account)</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<div style="display: flex;flex-direction: row;width:100%;">
+
+    <div style="flex: 2;padding-bottom: 0px; margin-right: 5px;">
+        <p-tree [value]="glAccountTree" selectionMode="single" (onNodeSelect)="nodeSelect($event)" [style]="{'width':'380px','height':'480px'}"
+            #glTreeComponent></p-tree>
+    </div>
+
+    <div class="ui-g ui-g-fluid" style="flex: 8;padding-bottom: 0px;font-size:12px; margin-bottom:0px">
+
+        <div class="ui-g ui-md-6">
+            <table class="table table-bordered table-striped">
+
+                <tr>
+                    <th style="width: 150px">Name</th>
+                    <td align="center">{{glAccountDetails.name}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Code</th>
+                    <td align="center">{{glAccountDetails.code}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Status</th>
+                    <td align="center">{{status.get(glAccountDetails.status)}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Parent</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.parent? "done":"close"}}</i></td>                    
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Type</th>
+                    <td align="center">{{glTypes.get(glAccountDetails.type)}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Subtype</th>
+                    <td align="center">{{glSubTypes.get(glAccountDetails.subType)}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Currency type</th>
+                    <td align="center">{{currencyRestrictions.get(glAccountDetails.currencyRestriction)}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Transaction scope</th>
+                    <td align="center">{{branchRestrictions.get(glAccountDetails.branchRestriction)}}</td>
+                </tr>              
+
+                <tr>
+                    <th style="width: 150px">Showable</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isShowable? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Balance showable</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isBalanceShowable? "done":"close"}}</i></td>
+                </tr>
+                            
+                <tr>
+                    <th style="width: 150px">Direct posting</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isDirectPostingAllowed? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Direct debit posting</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isDirectPostingDebitAllowed? "done":"close"}}</i></td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="ui-g ui-md-6">
+            <table class="table table-bordered table-striped">
+
+                <tr>
+                    <th style="width: 150px">Direct credit posting</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isDirectPostingCreditAllowed? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Value date transaction</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isBackPeriodTransactionAllowed? "done":"close"}}</i></td>
+                </tr>                
+
+                <tr>
+                    <th style="width: 150px">Negative balance</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isNegativeBalanceAllowed? "done":"close"}}</i></td>                   
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Temporary GL</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isTemporary? "done":"close"}}</i></td>
+                </tr>                
+
+                <tr>
+                    <th>Profit applicable</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isProfitCalculationAllowed? "done":"close"}}</i></td>
+                </tr>
+                            
+                <tr>
+                    <th style="width: 150px">Limit</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isLimitRequired? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Clean cash</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isCleanCash? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Supplementary</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isSupplementary? "done":"close"}}</i></td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">SBS code</th>
+                    <td align="center">{{glAccountDetails.sbsCode}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">Bold</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isBold? "done":"close"}}</i></td>
+                </tr>
+
+                 <tr>
+                    <th style="width: 150px">Switchable parent</th>
+                    <td align="center">
+                                {{glAccountDetails.switchableGeneralLedgerAccountId? switchableParentGl.name+'('+switchableParentGl.code +')' :""}}</td>
+                </tr>
+
+                <tr>
+                    <th style="width: 150px">IBTA required</th>
+                    <td align="center"><i class='material-icons-done-close'>
+                                {{glAccountDetails.isIbtaRequired? "done":"close"}}</i></td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div class="ui-g ui-md-12" *ngIf="glAccountDetails.currencyRestriction=='MULTIPLE_CURRENCY'">
+            <mat-card>
+                <mat-card-title>Currencies:</mat-card-title>
+            <p-dataTable [rows]="10" [paginator]="true" sortMode="multiple" [value]="glAccountCurrencies" >
+                    <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+                    <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>                   
+            </p-dataTable>
+            </mat-card>    
+        </div>
+
+        <div class="ui-g ui-md-12" *ngIf="glAccountDetails.branchRestriction=='SPECIFIC_BRANCH'">
+            <mat-card>
+                <mat-card-title>Branches:</mat-card-title>
+            <p-dataTable [rows]="10" [paginator]="true" sortMode="multiple" [value]="glAccountBranches" >
+                    <p-column field="id" header="ID" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+                    <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>                   
+            </p-dataTable>
+            </mat-card>    
+        </div>
+
+        <comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>
+
+       
+    </div>
+</div>   

@@ -1,0 +1,45 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+      <div class="card card-w-title"> 
+                   
+              <p-toolbar>
+                  <div class="ui-toolbar-group-left">
+                            <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Groupmenu Profile Details</label>
+                  </div> 
+                  <div class="ui-toolbar-group-right">
+                      <button pButton type="button" label="Edit" icon="ui-icon-create" class="green-btn" [routerLink]="['edit']"></button>
+                      <button pButton type="button" label="Add Task" icon="ui-icon-plus" class="green-btn" (click)="createTask()"></button>
+                      <button pButton type="button" label="Delete" icon="ui-icon-delete" class="red-btn"></button>
+                      <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="secondary-btn" (click)="cancel()"></button>
+                      
+                    </div>
+              </p-toolbar>
+
+              <br/>
+
+              <table class="table table-bordered">
+
+                  <tr>
+                     <th>Code</th>
+                     <td>{{profile.code}}</td>
+                  </tr>                 
+                
+                  <tr>
+                     <th>Name</th>
+                     <td>{{profile.name}}</td>
+                  </tr>
+              </table>  
+
+
+              <br/>
+              <!-- <p-tabView>                
+                <p-tabPanel header="Tasks">
+                   <p-dataTable [value]="tasks | async" selectionMode="single" (onRowSelect)="onTaskSelect($event)" [globalFilter]="gb" #dt>               
+                      <p-column field="name" header="Task Name" [filter]="true" filterPlaceholder="Search"></p-column>
+                   </p-dataTable>
+               
+              </p-tabView> -->
+      </div>
+    </div>    
+</div>    

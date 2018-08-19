@@ -1,0 +1,10 @@
+export const ACCOUNT_OPENING_CHANNELS = '/accounts/opening/channels';
+export const FETCH_ACCOUNT_OPENING_CHANNEL_DETAIL = '/accounts/opening/channels/{id}';
+export const FETCH_ACCOUNTS = '/accounts'
+export const FETCH_ACCOUNT_DETAILS = '/accounts/{accountId}';
+export const GENERATE_ACCOUNT_NUMBER = "/products/{id}/accounts/";
+export const ACCOUNT_TAXATION = "/taxation";
+export const FREEZE_ACCOUNT_COMMAND = "/accounts/{accountId}/commands";
+export const ACCOUNT_LENGTH_CONFIGURATION = "/accounts/configuration/length";
+export const PRODUCT_CODE_LENGTH_CONFIGURATION = "/products/configuration/length";
+export const BRANCH_CODE_LENGTH_CONFIGURATION= "/branches/length"

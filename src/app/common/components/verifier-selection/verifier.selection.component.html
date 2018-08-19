@@ -1,0 +1,18 @@
+<p-sidebar [(visible)]="showModal" (onHide)="onVerificationSelectionModalHide()" [fullScreen]="true" appendTo="body">
+
+    <div style="position: absolute;top:30%;left:35%">
+        <h2 style="font-weight:normal;padding:10px">Assign Verification Task</h2>
+        <hr/>
+
+        <div [formGroup]='verifierForm' style="height: 40px">
+            <div class="ui-g-12 ui-md-12">
+                <p-dropdown [options]="verifiers | verifierSelectionPipe" [autoWidth]="false" formControlName="verifier" appendTo="body"
+                    [style]="{width:'350px'}"></p-dropdown>
+            </div>
+        </div>
+
+        <br/>
+        
+        <button pButton type="button" label="Submit" icon="ui-icon-save" (click)="emitSelectionEvent(true)" [disabled]="verifierFormInvalid()"></button>
+    </div>
+</p-sidebar>

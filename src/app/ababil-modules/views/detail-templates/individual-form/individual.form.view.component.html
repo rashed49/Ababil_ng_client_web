@@ -1,0 +1,531 @@
+
+    
+    <div style="position:relative">
+        <div class="ui-g" #individualFormContainer>
+            <div class="ui-g-12 ui-md-12">
+                <form class="ui-g ui-fluid form-group" [formGroup]="individualForm">
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card class="img-container" style="padding:0px">
+                            <img [src]="individualId?(imageApiUrl+'/'+individualId+'/'+'image'):'assets/images/noimage.jpg'" alt="Photo of a user" style="width:100%;height:100%"
+                                alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" #individualImage>
+                            <div class="overlay"></div>
+                        </mat-card>
+                        <mat-card style="flex: 8;padding-bottom: 0px;">
+                            <mat-card-title>Basic Information:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="firstName" id="firstName" readonly>
+                                                <label>First Name*</label>
+                                                <div *ngIf="individualForm.controls['firstName'].errors && !individualForm.controls['firstName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['firstName'].errors.required">First name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['firstName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="middleName" readonly>
+                                                <label>Middle Name</label>
+                                                <div *ngIf="individualForm.controls['middleName'].errors && !individualForm.controls['middleName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['middleName'].errors.required">Middle name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['middleName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="lastName" readonly>
+                                                <label>Last Name</label>
+                                                <div *ngIf="individualForm.controls['lastName'].errors && !individualForm.controls['lastName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['lastName'].errors.required">Last name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['lastName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="fathersFirstName" readonly>
+                                                <label>Father's First Name*</label>
+                                                <div *ngIf="individualForm.controls['fathersFirstName'].errors && !individualForm.controls['fathersFirstName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersFirstName'].errors.required">Father's first name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersFirstName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="fathersMiddleName" readonly>
+                                                <label>Father's Middle Name</label>
+                                                <div *ngIf="individualForm.controls['fathersMiddleName'].errors && !individualForm.controls['fathersMiddleName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersMiddleName'].errors.required">Father's middle name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersMiddleName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="fathersLastName" readonly>
+                                                <label>Father's Last Name</label>
+                                                <div *ngIf="individualForm.controls['fathersLastName'].errors && !individualForm.controls['fathersLastName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersLastName'].errors.required">Father's middle name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fathersLastName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="mothersFirstName" readonly>
+                                                <label>Mother's First Name*</label>
+                                                <div *ngIf="individualForm.controls['mothersFirstName'].errors && !individualForm.controls['mothersFirstName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersFirstName'].errors.required">Mother's first name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersFirstName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="mothersMiddleName" readonly>
+                                                <label>Mother's Middle Name</label>
+                                                <div *ngIf="individualForm.controls['mothersMiddleName'].errors && !individualForm.controls['mothersMiddleName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersMiddleName'].errors.required">Mother's middle name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersMiddleName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="mothersLastName" readonly>
+                                                <label>Mother's Last Name</label>
+                                                <div *ngIf="individualForm.controls['mothersLastName'].errors && !individualForm.controls['mothersLastName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersLastName'].errors.required">Mother's last name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mothersLastName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown [options]="genders" [autoWidth]="false" formControlName="gender" [disabled]="true"></p-dropdown>
+                                                <div *ngIf="individualForm.controls['gender'].errors && !individualForm.controls['gender'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['gender'].errors.required">Gender is required.</div>
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['gender'].errors.pattern">Gender is invalid.</div>
+                                                </div>
+                                                <label class="md-inputlabel-2">Gender*</label>
+                                            </span>
+                                        </div>
+    
+                                         <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown name="nationality" [options]="countries | nationalityPipe" [autoWidth]="false" [filter]="true" filterBy="label"
+                                                    formControlName="nationality" [disabled]="true"></p-dropdown>
+                                                <div *ngIf="individualForm.controls['nationality'].errors && !individualForm.controls['nationality'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['nationality'].errors">Nationality is required.</div>
+                                                </div>
+                                                <label class="md-inputlabel-2">Nationality*</label>
+                                            </span>
+                                        </div>
+                                        
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield">
+                                                <p-calendar formControlName="dateOfBirth" readonlyInput="true" hourFormat="12" showButtonBar="true" monthNavigator="true"
+                                                    yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate"
+                                                    dateFormat="dd-mm-yy" (onSelect)="calculateAge()" [disabled]="true"></p-calendar>
+                                                <div *ngIf="individualForm.controls['dateOfBirth'].errors && !individualForm.controls['dateOfBirth'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['dateOfBirth'].errors.required">Birth date is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['dateOfBirth'].errors.pattern">Birth date is invalid.</div>
+                                                </div>
+                                                <label>Date Of Birth*</label>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown name="residentStatuses" [options]="residentStatuses" [autoWidth]="false" formControlName="residenceStatus" [disabled]="true"></p-dropdown>
+                                                <div *ngIf="individualForm.controls['residenceStatus'].errors && !individualForm.controls['residenceStatus'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['residenceStatus'].errors">Resident Status is required.</div>
+                                                </div>
+                                                <label class="md-inputlabel-2">Residential Status*</label>
+                                            </span>
+                                        </div>
+    
+    
+                                        <div class="ui-g-12 ui-md-4">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown name="birthCountry" [options]="countries | countryPipe" [autoWidth]="false" [filter]="true" filterBy="label"
+                                                    formControlName="birthCountryId" [disabled]="true"></p-dropdown>
+                                                <!-- <div *ngIf="individualForm.controls['birthCountryId'].errors && !individualForm.controls['birthCountryId'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['birthCountryId'].errors">Birth country is required.</div>
+                                                </div> -->
+                                                <label class="md-inputlabel-2">Birth country*</label>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-4" *ngIf="!nrbBirthPlace">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown name="birthPlace" [options]="baseCountryDistricts | districtPipe" [autoWidth]="false" [filter]="true" filterBy="label"
+                                                    formControlName="birthPlaceId" [disabled]="true"></p-dropdown>
+                                                <!-- <div *ngIf="individualForm.controls['birthPlaceId'].errors && !individualForm.controls['birthPlaceId'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['birthPlaceId'].errors">Birth place is required.</div>
+                                                </div> -->
+                                                <label class="md-inputlabel-2">Birth place*</label>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12 ui-md-4" *ngIf="nrbBirthPlace">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="foreignBirthPlace" maxlength="15" readonly>
+                                                <label>Birth place*</label>
+                                                <!-- <div *ngIf="individualBasicInfoForm.controls['foreignBirthPlace'].errors && !individualBasicInfoForm.controls['foreignBirthPlace'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualBasicInfoForm.controls['foreignBirthPlace'].errors.required">Birth place is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualBasicInfoForm.controls['foreignBirthPlace'].errors.pattern">Birth place is invalid.</div>
+                                                </div> -->
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown [options]="maritalStatuses" [autoWidth]="false" formControlName="maritalStatus" [disabled]="true"></p-dropdown>
+                                                <div *ngIf="individualForm.controls['maritalStatus'].errors && !individualForm.controls['maritalStatus'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['maritalStatus'].errors.required">Marital Status is required.</div>
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['maritalStatus'].errors.pattern">Marital Status is invalid.</div>
+                                                </div>
+                                                <label class="md-inputlabel-2">Marital Status*</label>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-6" *ngIf="individualForm && individualForm.controls['spouseName']">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="spouseName" readonly>
+                                                <label>Spouse Name</label>
+                                                <div *ngIf="individualForm.controls['spouseName'].errors && !individualForm.controls['spouseName'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['spouseName'].errors.required">Spouse name is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['spouseName'].errors.pattern">Name format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+    
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Contact Information:</mat-card-title>
+                            <br/>
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+    
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pKeyFilter="pint" type="text" pInputText formControlName="phoneNumber" readonly>
+                                                <label>Phone Number</label>
+                                                <div *ngIf="individualForm.controls['phoneNumber'].errors && !individualForm.controls['phoneNumber'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['phoneNumber'].errors.required">Phone number is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['phoneNumber'].errors.pattern">Phone number format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pKeyFilter="pint" type="text" pInputText formControlName="mobileNumber" readonly>
+                                                <label>Mobile Number*</label>
+                                                <div *ngIf="individualForm.controls['mobileNumber'].errors && !individualForm.controls['mobileNumber'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mobileNumber'].errors.required">Mobile number is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['mobileNumber'].errors.pattern">Mobile number format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input pKeyFilter="pint" type="text" pInputText formControlName="alternateMobileNumber" readonly>
+                                                <label>Alternate Mobile Number</label>
+                                                <div *ngIf="individualForm.controls['alternateMobileNumber'].errors && !individualForm.controls['alternateMobileNumber'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['alternateMobileNumber'].errors.required">Alternate mobile number is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['alternateMobileNumber'].errors.pattern">Alternate mobile number format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-6">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText formControlName="email" readonly>
+                                                <label>Email</label>
+                                                <div *ngIf="individualForm.controls['email'].errors && !individualForm.controls['email'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['email'].errors.required">Email is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['email'].errors.pattern">Email format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12 ui-md-12">
+                                            <span class="md-inputfield">
+                                                <input pKeyFilter="pint" type="text" pInputText formControlName="fax" readonly>
+                                                <label>Fax</label>
+                                                <div *ngIf="individualForm.controls['fax'].errors && !individualForm.controls['fax'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fax'].errors.required">Fax is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['fax'].errors.pattern">Fax format is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                        <mat-card style="flex: 2">
+                            <mat-card-title>Present Address:</mat-card-title>
+                            <address-component [address]='presentAddress' #presentAddressComponent [viewMode]="viewMode"></address-component>
+                        </mat-card>
+                    </div>
+    
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Permanent Address:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <span>
+                                        <p-inputSwitch formControlName="permanentAdressaspresentChceker"></p-inputSwitch>
+                                        Same as present address
+                                    </span>
+                                </div>
+                                <div class="ui-g-12"></div>
+                            </div>
+    
+                            <address-component [address]='permanentAddress' [viewMode]="viewMode" #permanentAddressComponent></address-component>
+                        </mat-card>
+                        <mat-card style="flex: 2">
+                            <mat-card-title>Professional Address:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-6">
+                                    <span>
+                                        <p-inputSwitch [disabled]="presentAddressCheckerStatus"  formControlName="profAdressaspresentChceker"></p-inputSwitch>
+                                        Same as present address
+                                    </span>
+                                </div>
+                                <div class="ui-g-6">
+                                    <span>
+                                        <p-inputSwitch [disabled]="permanenetAddressCheckerStaus" formControlName="profAdressaspermanentChceker"></p-inputSwitch>
+                                        Same as permanent address
+                                    </span>
+                                </div>
+                                <div class="ui-g-12"></div>
+                            </div>
+                            <address-component [address]='professionalAddress' #professionalAddressComponent [viewMode]="viewMode"></address-component>
+                        </mat-card>
+                    </div>
+    
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Financial Information:</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12 ui-md-12">
+                                    <div class="ui-g ui-fluid form-group">
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield-2">
+                                                <p-dropdown [options]="customerClassificationTypes | customerClassificationTypePipe" [autoWidth]="false" formControlName="classificationId" [disabled]="true"></p-dropdown>
+                                                <label class="md-inputlabel-2">Classification Type*</label>
+                                                <div *ngIf="individualForm.controls['classificationId'].errors && !individualForm.controls['classificationId'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['classificationId'].errors.required">Classification type is required.</div>
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['classificationId'].errors.pattern">Classification type is invalid.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+    
+                                        <div class="ui-g-12">
+                                            <span class="md-inputfield">
+                                                <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                                    formControlName="monthlyIncome" readonly>
+                                                <label>Monthly Income*</label>
+                                                <div *ngIf="individualForm.controls['monthlyIncome'].errors && !individualForm.controls['monthlyIncome'].pristine">
+                                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!individualForm.controls['monthlyIncome'].errors.required && !individualForm.controls['monthlyIncome'].errors.isNumber">Monthly income is required.</div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <div class="ui-g-12"></div>
+    
+                                        <p-dataTable [value]="selectedSourceOfFunds">
+                                            <p-column header="Source name">
+                                                <ng-template let-col let-data="rowData"  pTemplate="body">
+                                                    {{sourceOfundDescriptionMap.get(data.sourceId)}}
+                                                </ng-template>
+                                            </p-column>
+                                            <p-column header="Source description">
+                                                <ng-template let-col let-data="rowData"  pTemplate="body">
+                                                    {{data.description}}
+                                                </ng-template>
+                                            </p-column>
+                                        </p-dataTable>
+                                        <div class="ui-g-12"></div>
+                                        <occupation-component [inputoccupations]="addedOccupations" #occupationComponent [viewMode]="true"></occupation-component>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+    
+                        <mat-card style="flex: 2">
+
+                            <mat-card-title>Foreigner Information</mat-card-title>
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText formControlName="passportNumber" [attr.disabled]="nrbFieldsDisabled ? 'disabled' : null" readonly>
+                                            <label>Passport Number</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield-2">
+                                            <p-dropdown [options]="visaTypes" [autoWidth]="false" formControlName="visaType" [disabled]="true"></p-dropdown>
+                                            <!-- <div *ngIf="individualForm.controls['gender'].errors && !individualForm.controls['gender'].pristine">
+                                            <div class="dropdown-error-msg" [hidden]="!individualForm.controls['gender'].errors.required">Gender is required.</div>
+                                            <div class="dropdown-error-msg" [hidden]="!individualForm.controls['gender'].errors.pattern">Gender is invalid.</div>
+                                        </div> -->
+                                            <label class="md-inputlabel-2">Type of VISA</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText formControlName="visaValidity" [attr.disabled]="nrbFieldsDisabled ? 'disabled' : null" readonly>
+                                            <label>Validity of VISA</label>
+                                        </span>
+                                    </div>
+                                </div>
+    
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield-2">
+                                            <p-dropdown name="foreignCountry" [options]="countries | countryPipe" [autoWidth]="false" [filter]="true" filterBy="label"
+                                                formControlName="foreignCountry" [disabled]="true" ></p-dropdown>
+                                            <!-- <div *ngIf="individualForm.controls['birthCountry'].errors && !individualForm.controls['birthCountry'].pristine">
+                                                    <div class="dropdown-error-msg" [hidden]="!individualForm.controls['birthCountry'].errors">Country is required.</div>
+                                                </div> -->
+                                            <label class="md-inputlabel-2">Country</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText formControlName="foreignAddress" [attr.disabled]="nrbFieldsDisabled ? 'disabled' : null" readonly>
+                                            <label>Foreign address</label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="ui-g-12">
+                                    <div class="ui-g-12">
+                                        <span class="md-inputfield">
+                                            <p-checkbox binary="true"  formControlName="workPermitObtained" [disabled]="true"></p-checkbox>
+                                            Work permit obtained
+                                        </span>
+    
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </mat-card>
+                    </div>
+    
+    
+                    <!-- credit-card-info -->
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                                <mat-card-title>Other bank account Information</mat-card-title>
+                                <div class="ui-g">
+        
+                                    <p-dataTable [value]="otherBankInformations">
+                                        <p-column header="Bank name">
+                                            <ng-template let-col let-data="rowData" pTemplate="body" style="">
+                                                {{data.bank}}
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column header="Branch name">
+                                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                                {{data.branch}}
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column header="Account number">
+                                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                                {{data.accountNumber}}
+                                            </ng-template>
+                                        </p-column>
+                                        <p-column header="Account type">
+                                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                                {{data.otherBankAccountType}}
+                                            </ng-template>
+                                        </p-column>
+                                    </p-dataTable>
+                                </div>
+                        </mat-card>
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Credit Card Information</mat-card-title>
+                            <div class="ui-g">
+    
+                                <p-dataTable [value]="creditCardInformations">
+                                    <p-column header="Bank name">
+                                        <ng-template let-col let-data="rowData" pTemplate="body">
+                                            {{data.bank}}
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column header="Credit card number">
+                                        <ng-template let-col let-data="rowData" pTemplate="body">
+                                            {{data.creditCardNumber}}
+                                        </ng-template>
+                                    </p-column>
+                                    <p-column header="Card type">
+                                        <ng-template let-col let-data="rowData" pTemplate="body">
+                                            {{data.creditCardType}}
+                                        </ng-template>
+                                    </p-column>
+                                </p-dataTable>
+                            </div>
+                        </mat-card>
+                    </div>
+                    <div style="display: flex;flex-direction: row;width:100%;">
+                        <mat-card style="margin-right: 5px;flex: 2">
+                            <mat-card-title>Others</mat-card-title>
+                            <div *ngFor="let otherInfo of otherInformations">
+                                <div class="ui-g-12">
+                                    <div class="ui-g-4">
+                                        <span>
+                                            <p-checkbox binary="true" [(ngModel)]="otherInfo.status" [ngModelOptions]="{standalone: true}" (onChange)="onOtherInfoChange(otherInfo)" [disabled]="true"></p-checkbox>
+                                            {{otherInfo.otherInformationTopic.name}}
+                                        </span>
+                                    </div>
+                                    <div class="ui-g-4" *ngIf="otherInfo.otherInformationTopic.interviewWithCustomerRequired">
+                                        <span>
+                                            <p-checkbox binary="true" [(ngModel)]="otherInfo.permissionGranted" [ngModelOptions]="{standalone: true}"  [disabled]="true"></p-checkbox>
+                                            Permission taken from senior management
+                                        </span>
+                                    </div>
+                                    <div class="ui-g-4" *ngIf="otherInfo.otherInformationTopic.seniorManagementPermissionRequired">
+                                        <span>
+                                            <p-checkbox binary="true" [(ngModel)]="otherInfo.customerInterviewed" [ngModelOptions]="{standalone: true}"  [disabled]="true"></p-checkbox>
+                                            Face to face interview with customer taken
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-card>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>

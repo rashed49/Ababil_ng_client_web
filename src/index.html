@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Ababil NG</title>
+    <base href=".">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/x-icon" href="assets/layout/images/favicon.ico">
+
+
+    <!-- Layout CSS -->
+    <link id="theme-css" rel="stylesheet" type="text/css" href="assets/theme/theme-teal.css">
+    <link id="layout-css" rel="stylesheet" type="text/css" href="assets/layout/css/layout-teal.css">
+
+    <script>
+        if (global === undefined) {
+            var global = window;
+        }
+    </script>
+
+</head>
+
+<style>
+    .unsupported-browser {
+        display: none;
+    }
+
+    .unsupported-browser-show {
+        background-color: white;
+        color: teal;
+        display: block;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        height: 100%;
+        width: 100%;
+        z-index: 3000;
+    }
+</style>
+
+
+<body>
+    <!-- <app-root>
+        <div class="splash-screen">
+            <div class="splash-container">
+                <div class="logo"></div>
+                <div class="load-bar">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                </div>
+            </div>
+        </div>
+    </app-root> -->
+
+    <div id="unsupported_browser" class="unsupported-browser">
+        <div style="width: 100%;margin-top:100px;">
+            <h1 style="text-align: center;">Ababil</h1>
+            <h3 style="text-align: center;">Unsupported Browser Version Detected</h3>
+            <h3 style="text-align: center;">Supported Browsers are: Firefox (Version > 38)</h3>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+
+            var unsupportedBrowser = function () {
+                document.getElementById("unsupported_browser").classList.add("unsupported-browser-show");
+            }
+            var ua = navigator.userAgent, tem, M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+            if (/trident/i.test(M[1])) {
+                tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+                unsupportedBrowser();
+                return;
+            }
+            if (M[1] === 'Chrome') {
+                tem = ua.match(/\bOPR|Edge\/(\d+)/)
+                if (tem != null) {
+                    unsupportedBrowser();
+                    return;
+                }
+            }
+            M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+            if ((tem = ua.match(/version\/(\d+)/i)) != null) { M.splice(1, 1, tem[1]); }
+
+            var browserName = M[0].toLowerCase();
+            var browserVersion = Number(M[1].split(".")[0]);
+            // if (browserName == 'firefox') {
+            //     if (browserVersion < 39) {
+            //         unsupportedBrowser();
+            //     }
+            //     else {
+            //         var appRoot = document.createElement('app-root');                                    
+            //         document.getElementsByTagName('body')[0].appendChild(appRoot);
+            //     }
+            // } else {
+            //     unsupportedBrowser();
+            // }
+            var appRoot = document.createElement('app-root');
+            document.getElementsByTagName('body')[0].appendChild(appRoot);
+        })();
+    </script>
+
+
+</body>
+
+</html>

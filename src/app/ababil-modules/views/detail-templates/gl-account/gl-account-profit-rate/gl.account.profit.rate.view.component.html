@@ -1,0 +1,40 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task of {{gneralLedgerAccountName}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<p-dataTable [value]="profitRateMergedTotal" sortField="effectiveDate" rowGroupMode="rowspan" [style]="{'margin-top':'50px','padding':'5px'}"
+    [lazy]="true" [rows]="20" [paginator]="true" >
+
+    <p-column field="effectiveDate" header="Effective date" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-row="rowData" pTemplate="body">
+            {{row.effectiveDate | date}}
+        </ng-template>
+    </p-column>
+    <p-column field="amountRangeFrom" header="Amount range from" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+            <div align="right">
+                {{data.amountRangeFrom | number:'1.2-4'}}
+            </div>
+        </ng-template>
+    </p-column>
+    <p-column field="amountRangeTo" header="Amount range to" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+            <div align="right">
+                {{data.amountRangeTo | number:'1.2-4'}}
+            </div>
+        </ng-template>
+    </p-column>
+    <p-column field="landingRate" header="Lending rate" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+    <p-column field="borrowingRate" header="Borrowing rate" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+</p-dataTable>
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

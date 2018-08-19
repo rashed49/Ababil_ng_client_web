@@ -1,0 +1,23 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+        <div class="ababil-toolbar">
+                <span class="ababil-toolbar-header">Approve Task</span>
+                <div class="ababil-toolbar-button-group">
+                        <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+                        <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+                        <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+                </div>
+        </div>
+</div>
+
+<br/>
+<br/>
+<hr/>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12" #report>
+    </div>
+</div>
+
+<comment-component [commentGroup]="commandReference"></comment-component>

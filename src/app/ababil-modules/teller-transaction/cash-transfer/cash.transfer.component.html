@@ -1,0 +1,258 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Cash Transfer</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Transfer" icon="ui-icon-call-made" class="default-btn" (click)="transfer()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<div>
+    <div style="display: flex; flex-direction: row; width: 100%;margin-bottom: 10px;">
+        <mat-card style="flex: 1;">
+            <mat-card-title>Source Teller:</mat-card-title>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="flex: 4; margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <td>{{sourceTeller.title}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Cash receive limit</th>
+                            <td>{{tellerLimit.cashReceiveLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="flex: 4;margin-right: 3px;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Balance</th>
+                            <td>{{tellerBalance.balance | number:'1.2-4'}}</td>
+                        </tr>
+                        <tr>
+                            <th>Cash withdraw limit</th>
+                            <td>{{tellerLimit.cashWithdrawLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="flex: 4;">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Currency</th>
+                            <td>{{tellerBalance.currencyCode}}</td>
+                        </tr>
+                        <tr>
+                            <th>Balance limit</th>
+                            <td>{{tellerLimit.balanceLimit}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex; flex-direction: row; width: 100%;margin-bottom: 10px;">
+        <mat-card style="flex:1;font-size: 12px;">
+            <mat-card-title>Teller Transaction Detail:</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-4 md-inputfield" style="font-size: 16px;">
+                        <p-selectButton [options]="transferTypes" [(ngModel)]="selectedType" (onChange)="onTransferTypeChange()"></p-selectButton>
+                    </div>
+                    <div class="ui-g-8"></div>
+                </div>
+            </div>
+            <form class="ui-g ui-fluid form-group" [formGroup]="cashTransferForm">
+                <div class="ui-g-12 ui-md-12" *ngIf="sendChecker">
+                    <div class="ui-g-12 ui-md-4">
+                        <p-dropdown [options]="tellers | tellerList" [autoWidth]="false" formControlName="destinationTellerId" [style]="{'width': '100%'}"></p-dropdown>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12" *ngIf="receiveChecker">
+                    <div class="ui-g-12 ui-md-4 md-inputfield">
+                        <input type="text" pInputText readonly formControlName="destinationTellerId">
+                        <label class="md-inputLabel">Source teller</label>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-12" *ngIf="!isBaseCurrency">
+                    <div class="ui-g-12 ui-md-6">
+                        <span>
+                            <p-dropdown [options]="exchangeRateTypes" [autoWidth]="false" formControlName="exchangeRateTypeId"></p-dropdown>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input enter type="number" pInputText formControlName="exchangeRate" readonly>
+                            <label>Exchange Rate</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-4">
+                        <span class="md-inputfield">
+                            <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' ,precision: 4}" pInputText formControlName="amountCcy"
+                                [attr.disabled]="receiveChecker || amountVisible ? receiveChecker || amountVisible : null">
+                            <label>Amount</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input enter type="text" pInputText [(ngModel)]="amountCCYInWords"  [ngModelOptions]="{standalone: true}" readonly>
+                            <label>Amount In Words </label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-2">
+                        <button pButton type="button" icon="ui-icon-widgets" label="Denomination" class="default-btn" (click)="showDenomination()"
+                            [disabled]="denominationChecker"></button>
+                    </div>
+                </div>
+
+
+
+                <div class="ui-g-12 ui-md-12" *ngIf="!isBaseCurrency">
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" pInputText formControlName="amountLcy">
+                            <label>Amount LCY*</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input enter type="text" pInputText [(ngModel)]="amountLCYInWords" [ngModelOptions]="{standalone: true}" readonly>
+                            <label>Amount LCY In Words </label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield">
+                            <input enter type="text" pInputText formControlName="narration" [attr.disabled]="receiveChecker ? receiveChecker : null">
+                            <label>Narration*</label>
+                        </span>
+                    </div>
+                    <!-- <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <p-calendar placeholder="Value Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                                utc="true" [minDate]="minDate" formControlName="valueDate"></p-calendar>
+                            <label>Value Date</label>
+                        </span>
+                    </div> -->
+                </div>
+
+            </form>
+        </mat-card>
+    </div>
+    <mat-card *ngIf="selectedType=='receive' && pendingTransactions.length>0">
+        <mat-card-title>Pending receivable transactions </mat-card-title>
+        <p-dataTable  [value]="pendingTransactions" selectionMode="single" (onRowSelect)="onRowSelect($event)">
+            <p-column field="tellerId" header="Source Teller"></p-column>
+            <p-column field="amountCcy" header="Amount CCY"></p-column>
+            <!-- <p-column field="Currency code" header="Currency code"></p-column> -->
+            <p-column field="globalTxnNumber" header="Voucher number"></p-column>
+        </p-dataTable>
+    </mat-card>
+    <p-dialog header="Denomination of Amount CCY" [(visible)]="denominationDisplay" modal="true" responsive="true" appendTo="body"
+        [minHeight]="550" closable="false" [width]="1000">
+        <denominatorComponent [previousTransactionDenominations]="previousTransactionDenominations" [tellerDenominationBalances]="tellerDenominationBalances"
+            [denominationStatus]="denominationStatus" [tellerCurrencyCode]="tellerCurrencyCode" #denominatorComponent></denominatorComponent>
+        <div style="float: right; margin-top: 10px">
+            <button pButton type="button" *ngIf="sendChecker && (sourceTeller.denominationRequired || destinationTellerDetail.denominationRequired)" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveDenomination()"></button>
+            <button pButton type="button" label="Close" icon="ui-icon-close" class="default-btn" (click)="closeDenomination()"></button>
+        </div>
+    </p-dialog>
+
+    <!-- <div style="display: flex; flex-direction: row; width: 100%">
+        <mat-card style="font-size: 12px; text-align:center !important;" style="width:100%;" *ngIf="isDestinationVault || isSourceVault">
+            <mat-card-title style="margin-top:10px;">Denomination Detail</mat-card-title>
+
+            <p-dataTable [value]="tellerDenominationTransactionList" [editable]="true" [responsive]="true" (onEditComplete)="onTellerDominationTransactionListEdit($event)"
+                *ngIf="isDestinationVault || isSourceVault">
+                <p-headerColumnGroup *ngIf="isSourceVault">
+                    <p-row>
+                        <p-column header="Denomination Value" rowspan="2"></p-column>
+                        <p-column header="Balance" colspan="2"></p-column>
+                        <p-column header="Transaction" colspan="2"></p-column>
+                    </p-row>
+                    <p-row>
+                        <p-column header="Quantity" colspan="1"></p-column>
+                        <p-column header="Amount" colspan="1"></p-column>
+                        <p-column header="Quantity" colspan="1"></p-column>
+                        <p-column header="Amount" colspan="1"></p-column>
+                    </p-row>
+                </p-headerColumnGroup>
+                <p-headerColumnGroup *ngIf="isDestinationVault">
+                    <p-row>
+                        <p-column header="Denomination Value" rowspan="2"></p-column>
+                        <p-column header="Transaction" colspan="2"></p-column>
+                    </p-row>
+                    <p-row>
+                        <p-column header="Quantity" colspan="1"></p-column>
+                        <p-column header="Amount" colspan="1"></p-column>
+                    </p-row>
+                </p-headerColumnGroup>
+                <p-column field="denominationValue" header="Denomination Value">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.denominationValue}} ({{data.denominationType}})
+                    </ng-template>
+                </p-column>
+                <p-column field="debit_quantity" header="Balance Quantity" *ngIf="isSourceVault"></p-column>
+                <p-column field="balance_amount" header="Balance Amount" *ngIf="isSourceVault">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.debit_quantity * data.denominationValue | number:'1.2-4'}}
+                    </ng-template>
+
+                </p-column>
+                <p-column field="quantity" [editable]="true" header="Transaction Quantity">
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                        <input enter type="text" pInputText pKeyFilter="pnum" [(ngModel)]="data.quantity">
+                    </ng-template>
+                </p-column>
+                <p-column field="transaction_amount" header="Transaction Amount">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.quantity * data.denominationValue | number:'1.2-4'}}
+                    </ng-template>
+
+                </p-column>
+                <p-footerColumnGroup>
+                    <p-row>
+                        <p-column footer="Total:" colspan="2" *ngIf="!isSourceVault" [style]="{'background-color': 'rgb(0, 150, 136)',
+                    'color': 'rgb(255, 255, 255)',
+                    'font-size': '1.5em',
+                    'text-align': 'left',
+                    'border': '1px solid rgb(0, 150, 136)',
+                    'padding':'0.625em 1em'}"></p-column>
+                        <p-column footer="Total:" colspan="2" *ngIf="isSourceVault" [style]="{'background-color': 'rgb(0, 150, 136)',
+                    'color': 'rgb(255, 255, 255)',
+                    'font-size': '1.5em',
+                    'text-align': 'left',
+                    'border': '1px solid rgb(0, 150, 136)',
+                    'padding':'0.625em 1em'}"></p-column>
+                        <p-column [footer]="(total_balance_amount | number:'1.2-4')" *ngIf="isSourceVault" colspan="1" [style]="{'background-color': 'rgb(0, 150, 136)',
+                    'color': 'rgb(255, 255, 255)',
+                    'font-size': '1.5em',
+                    'border': '1px solid rgb(0, 150, 136)',
+                    'padding':'0.625em 1em'}"></p-column>
+                        <p-column *ngIf="isSourceVault" colspan="1" [style]="{'background-color': 'rgb(0, 150, 136)',
+                    'color': 'rgb(255, 255, 255)',
+                    'font-size': '1.5em',
+                    'border': '1px solid rgb(0, 150, 136)',
+                    'padding':'0.625em 1em'}"></p-column>
+                        <p-column [footer]="(total_denomination_amount | number:'1.2-4')" colspan="1" [style]="{'background-color': 'rgb(0, 150, 136)',
+                    'color': 'rgb(255, 255, 255)',
+                    'font-size': '1.5em',
+                    'border': '1px solid rgb(0, 150, 136)',
+                    'padding':'0.625em 1em'}"></p-column>
+
+                    </p-row>
+                </p-footerColumnGroup>
+            </p-dataTable>
+        </mat-card>
+    </div> -->
+</div>

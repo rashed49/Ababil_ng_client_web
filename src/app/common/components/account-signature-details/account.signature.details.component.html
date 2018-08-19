@@ -1,0 +1,60 @@
+<div class="ui-g">
+        <div class="ui-g-12">
+    <div class="ui-g-12">
+        <div class="ui-g-6 ui-md-6">
+            <table class="table table-bordered table-striped" style="margin: 0px;">
+                <tr>
+                    <th class="ui-lg-3">Account Number</th>
+                    <td class="ui-lg-3">{{demandDepositAccount.number}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="ui-g-6 ui-md-6">
+            <table class="table table-bordered table-striped" style="margin: 0px;">
+                <tr>
+                    <th class="ui-lg-3">Account Name</th>
+                    <td class="ui-lg-3">{{demandDepositAccount.name}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th class="ui-lg-3">Account Operator Instruction</th>
+                    <td class="ui-lg-9">
+                        <input type="text" value={{accountOperatorInformation.instruction}} [(ngModel)]="accountOperatorInformation.instruction"
+                            pInputText style="width: 95%;" readonly>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="ui-g-12 ui-md-3" *ngFor="let signatory of signatories">
+            <mat-card style="height: 220px" (click)="onSignatoryCardSelect(signatory.id)">
+                <img mat-card-image class="no-bottom-margin" [src]="signatory.signature"
+                    alt="No image" style="height: 120px" #signatorySignature>
+                <hr class="set-hr-margin">
+                <mat-card-footer style="height: 100px">
+                    <div class="ui-g-12 ui-md-12" style="padding: 0px">
+                        <div class="ui-g">
+                            <div class="ui-g-3">
+                                <img src="{{imageApiUrl}}/individuals/{{signatory.individualId}}/image" width="45">
+                            </div>
+                            <div class="ui-g-9">
+                                {{signatory.signatoryName}}
+                                <br> Cell: {{signatory.mobileNumber}}
+                            </div>
+                        </div>
+                        <hr style="margin: 0px">
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p class="set-bottom-margin">{{signatory.individualId}} Individual</p>
+                    </div>
+                    <div class="ui-g-12 ui-md-6" align="right">
+                        <p class="set-bottom-margin">{{signatory.signatoryType}}</p>
+                    </div>
+                </mat-card-footer>
+            </mat-card>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,45 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Gl Account Search</span>
+        <div class="ababil-toolbar-button-group">
+            <button type="button" pButton icon="ui-icon-search" (click)="op.show($event)"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="fetchGlAccounts()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<p-overlayPanel #op [formGroup]="searchForm">
+    <br/>
+    <div class="ui-g ui-fluid form-group">
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="code">
+                <label>Code</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="name">
+                <label>Name</label>
+            </span>
+        </div>
+    </div>
+
+    <button pButton type="button" label="Search" class="primary-btn" (click)="op.hide($event);fetchGlAccounts();"></button>
+
+</p-overlayPanel>
+
+
+<p-dataTable sortMode="multiple" [value]="glAccounts" selectionMode="single" (onRowSelect)="onRowSelect($event)" #dt>
+    <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="glType" header="GL Type" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="status" header="Status" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="leafType" header="Leaf Type" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+</p-dataTable>

@@ -1,0 +1,75 @@
+<div class="ui-fluid ui-g">
+    <div class="ui-g-12">
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <input type="text" pInputText [(ngModel)]="branchName">
+                <label class="md-inputlabel-2">Branch name</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <input type="text" pInputText [(ngModel)]="branchId">
+                <label class="md-inputlabel-2">Branch ID</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="branchTypes" [autoWidth]="false" [(ngModel)]="selectedBranchType"></p-dropdown>
+                <label class="md-inputlabel-2">Branch type</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="ui-g-12">
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <input type="text" pInputText [(ngModel)]="routingNumber">
+                <label class="md-inputlabel-2">Routing number</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <input type="text" pInputText [(ngModel)]="swiftCode">
+                <label class="md-inputlabel-2">Swift code</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="transactionStatus" [autoWidth]="false" [(ngModel)]="selectedTransactionStatus"></p-dropdown>
+                <label class="md-inputlabel-2">Transaction status</label>
+            </span>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-md-12">
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="transactionTypes" [autoWidth]="false" [(ngModel)]="selectedTransactionType"></p-dropdown>
+                <label class="md-inputlabel-2">Transaction type</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6"></div>
+        <div class="ui-g-12 ui-md-2">
+            <button pButton label="Search" icon="ui-icon-search" (click)="search()"></button>
+        </div>
+    </div>
+
+    <!-- id?: number;
+    code?: string;
+    name?: string;
+    address?: Address;
+    adCode?: string;
+    phoneNumber?: string;
+    mobileNumber?: string;
+    email?: string;
+    routingNumber?: string;
+    bankId?: number; -->
+</div>
+<p-dataTable [style]="{'margin-top':'20px'}" (onRowSelect)="onRowSelect($event)" [value]="branches" selectionMode="single" [lazy]="true" [paginator]="true"
+    [totalRecords]="totalRecords" (onLazyLoad)="loadBranchesLazily($event)" [rows]="20" selectionMode="single">
+    <p-column field="name" header="Branch name"></p-column>
+    <p-column field="address.addressLine" header="Branch address"></p-column>
+    <p-column field="code" header="Branch code"></p-column>
+</p-dataTable>

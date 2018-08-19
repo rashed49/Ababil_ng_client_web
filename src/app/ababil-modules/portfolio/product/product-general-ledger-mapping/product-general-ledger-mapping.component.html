@@ -1,0 +1,99 @@
+<gl-account-lookup [display]="glAccountLookUpDisplay" [resultType]="glAccountLookUpMode" (onSelect)="onSearchResult($event)"
+    (onClose)="onSearchModalClose($event)"></gl-account-lookup>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Product general ledger mapping</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Refresh" type="button" icon="ui-icon-refresh" class="default-btn" (click)="refresh()"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+
+    <mat-card>
+        <div class="ui-g">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Product name</th>
+                    <td>{{product.name}}</td>
+                </tr>
+                <tr>
+                    <th>Product prefix</th>
+                    <td>{{product.code}}</td>
+                </tr>
+            </table>
+        </div>
+    </mat-card>
+
+    <form class="ui-fluid form-group" [formGroup]="productGeneralLedgerMappingForm">
+
+        <mat-card style="flex: 1;">
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="flex: 3; margin-right: 10px;">
+                        <span class="md-inputfield-2">
+                    <p-dropdown [options]="generalLedgerTypesThatAreNotAdded | generalLedgerTypePipe" [autoWidth]="false" formControlName="generalLedgerTypeId"></p-dropdown>
+                    <label class="md-inputlabel-2">General ledger type</label>
+                    </span>
+                </div>
+                <div style="flex:2; margin-right: 10px;">
+                        <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="generalLedgerCode" #glCode (keyup.enter)="onEnter(glCode.value)"/>
+                    <label>GL map code</label>
+                    <div *ngIf="(productGeneralLedgerMappingForm.get('generalLedgerCode').errors) && !(productGeneralLedgerMappingForm.get('generalLedgerCode').value === null)">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!productGeneralLedgerMappingForm.get('generalLedgerCode').errors.invalidCode">Invalid general ledger map code.</div>
+                        </div>
+                        <div *ngIf="(productGeneralLedgerMappingForm.get('generalLedgerCode').errors) && !(productGeneralLedgerMappingForm.get('generalLedgerCode').value === null)">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!productGeneralLedgerMappingForm.get('generalLedgerCode').errors.misMatchGLHeadType">General ledger account nature and general ledger type head does not match.</div>
+                        </div>
+                </span>
+                </div>
+                <div style="flex: 4; margin-right: 10px;">
+                        <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="generalLedgerName" readonly/>
+                    <label>GL name</label>
+                    <div *ngIf="(productGeneralLedgerMappingForm.get('generalLedgerName').errors) && (productGeneralLedgerMappingForm.get('generalLedgerName').value === null)">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!productGeneralLedgerMappingForm.get('generalLedgerName').errors.misMatchGLHeadType">General ledger account nature and general ledger type head does not match.</div>
+                    </div>
+                </span>
+                </div>
+
+                <div style="flex: 0.1;">
+                    <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="searchGlAccount()">
+                    </button>
+                </div>
+
+                <div style="flex: 0.1;">
+                    <button pButton type="button" icon="ui-icon-plus" class="default-btn" (click)="createProductGeneralLedgerMapping()" [disabled]="productFormInvalid()">
+                    </button>
+                </div>
+            </div>
+            <br/>
+            <br/>
+
+            <div style="display: flex; flex-direction: column; width: 100%;">
+                <p-dataTable [value]="productGeneralLedgerMapping" selectionMode="single" dataKey="id" #dt>
+                    <p-column field="generalLedgerTypeName" header="General ledger type name"></p-column>
+                    <p-column field="generalLedgerName" header="General ledger name">
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                            {{ data.generalLedgerName}} ( {{data.generalLedgerCode}} )
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Delete" [style]="{'width':'70px','text-align':'center'}" *ngIf="product.status !== 'ACTIVE'">
+                        <ng-template let-col let-rowData="rowData" pTemplate="body">
+                            <div align="center">
+                                <button type="button" pButton icon="ui-icon-delete" align="center" (click)="delete(rowData.id)"></button>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </div>
+        </mat-card>
+    </form>
+</div>
+
+<p-confirmDialog icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

@@ -1,0 +1,34 @@
+// import { NgModule } from '@angular/core';
+// import { AbabilNgSharedModule } from '../../../common/ababil-ng-shared-module.module';
+// import { ChequeService } from '../../../services/cheque/service-api/cheque.service';
+// import { WorkflowService } from '../../../services/workflow/service-api/workflow.service';
+// import { RouterModule } from '@angular/router';
+// import { ChequeRoutes } from './cheque.routes';
+// import { TranslateService } from '@ngx-translate/core';
+// import { ChequeComponent } from './cheque.component';
+// import { ReactiveFormsModule } from '@angular/forms';
+// import {NotificationService} from '../../../common/notification/notification.service';
+// import {ChequeDetailComponent} from './detail/cheque-detail/cheque.detail.component';
+// import {CreateChequeBookFormComponent} from './form/cheque-form/create/create.cheque.form.component';
+// import {ChequeBookFormComponent} from './form/cheque-form/cheque.form.component';
+// @NgModule({
+//     imports: [
+//         AbabilNgSharedModule,
+//         RouterModule.forChild(ChequeRoutes),
+//         ReactiveFormsModule
+//     ],
+//     declarations: [
+//         ChequeComponent,
+//         ChequeDetailComponent,
+//         ChequeBookFormComponent,
+//         CreateChequeBookFormComponent
+      
+//     ],
+//     providers: [
+//         ChequeService,
+//         TranslateService,
+//         WorkflowService
+//     ]
+// })
+// export class ChequeModule {
+// }

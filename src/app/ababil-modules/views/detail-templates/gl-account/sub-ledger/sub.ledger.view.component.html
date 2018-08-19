@@ -1,0 +1,71 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <!-- <span class="ababil-toolbar-header">Approve Task of {{gneralLedgerAccountName}}</span> -->
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<mat-card>
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Sub ledger title</th>
+                        <td class="ui-lg-3">{{subLedgers.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <th class="ui-lg-3">General ledger account id</th>
+                        <td class="ui-lg-3">{{subLedgers.generalLedgerAccountId}}</td>
+                    </tr>
+
+                    
+                    <tr>
+                        <th>Currency Code</th>
+                        <td>{{subLedgers.currencyCode}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>All branch allowed</th>
+                        <td>{{subLedgers.areAllBranchAllowed}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+
+
+                    <tr>
+                        <th>Negative balance allowed</th>
+                        <td>{{subLedgers.isNegativeBalanceAllowed}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Online txn Allowed</th>
+                        <td>{{subLedgers.isOnlineTxnAllowed}}</td>
+                    </tr>
+                    
+                    <tr *ngIf= "allBranch">
+                        <th>Branch id</th>
+                        <td>{{subLedgers.branchId}}</td>
+                    </tr>
+ 
+                </table>
+            </div>
+
+        </div>
+        </div>
+</mat-card>
+
+
+<!-- <comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component> -->

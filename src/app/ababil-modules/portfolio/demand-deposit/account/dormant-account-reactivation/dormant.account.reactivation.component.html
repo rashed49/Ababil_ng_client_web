@@ -1,0 +1,89 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Reactivate dorment account</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+
+<mat-card style="margin-bottom:5px;">
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Title</th>
+                        <td>{{demandDepositAccount.name}}</td>
+                    </tr>
+                    <tr>
+                        <th>Open Date</th>
+                        <td>{{demandDepositAccount.openingDate | date:'medium'}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{demandDepositAccount.number}}</td>
+                    </tr>
+                    <tr>
+                        <th>Last Transaction Date</th>
+                        <td>{{ (demandDepositAccount.balance) ? (demandDepositAccount.balance.lastClientTransactionDate | date:'medium')
+                            : "" }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="float: rigth;">
+                <button pButton type="button" label="Account detail" class="default-btn" (click)="showAccountDetail()" style="float: right;"></button>
+                <button pButton type="button" style="float: right;" label="Signature" class="default-btn" (click)="showSignature()"></button>
+            </div>
+        </div>
+    </div>
+</mat-card>
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+
+            <mat-card style="flex: 6; margin-right:5px;">
+
+                <mat-card-title>Charges:</mat-card-title>
+                <div class="ui-g">
+                    <common-charge-table #chargeTable [charges]="charges" [editable]="true"></common-charge-table>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 6;">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g ui-fluid form-group" [formGroup]="dormantAccountReactivationForm">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="comment">
+                                <label>Comment</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+            </mat-card>
+        </div>
+    </div>
+</div>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+
+<p-dialog header="Demand deposit account signature" [(visible)]="demandDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="accountId" [customerId]="customerId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="accountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>

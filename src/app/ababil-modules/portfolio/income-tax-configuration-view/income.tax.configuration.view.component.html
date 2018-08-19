@@ -1,0 +1,200 @@
+<!-- <verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Income tax configuration</span>
+    </div>
+</div>
+
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <mat-card>
+            <mat-tab-group dynamicHeight>
+
+                <mat-tab label="Default tax rate">
+                    <p-dataTable [value]="slabs" [responsive]="true" [style]="{'margin-top':'10px'}">
+
+                        <p-column field="id" header="Sl no." [style]="{'width':'100px','text-align':'center'}">
+                            <ng-template let-i="rowIndex" pTemplate="body">
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="fromAmount" header="From amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.fromAmount | number}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="toAmount" header="To amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.toAmount | number}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="ratePercent" header="Rate" [style]="{'text-align':'center'}">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.ratePercent | number}}%
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </mat-tab>
+                <mat-tab label="Waive rule">
+                    <p-dataTable [value]="waiverRuleDataTable" [responsive]="true" [style]="{'margin-top':'10px'}">
+                        <p-column field="id" header="Sl no." [style]="{'width':'100px','text-align':'center'}">
+                            <ng-template let-i="rowIndex" pTemplate="body">
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="name" header="Name">
+                                <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                    {{data.name | sentenceCasePipe}}
+                                </ng-template>
+    
+                            </p-column>
+                        <p-column field="description" header="Description" [style]="{'width':'300px','text-align':'left'}"></p-column>
+                        <p-column field="evaluatorFunction" header="Evaluator function"></p-column>
+                        <p-column field="ratePercent" header="Rate" [style]="{'text-align':'center'}">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.ratePercent | number}}%
+                            </ng-template>
+                        </p-column>
+                        <p-column field="applicableCustomerType" header="Applicable customer type">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.applicableCustomerType | sentenceCasePipe}}
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </mat-tab>
+                <mat-tab label="Special tax rate">
+                    <mat-card-title style="display: flex;flex-direction: row; margin-top: 20px;">
+                        <div style="flex:1; ">
+                            <span style="display: none;">Special tax rates:</span>
+                        </div>
+                        <div align="right">
+                            <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add special tax rate" tooltipPosition="top"
+                                (click)="op1.show($event);op2.hide($event)"></button>
+                            <button pButton type="button" icon="ui-icon-search" class="default-btn" pTooltip="Search" tooltipPosition="top" (click)="op2.show($event);op1.hide($event)"></button>
+                            <button pButton type="button" icon="ui-icon-refresh" class="default-btn" pTooltip="Refresh" tooltipPosition="top" (click)="refresh()"></button>
+                        </div>
+                    </mat-card-title>
+
+                    <p-dataTable [value]="specialTaxRateList" [responsive]="true" [resizableColumns]="true" [tableStyle]="{'table-layout':'auto'}"
+                        dataKey="id" [lazy]="true" [rows]="20" [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadSpecialTaxRateLazy($event)"
+                        [style]="{'text-align':'center'}" #dt>
+                        <p-column field="id" header="Sl no." [style]="{'width':'100px','text-align':'center'}">
+                            <ng-template let-i="rowIndex" pTemplate="body">
+                                {{i+1}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="account" header="Account name">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.accountName}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="account" header="Account number">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.accountNumber}}
+                            </ng-template>
+                        </p-column>
+                        <p-column field="taxRate" header="Special tax rate">
+                            <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                                {{data.taxRate | number}}%
+                            </ng-template>
+                        </p-column>
+                        <p-column header="Delete" [style]="{'width':'70px','text-align':'center'}">
+                            <ng-template let-data="rowData" pTemplate="body">
+                                <div align="center">
+                                    <button type="button" pButton (click)="onPressDeleteButton(data)" tooltipPosition="top" icon="ui-icon-delete" class="ui-button-danger"></button>
+                                </div>
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>
+
+<p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="demandDepositAccountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>
+
+
+
+<p-dialog header="Fixed deposit account detail" [(visible)]="fixedDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-fixed-account-detail [fixedDepositAccountId]="fixedDepositAccountId"></common-fixed-account-detail>
+</p-dialog>
+
+
+<p-dialog header="Reccuring deposit account detail" [(visible)]="recurringDepositdisplay" [width]="1000" [minHeight]="800"
+    modal="true" closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-recurring-deposit-account-details [recurringDepositAccountId]="recurringDepositAccountId"></common-recurring-deposit-account-details>
+</p-dialog>
+
+<p-overlayPanel #op1 [style]="{'width':'600px'}">
+    <div class="ui-g" style="display: block;">
+        <div class="ui-g-12 ui-md-12" [formGroup]="specialTaxRateForm">
+            <div class="ui-g ui-fluid form-group">
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input name="skip" enter type="text" pInputText [(ngModel)]="accountNumber" [ngModelOptions]="{standalone: true}" [maxLength]="accountNumberLength"
+                                (keyup.enter)="fetchAccountDetail()" (blur)="fetchAccountDetail()" pKeyFilter="pint">
+                            <!-- <button name="skip" icon="ui-icon-account-circle" pButton type="button" class="default-btn" (click)="showAccountDetails()"
+                                *ngIf="accountNumber && showAccountDetailsButton" style="float: right; top: -38px;"></button> -->
+                            <label>Account Number</label>
+                            <div *ngIf="specialTaxRateForm.controls['accountId'].errors && !specialTaxRateForm.controls['accountId'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!specialTaxRateForm.controls['accountId'].errors.required">Account is required.</div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input name="skip" enter type="text" pInputText [(ngModel)]="accountDetail.name" [ngModelOptions]="{standalone: true}" [disabled]="true">
+                            <label>Account name</label>
+                        </span>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" formControlName="taxRate" pInputText pKeyFilter="pint">
+                            <label>Special tax rate</label>
+                            <div *ngIf="specialTaxRateForm.controls['taxRate'].errors && !specialTaxRateForm.controls['taxRate'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!specialTaxRateForm.controls['taxRate'].errors.required">Tax rate is required.</div>
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!specialTaxRateForm.controls['taxRate'].errors.max">Tax rate cannot be more than 100%.</div>
+
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="float:right;">
+            <button pButton type="button" label="Add" class="default-btn" (click)="op1.hide($event);addSpecialTaxRate();"></button>
+        </div>
+    </div>
+</p-overlayPanel>
+
+<p-overlayPanel #op2 [style]="{'width':'400px'}">
+    <div class="ui-g ui-fluid" style="display: block;">
+        <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input name="skip" enter type="text" pInputText [(ngModel)]="searchedAccountNumber" [ngModelOptions]="{standalone: true}"
+                            [maxLength]="accountNumberLength" pKeyFilter="pint">
+                        <label>Account Number</label>
+                    </span>
+                </div>
+                <div style="float:right;">
+                    <button pButton type="button" label="Search" class="default-btn" (click)="op2.hide($event);search(null);"></button>
+                </div>
+        </div>
+    </div>
+</p-overlayPanel>

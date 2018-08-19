@@ -1,0 +1,65 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">nominated/ owner signatory</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-edit" class="default-btn" (click)="editSignatory()"></button>
+            <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn" (click)="deleteAccountSignatory()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <div style="display: flex;flex-direction: row;width:100%;">
+            <div class="ui-g-12 ui-md-3">
+                <mat-card style="margin-right: 5px;flex: 2">
+                    <img mat-card-image src="" alt="picture of a individual" style="height: 200px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                        #individualImage>
+                </mat-card>
+                <div style="padding-top:12px"></div>
+                <mat-card style="margin-right: 5px;flex: 2">
+                    <img mat-card-image [src]="accountSignatory.signature" alt="picture of signature" style="height: 150px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                        #signatorySignature>
+                </mat-card>
+            </div>
+            <div class="ui-g-12 ui-md-9">
+                <mat-card>
+                    <mat-card-title>Nominated/Owner signatory information</mat-card-title>
+                    <br/>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12">
+                            <div class="ui-g ui-fluid">
+                                <table class="table table-bordered table-striped" style="margin: 0px;">
+                                    <tr>
+                                        <th class="ui-lg-6">Signatory Name</th>
+                                        <td class="ui-lg-6">{{accountSignatory.signatoryName}}</td>
+                                    </tr>
+                                    <tr>
+                                            <th class="ui-lg-6">Mobile Number</th>
+                                            <td class="ui-lg-6">{{accountSignatory.mobileNumber}}</td>
+                                        </tr>
+                                        <tr>
+                                                <th class="ui-lg-6">Remarks</th>
+                                                <td class="ui-lg-6">{{accountSignatory.remarks}}</td>
+                                            </tr>
+                                            <tr *ngIf="!isOwnerSignature">
+                                                <th class="ui-lg-6">Start Date</th>
+                                                <td class="ui-lg-6">{{accountSignatory.dateFrom | date}}</td>
+                                            </tr>
+                                            <tr *ngIf="!isOwnerSignature">
+                                                <th class="ui-lg-6">Expire Date</th>
+                                                <td class="ui-lg-6">{{accountSignatory.dateTo | date}}</td>
+                                            </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+
+    </div>
+</div>

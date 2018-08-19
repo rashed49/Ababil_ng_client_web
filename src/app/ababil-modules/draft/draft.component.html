@@ -1,0 +1,27 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <p-panel>
+            <p-header>
+                <div class="ui-helper-clearfix">
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Drafts</span>
+
+                    <div class="ui-toolbar-group-right">
+                        <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refresh()"></button>
+                        <button pButton type="button" label="Open" icon="ui-icon-folder" class="default-btn" (click)="openDraft()" *ngIf="selectedDraft"></button>
+                        <button pButton type="button" label="Delete" icon="ui-icon-trash" class="default-btn" (click)="deleteDraft()" *ngIf="selectedDraft"></button>
+                    </div>
+                </div>
+            </p-header>
+
+            <p-dataTable [value]="drafts" [(selection)]="selectedDraft"  [totalRecords]="totalRecords" [lazy]="true"
+                [rows]="20" [paginator]="true" (onLazyLoad)="loadDraftsLazy($event)" #dt>
+                <p-column [style]="{'width':'38px'}" selectionMode="single"></p-column>
+                <p-column field="subject" header="Subject" [filter]="true" filterPlaceholder="Search"></p-column>
+            </p-dataTable>
+
+        </p-panel>
+
+    </div>
+
+</div>

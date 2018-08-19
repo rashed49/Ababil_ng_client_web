@@ -1,0 +1,77 @@
+<!-- <verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <p-panel>
+            <p-header>
+                <div class="ui-helper-clearfix">
+
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px" *ngIf="profile.ownBank">Home: {{profile.name}}</span>
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px" *ngIf="!profile.ownBank">{{profile.name}}</span>
+
+                    <div class="ui-toolbar-group-right">
+                        <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+                        <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn" (click)="deleteBank()"></button>
+                        <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+                    </div>
+                </div>
+            </p-header>
+
+            <br/>
+            <div class="row">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{profile.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Code</th>
+                                <td>{{profile.code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Address</th>
+                                <td>{{bank_address.addressLine}}, {{bank_address.upazilla}},  {{bank_address.district}}, {{bank_address.country}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Code</th>
+                                <td>{{profile.code}}</td>
+                            </tr>
+                            <tr>
+                                <th>Central bank code</th>
+                                <td>{{profile.centralBankCode}}</td>
+                            </tr>
+                            <tr>
+                                <th>Swift code</th>
+                                <td>{{profile.swiftCode}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>       
+        </p-panel>
+        <br/>
+        <p-panel>
+                <p-header>
+                    <div class="ui-helper-clearfix">
+                        <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Branches</span>
+                        <div class="ui-toolbar-group-right">
+                            <button pButton type="button" label="Add Branch" icon="ui-icon-plus" class="default-btn" (click)="createBranch()"></button>
+                        </div>
+                    </div>
+                </p-header>
+                <p-dataTable [value]="branches" selectionMode="single" (onRowSelect)="onBranchSelect($event)" #dt>
+                    <p-column field="name" header="Branch Name" [filter]="true" filterPlaceholder="Search"></p-column>
+                    <p-column field="code" header="Branch Code" [filter]="true" filterPlaceholder="Search"></p-column>
+                    <p-column field="routingNumber" header="Routing Number" [filter]="true" filterPlaceholder="Search"></p-column>
+                    <p-column field="adCode" header="Ad Code" [filter]="true" filterPlaceholder="Search"></p-column>
+                </p-dataTable>
+            </p-panel>
+    </div>
+</div>

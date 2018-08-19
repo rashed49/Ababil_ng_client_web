@@ -1,0 +1,1 @@
+export type CustomerType = 'INDIVIDUAL_SINGLE' | 'INDIVIDUAL_JOINT' | 'ORGANIZATION';

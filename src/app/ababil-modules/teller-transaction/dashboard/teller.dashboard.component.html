@@ -1,0 +1,218 @@
+<!-- <div class="ui-g">
+    <div class="ababil-toolbar" style="height: 50px; padding-bottom: 5px;">
+
+        <div class="ababil-toolbar-button-group" style="font-size: 18px;"> -->
+<!-- <button type="text" (click)="showDialog()" pButton icon="fa-external-link-square" label="Show"></button> -->
+<!-- </div>
+    </div>
+</div> -->
+
+<div class="notificationbox">
+    <div>
+        <div class="pendingtaskbox">
+            <!-- <div class="leftbox"> -->
+            <!-- <span>
+                    <i class="material-icons">call_made</i>
+                </span> -->
+            <!-- </div> -->
+            <!-- <div class="rightbox"> -->
+
+            <h1>
+                50
+                <!-- {{totalInvestment|number}} -->
+            </h1>
+            <a href="#">
+                <span>Total withdraw transactions</span>
+            </a>
+
+            <!-- </div> -->
+        </div>
+    </div>
+    <div>
+        <div class="pendingtaskbox">
+            <!-- <div class="leftbox">
+                <span>
+                    <i class="material-icons">call_received</i>
+                </span>
+            </div> -->
+            <!-- <div class="rightbox"> -->
+            <h1>
+                50
+                <!-- {{totalDeposit|number}} -->
+            </h1>
+            <a href="#">
+                <span>Total deposit transactions</span>
+            </a>
+
+            <!-- </div> -->
+        </div>
+    </div>
+    <div>
+        <div class="pendingtaskbox">
+            <!-- <div class="leftbox">
+                <span>
+                    <i class="material-icons"> swap_horiz</i>
+                </span>
+            </div> -->
+            <!-- <div class="rightbox"> -->
+            <h1>
+                50
+                <!-- {{totalIncome|number}} -->
+            </h1>
+            <a href="#">
+                <span>Total transfer transactions</span>
+            </a>
+
+            <!-- </div> -->
+        </div>
+    </div>
+    <div>
+        <div class="pendingtaskbox">
+            <a (click)="goToPendingPosts()">
+                <h1>
+                    {{pendingPosts.length}}
+                </h1>
+                <span>Pending transactions</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; margin-top: 10px">
+    <div style="flex:1; margin-right: 5px">
+        <mat-card style="height: 100%;">
+            <mat-card-title>Teller menu:</mat-card-title>
+            <div class="ui-g ui-fluid" style="padding-top:20px ">
+                <!-- <div class="ui-g-12"> -->
+                <!-- <span class="ababil-toolbar-header" style="font-size: 18px;padding-top: 5px;"> -->
+                <!-- <span  class="md-inputfield-2 ui-g-12"> -->
+                <!-- <p-dropdown [options]="allocatedTeller | tellerAllocation" [(ngModel)]="selectedTeller" (onChange)="onTellerChange($event)"
+                        [style]="{'width':'100%'}"></p-dropdown> -->
+                <div class="ui-g-12 ui-md-12 " style="font-size: 16px;">
+                    <p class="md-inputlabel-2">Choose a teller profile</p>
+                    <p-selectButton [options]="allocatedTellerToShow" (onChange)="onTellerChange()" [(ngModel)]="selectedTeller"></p-selectButton>
+                </div>
+                <!-- </span> -->
+                <!-- </div> -->
+                <div class="ui-g-12">
+                    <p-panelMenu [model]="panelMenuItems"></p-panelMenu>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <div style="flex:3">
+        <div style="display: flex; flex-direction: column">
+            <div style="flex: 1">
+                <mat-card>
+                    <mat-card-title>Currency & Teller Limit:</mat-card-title>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p-dataTable [value]="tellerLimits" [responsive]="true">
+                                <p-column field="currencyCode" header="Currency" header="Currency" [style]="{'text-align':'center'}">
+                                    <ng-template let-col let-data="rowData" pTemplate="body">
+                                        {{data.currencyCode}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="cashReceiveLimit" header="Cash receive limit" [style]="{'text-align':'center'}">
+                                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                        {{ data.cashReceiveLimit | number:'.2-2' }}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="cashWithdrawLimit" header="Cash withdraw limit" [style]="{'text-align':'center'}">
+                                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                        {{ data.cashWithdrawLimit | number:'.2-2' }}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="balanceLimit" header="Balance limit" [style]="{'text-align':'center'}">
+                                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                        {{ data.balanceLimit | number:'.2-2' }}
+                                    </ng-template>
+                                </p-column>
+                                <p-column field="balance" header="Balance" [style]="{'text-align':'center'}">
+                                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                                        {{ data.balance | number:'.2-2' }}
+                                    </ng-template>
+                                </p-column>
+                            </p-dataTable>
+                        </div>
+                        <div class="ui-g-12" id="alertBox"> Teller balance has crossed the balance limit</div>
+                    </div>
+                </mat-card>
+            </div>
+            <div style="flex:1; display: flex; flex-direction: row; ; margin-top: 5px">
+                <mat-card style="flex:2;  margin-right: 5px">
+                    <mat-card-title>Time wise currency transaction position:</mat-card-title>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p-chart type="bar" [data]="data"></p-chart>
+                        </div>
+                    </div>
+                </mat-card>
+                <mat-card style="flex:1">
+                    <mat-card-title>Currency wise exchange rates:</mat-card-title>
+                    <div class="ui-g ui-fluid">
+                        <div class="ui-g-12">
+                            <p-selectButton [options]="currenciesToShow" (onChange)="onCurrencyChange()" [(ngModel)]="selectedCurrencyForExRate"></p-selectButton>
+                            <ul style="padding-left: 0 !important; margin-top: 10px">
+                                <li style="list-style: none; margin-bottom: 10px" *ngFor="let exchangeRate of exchangeRateTypes">
+                                    <p style="margin-bottom:5px">
+                                        {{exchangeRate.label}}:
+                                        <b>{{exchangeRate.value}}</b>
+                                    </p>
+                                    <div class="beforeHorzontalBar">
+                                        <div class="horzontalBar" [ngStyle]="{'width': exchangeRate.barValue}">
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </mat-card>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<p-dialog header="Select Currency" [(visible)]="display" [responsive]="true" showEffect="fade" [modal]="true" [width]="600">
+    <p-dataTable #dt [value]="tellerBalance" selectionMode="single" [(selection)]="selectedCurrency" (onRowSelect)="handleRowSelect($event)">
+        <p-column field="currencyCode" header="Currency Code"></p-column>
+        <p-column field="balance" header="Balance"></p-column>
+    </p-dataTable>
+</p-dialog>
+
+<p-dialog header="Pending posts" [(visible)]="postDisplay" [responsive]="true" [draggable]="false" [minHeight]="500" [dismissableMask]="true"
+    appendTo="body" [modal]="true" [width]="1000">
+    <!-- [positionTop]="100" -->
+    <p-dataTable [value]="pendingPosts">
+        <p-column field="tellerTransactionType" [style]="{'width':'20%'}" header="Transaction type"></p-column>
+        <p-column field="amountCcy" header="Amount CCY"></p-column>
+        <p-column field="currencyCode" header="Currency code"></p-column>
+        <p-column header="Account">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{ data.tellerTransactionType == 'CASH_RECEIVE' ? data.transactionCreditAccountType : data.transactionDebitAccountType}}
+            </ng-template>
+        </p-column>
+        <p-column field="instrumentNumber" header="Instrument number"></p-column>
+        <p-column field="voucherNumber" header="Voucher Number"></p-column>
+        <p-column header="Post transaction">
+            <ng-template let-rowIndexValue="rowIndex" let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <button type="text" #dt (click)="postTransaction(data.voucherNumber,dt)" pButton icon="ui-icon-call-missed-outgoing"></button>
+                </div>
+            </ng-template>
+        </p-column>
+        <p-column header="View details">
+            <ng-template let-rowIndexValue="rowIndex" let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <button type="text" (click)="viewPostingDetail(data.voucherNumber, data.tellerTransactionType)" pButton icon="ui-icon-unfold-more"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</p-dialog>

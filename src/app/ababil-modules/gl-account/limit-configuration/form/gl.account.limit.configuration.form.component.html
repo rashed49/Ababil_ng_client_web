@@ -1,0 +1,89 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Gl account limit configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Submit" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<mat-card>
+    <form [formGroup]="glLimitConfigurationForm">
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6 dropdown-padding">
+                <span class="md-inputfield-2">Gl account*</span>
+                <p-dropdown [options]="glAccounts | glaccountPipe" [autoWidth]="false" formControlName="generalLedgerAccountId" filter="true"></p-dropdown>
+                <div *ngIf="glLimitConfigurationForm.controls['generalLedgerAccountId'].errors && !glLimitConfigurationForm.controls['generalLedgerAccountId'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!glLimitConfigurationForm.controls['generalLedgerAccountId'].errors.required">Gl account is required.</div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6 multiselect-padding">
+                <span class="md-inputfield-2">Branches*</span>
+                <p-multiSelect [options]="branches" [(ngModel)]="selectedBranches" formControlName="branchId"></p-multiSelect>
+                <div *ngIf="glLimitConfigurationForm.controls['branchId'].errors && !glLimitConfigurationForm.controls['branchId'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!glLimitConfigurationForm.controls['branchId'].errors.required">Branch is required.</div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <p-dataTable [value]="glAccountLimits" [editable]="true">
+        <p-column field="currencyCode" header="Currency code"></p-column>
+
+        <p-column field="balanceLimit" header="Balance limit*" [editable]="true">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                        pInputText [(ngModel)]="data[col.field]" [ngClass]="{'invalid-datatable-row':!data.balanceLimit}" />
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                        pInputText [(ngModel)]="data[col.field]" [maxlength]="balanceLength" />
+                </div>
+            </ng-template>
+        </p-column>
+
+        <p-column field="isMonthlyLimitAllowed" header="Monthly limit required" [editable]="true">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="center">
+                    {{data.isMonthlyLimitAllowed? 'True': 'False'}}
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <p-checkbox binary="true" [(ngModel)]="data[col.field]" (click)="onEditValidation(data,index)"></p-checkbox>
+                </div>
+            </ng-template>
+        </p-column>
+
+        <p-column field="monthlyLimit" header="Monthly limit" [editable]="true">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                <div align="center">
+                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                        pInputText [(ngModel)]="data[col.field]" [disabled]="!glAccountLimits[index].isMonthlyLimitAllowed" 
+                        [ngClass]="{'invalid-datatable-row':data.isMonthlyLimitAllowed && (!data.monthlyLimit || data.balanceLimit<data.monthlyLimit)}"/>
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                        pInputText [(ngModel)]="data[col.field]" [maxlength]="20" [disabled]="!glAccountLimits[index].isMonthlyLimitAllowed"
+                    />
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+
+    <div *ngIf="errorMessage()" class="ui-messages-error">
+        *Form contains invalid data.
+    </div>
+</mat-card>

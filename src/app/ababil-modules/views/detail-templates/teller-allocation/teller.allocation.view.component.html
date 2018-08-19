@@ -1,0 +1,42 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<mat-card>
+    <div class="ui-g ui-fluid form-group" [formGroup]="tellerAllocationForm" style="font-size:12px;">
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="branches | branchList" [autoWidth]="false" [(ngModel)]="selectedBranchId" [ngModelOptions]="{standalone: true}"
+                    [style]="{'width':'100%','font-size':'14px'}" [disabled]="true"></p-dropdown>
+                <label class="md-inputlabel-2">Branch</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <p-dropdown [options]="tellers | tellerPipe" [autoWidth]="false" formControlName="teller" pInputText [disabled]="true"></p-dropdown>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield">
+                <input type="text" formControlName="allocatedTo" pInputText readonly>
+                <label>Allocate to</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <p-checkbox binary="true" label="Auto allocation" formControlName="autoAllocate" [disabled]="true"></p-checkbox>
+        </div>
+        <br/>
+
+    </div>
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

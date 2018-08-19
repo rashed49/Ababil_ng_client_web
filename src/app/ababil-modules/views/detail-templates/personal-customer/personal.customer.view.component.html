@@ -1,0 +1,265 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+        <div class="ababil-toolbar">
+                <span class="ababil-toolbar-header">Approve Task</span>
+                <div class="ababil-toolbar-button-group">
+                        <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+                        <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+                        <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+                        <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+                </div>
+        </div>
+</div>
+
+
+<br/>
+
+<div>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <form class="ui-g ui-fluid form-group">
+                <div style="display: flex;flex-direction: row;width:100%;">
+                    <mat-card style="flex: 2;padding-bottom: 0px;margin-right: 5px;" class="img-container" *ngIf="individualId">
+                        <img mat-card-image [src]="individualId?(imageApiUrl+'/'+individualId+'/'+'image'):'assets/images/noimage.jpg'" alt="Photo of a user"
+                            style="height:100%" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                            #individualImage>                       
+                    </mat-card>
+                    <mat-card style="flex: 8;padding-bottom: 0px;">
+                        <mat-card-title>Basic Information:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g ui-fluid form-group">
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="15" id="firstName" [(ngModel)]="individualInformation.firstName" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>First Name*</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.middleName" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Middle Name</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.lastName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Last Name</label>
+
+                                            </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.fathersFirstName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Father's First Name*</label>                                            
+                                            </span>
+                                    </div>
+
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.fathersMiddleName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Father's Middle Name</label>
+                                            </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.fathersLastName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Father's Last Name</label>                                            
+                                            </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.mothersFirstName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Mother's First Name*</label>
+                                            
+                                            </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.mothersMiddleName" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Mother's Middle Name</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="15" [(ngModel)]="individualInformation.mothersLastName" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Mother's Last Name</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield-2">
+                                            <p-dropdown [options]="genders" [autoWidth]="false" [(ngModel)]="individualInformation.gender" [ngModelOptions]="{standalone: true}" readonly></p-dropdown>                                            
+                                            <label class="md-inputlabel-2">Gender*</label>   
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.nationality" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Nationality*</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-4">
+                                        <span class="md-inputfield">
+                                            <p-calendar hourFormat="12" showButtonBar="true" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate" [(ngModel)]="individualInformation.dateOfBirth" [ngModelOptions]="{standalone: true}" readonly></p-calendar>
+                                            <label>Date Of Birth*</label>
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield-2">
+                                          <p-dropdown [options]="maritalStatuses" [autoWidth]="false" [(ngModel)]="individualInformation.maritalStatus" [ngModelOptions]="{standalone: true}" readonly></p-dropdown>
+                                          <label class="md-inputlabel-2">Marital Status*</label>    
+                                         </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input type="text" pInputText maxlength="40" [(ngModel)]="individualInformation.spouseName" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Spouse Name</label>                                                
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>               
+
+
+                <div style="display: flex;flex-direction: row;width:100%;">
+                    <mat-card style="margin-right: 5px;flex: 2">
+                        <mat-card-title>Contact Information:</mat-card-title>
+                        <br/>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g ui-fluid form-group">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.contactInformation.phoneNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Phone Number</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.contactInformation.mobileNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Mobile Number*</label>                                                
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.contactInformation.alternateMobileNumber" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Alternate Mobile Number</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.contactInformation.email" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Email</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="individualInformation.contactInformation.fax" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Fax</label>                                               
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                    <mat-card style="flex: 2">
+                        <mat-card-title>Present Address:</mat-card-title>
+                        <address-component [address]='presentAddress' #presentAddressComponent></address-component>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex;flex-direction: row;width:100%;">
+                    <mat-card style="margin-right: 5px;flex: 2">
+                        <mat-card-title>Permanent Address:</mat-card-title>
+                        <address-component [address]='permanentAddress' #permanentAddressComponent></address-component>
+                    </mat-card>
+                    <mat-card style="flex: 2">
+                        <mat-card-title>Professional Address:</mat-card-title>
+                        <address-component [address]='professionalAddress' #professionalAddressComponent></address-component>
+                    </mat-card>
+                </div>
+
+                <div style="display: flex;flex-direction: row;width:100%;">
+                    <mat-card style="margin-right: 5px;flex: 2">
+                        <mat-card-title>Financial Information:</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g ui-fluid form-group">
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield-2">
+                                           <p-dropdown [options]="customerClassificationTypes | customerClassificationTypePipe" [autoWidth]="false" [(ngModel)]="individualInformation.classificationId" [ngModelOptions]="{standalone: true}" readonly></p-dropdown>
+                                           <label class="md-inputlabel-2">Classification Type*</label>     
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                            <input type="text" currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" pInputText maxlength="15" [(ngModel)]="individualInformation.monthlyIncome" [ngModelOptions]="{standalone: true}" readonly>
+                                            <label>Monthly Income*</label>                                               
+                                        </span>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-12">
+                                    <div *ngFor="let customerSourceOfFund of mergedSourceOfFunds">
+                                        <div class="ui-g-12 ui-md-12">
+                                            <p-checkbox binary="true" label="{{customerSourceOfFund.description}}" [(ngModel)]="customerSourceOfFund.selected" [ngModelOptions]="{standalone: true}"
+                                                (onChange)="sourceOfFundChanged($event,customerSourceOfFund)" readonly></p-checkbox>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText [(ngModel)]="otherSourceOfFundDetails" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Other Source Of Fund Description*</label>                                              
+                                        </span>
+                                    </div>                                    
+<!-- 
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield-2">
+                                           <p-dropdown [options]="occupations | occupationPipe" [autoWidth]="false" [(ngModel)]="individualInformation.occupationId" [ngModelOptions]="{standalone: true}" readonly></p-dropdown>
+                                           <label class="md-inputlabel-2">*Occupation</label>     
+                                       </span>
+                                    </div> -->
+<!-- 
+                                    <div class="ui-g-12 ui-md-6">
+                                        <span class="md-inputfield">
+                                                <input type="text" pInputText maxlength="80" [(ngModel)]="individualInformation.occupationDetails" [ngModelOptions]="{standalone: true}" readonly>
+                                                <label>Occupation Details</label>                                               
+                                        </span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+
+                
+            </form>            
+        </div>
+    </div>
+</div>
+
+
+<!-- <comment-component [commentGroup]="commandReference"></comment-component> -->

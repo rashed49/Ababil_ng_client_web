@@ -1,0 +1,366 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Cash Receive</span>
+        <div class="ababil-toolbar-button-group">
+            <div *ngIf="taskId">
+                <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+                <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+                <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+                <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+            </div>
+            <div *ngIf="!taskId">
+                <button type="button" label="Post" (click)="postTransaction()" pButton icon="ui-icon-call-missed-outgoing"></button>
+                <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="backToTeller()"></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div style="display: flex; flex-direction: row">
+    <mat-card style="margin: 50px 5px 5px 0px; flex: 1">
+        <mat-card-title>Teller information:</mat-card-title>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Title</th>
+                <td>{{teller.title}}</td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td>{{tellerBalance.currencyCode}}</td>
+            </tr>
+            <tr>
+                <th>Balance</th>
+                <td>{{tellerBalance.balance | number:'1.2-4'}}</td>
+            </tr>
+            <tr>
+                <th>Balance limit</th>
+                <td>{{tellerLimit.balanceLimit | number:'1.2-4'}}</td>
+            </tr>
+            <tr>
+                <th>Cash receive limit</th>
+                <td>{{tellerLimit.cashReceiveLimit | number:'1.2-4'}}</td>
+            </tr>
+            <tr>
+                <th>Cash withdraw limit</th>
+                <td>{{tellerLimit.cashWithdrawLimit | number:'1.2-4'}}</td>
+
+
+        </table>
+    </mat-card>
+    <mat-card *ngIf="accountTxn" style="margin: 50px 0px 5px 0px; flex: 1">
+        <mat-card-title>Account information</mat-card-title>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account Title</th>
+                <td>{{accountDetails.name}}</td>
+            </tr>
+            <tr>
+
+            </tr>
+            <tr>
+                <th>Account number</th>
+                <td>{{accountNumber}}</td>
+            </tr>
+            <tr>
+                <th>Available balance</th>
+                <td>{{availableBalance ? availableBalance : 0 | number:'1.2-4'}}</td>
+            </tr>
+            <tr>
+                <th>Currency code</th>
+                <td>{{accountDetails.currencyCode}}</td>
+            </tr>
+        </table>
+        <button style="float:right" *ngIf="cashDepositView.transactionCreditAccountType!='GL'" pButton type="button" label="Account details"
+            icon="ui-icon-account-circle" (click)="showAccountDetail()"></button>
+
+    </mat-card>
+    <mat-card *ngIf="glTxn" style="margin: 50px 0px 5px 0px; flex: 1">
+        <mat-card-title>GL account information</mat-card-title>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account Title</th>
+                <td>{{glAccount.name}}</td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <th>Account code</th>
+                <td>{{glAccount.code}}</td>
+            </tr>
+            <tr>
+                <th>Currency code</th>
+                <td *ngIf="glAccount.currencyRestriction=='MULTIPLE_CURRENCY'">
+                    <ul *ngFor="let gl of glCurrencies">
+                        <li>{{gl.label}}</li>
+                    </ul>
+                </td>
+                <td *ngIf="glAccount.currencyRestriction!='MULTIPLE_CURRENCY'">
+                    {{selectedCurrency}}
+                </td>
+            </tr>
+        </table>
+    </mat-card>
+
+    <mat-card *ngIf="subglTxn" style="margin: 50px 0px 5px 0px; flex: 1">
+        <mat-card-title>SUBGL account information</mat-card-title>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account Title</th>
+                <td>{{subglAccount.name}}</td>
+            </tr>
+            <tr>
+
+            </tr>
+            <tr>
+                <th>Account code</th>
+                <td>{{subglAccount.code}}</td>
+            </tr>
+            <tr>
+                <th>Available balance</th>
+                <td>{{subglAccount.balance ? subglAccount.balance: 0 | number:'1.2-4'}}</td>
+            </tr>
+            <tr>
+                <th>Currency code</th>
+                <td>
+                    {{selectedCurrency}}
+                </td>
+            </tr>
+        </table>
+    </mat-card>
+</div>
+<mat-card style="margin: 5px 0px 5px 0px; flex: 1">
+    <mat-card-title>Transaction information</mat-card-title>
+    <button icon="ui-icon-widgets" style="float: right; margin: 0px 0px 10px 0px;" pButton type="button" label="Denomination"
+        class="default-btn" (click)="showDenomination()" [disabled]="denominationChecker"></button>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Amount CCY</th>
+            <td>{{cashDepositView.amountCcy | number:'1.2-4' }} ({{amountCCYInWords}})</td>
+        </tr>
+        <tr>
+            <th>Amount LCY</th>
+            <td>{{cashDepositView.amountLcy | number:'1.2-4'}} ({{amountLCYInWords}})</td>
+        </tr>
+        <tr>
+            <th>Voucher number</th>
+            <td>{{cashDepositView.globalTxnNumber}}</td>
+        </tr>
+        <tr>
+            <th>Transaction credit account type</th>
+            <td>{{cashDepositView.transactionCreditAccountType}}</td>
+        </tr>
+        <tr>
+            <th>Transaction Currency Code</th>
+            <td>{{cashDepositView.transactionCurrencyCode}}</td>
+        </tr>
+        <tr *ngIf="showExchangeRate">
+            <th>Exchange rate type</th>
+            <td>{{exchangeRateTypes.get(cashDepositView.exchangeRateTypeId)}}</td>
+        </tr>
+        <tr *ngIf="showExchangeRate">
+            <th>Exchange rate</th>
+            <td>{{cashDepositView.exchangeRate}}</td>
+        </tr>
+        <tr>
+            <th>Source of fund</th>
+            <td>{{cashDepositView.sourceOfFund}}</td>
+        </tr>
+        <tr>
+            <th>Narration</th>
+            <td>{{cashDepositView.narration}}</td>
+        </tr>
+    </table>
+</mat-card>
+
+<mat-card *ngIf="glTxn && cashDepositView.ibtaInformation ">
+    <mat-card-title>IBTA information</mat-card-title>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <th>Transaction particular</th>
+            <td>{{ibTrParticular}}</td>
+        </tr>
+        <tr>
+            <th>Originating date</th>
+            <td>{{cashDepositView.ibtaInformation.originatingDate}}</td>
+        </tr>
+        <tr *ngIf="!cashDepositView.ibtaInformation.originating">
+            <th>Originating branch</th>
+            <td>{{originatingBranch}}</td>
+        </tr>
+        <tr>
+            <th>Responding branch</th>
+            <td>{{respondingBranch}}</td>
+        </tr>
+    </table>
+</mat-card>
+
+<mat-card style="margin: 5px 0px 5px 0px;" *ngIf="cashDepositView.bearerTransaction==true">
+    <mat-card-title>Bearer information</mat-card-title>
+    <div style="display: flex;">
+        <div style="flex:1">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Name</th>
+                    <td>{{cashDepositView.bearerInfo.name}}</td>
+                </tr>
+                <tr>
+                    <th>Father's name</th>
+                    <td>{{cashDepositView.bearerInfo.fatherName}}</td>
+                </tr>
+                <tr>
+                    <th>Mother's name</th>
+                    <td>{{cashDepositView.bearerInfo.motherName}}</td>
+                </tr>
+                <tr>
+                    <th>Address</th>
+                    <td>{{cashDepositView.bearerInfo.address}}</td>
+                </tr>
+                <tr>
+                    <th>NID Number</th>
+                    <td>{{cashDepositView.bearerInfo.nid}}</td>
+                </tr>
+                <tr>
+                    <th>Relationship with account holder</th>
+                    <td>{{cashDepositView.bearerInfo.relationship}}</td>
+                </tr>
+            </table>
+        </div>
+        <div style="flex: 1">
+            <table class="table table-bordered table-striped" *ngIf="cashDepositView.bearerTransaction==true && cashDepositView.bearerInfo.contactInformation!=null">
+                <tr>
+                    <th>Phone number</th>
+                    <td>{{cashDepositView.bearerInfo.contactInformation.phoneNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Mobile number</th>
+                    <td>{{cashDepositView.bearerInfo.contactInformation.mobileNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Alternative mobile number</th>
+                    <td>{{cashDepositView.bearerInfo.contactInformation.alternateMobileNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{cashDepositView.bearerInfo.contactInformation.email}}</td>
+                </tr>
+                <tr>
+                    <th>Fax</th>
+                    <td>{{cashDepositView.bearerInfo.contactInformation.fax}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</mat-card>
+<p-dialog header="Denomination of Amount CCY" [(visible)]="denominationDisplay" modal="true" responsive="true" appendTo="body"
+    [minHeight]="550" closable="false" [width]="1000">
+    <h6>Total amount : {{(noteTotal + coinTotal) | number}} {{cashDepositView.transactionCurrencyCode}}</h6>
+    <mat-tab-group dynamicHeight [selectedIndex]="0">
+        <mat-tab label="Notes">
+            <p-dataTable [value]="denominationNotes">
+                <p-column field="denominationValue" header="Denomination value"></p-column>
+                <p-column field="quantity" header="Transaction quantity"></p-column>
+                <p-column field="netBalance" header="Net balance"></p-column>
+            </p-dataTable>
+            <h6>Note total: {{noteTotal | number}} {{cashDepositView.transactionCurrencyCode}}</h6>
+        </mat-tab>
+        <mat-tab label="Coins">
+            <p-dataTable [value]="denominationCoins">
+                <p-column field="denominationValue" header="Denomination Value"></p-column>
+                <p-column field="quantity" header="Transactin quantity"></p-column>
+                <p-column field="netBalance" header="Net balance"></p-column>
+            </p-dataTable>
+            <h6>Coin total: {{coinTotal | number}} {{cashDepositView.transactionCurrencyCode}}</h6>
+        </mat-tab>
+    </mat-tab-group>
+
+</p-dialog>
+
+
+
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>
+
+<p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="demandDepositAccountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>
+
+
+
+<p-dialog header="Fixed deposit account detail" [(visible)]="fixedDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-fixed-account-detail [fixedDepositAccountId]="fixedDepositAccountId"></common-fixed-account-detail>
+</p-dialog>
+
+
+<p-dialog header="Reccuring deposit account detail" [(visible)]="recurringDepositdisplay" [width]="1000" [minHeight]="800"
+    modal="true" closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-recurring-deposit-account-details [recurringDepositAccountId]="recurringDepositAccountId"></common-recurring-deposit-account-details>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <p-dialog header="Demand deposit account detail" [(visible)]="demandDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <deposit-account-detail [demandDepositAccountId]="demandDepositAccountId" [customerId]="customerId"></deposit-account-detail>
+</p-dialog>
+
+
+
+<p-dialog header="Fixed deposit account detail" [(visible)]="fixedDepositDisplay" [width]="1000" [minHeight]="800" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-fixed-account-detail [fixedDepositAccountId]="fixedDepositAccountId"></common-fixed-account-detail>
+</p-dialog>
+
+
+<p-dialog header="Reccuring deposit account detail" [(visible)]="recurringDepositdisplay" [width]="1000" [minHeight]="800"
+    modal="true" closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-recurring-deposit-account-details [recurringDepositAccountId]="recurringDepositAccountId"></common-recurring-deposit-account-details>
+</p-dialog>
+
+<p-dialog header="Bearer information" [(visible)]="bearerdisplay" [width]="1000" [closable]="false" modal="true" appendTo="body"
+    maximizable="true">
+    <bearer-information [bearerInfo]="bearerInfo" #bearerComponent></bearer-information>
+    <div class="margin-bottom:10px;">
+        <button style="float: right;" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveBearer()"></button>
+        <button style="float: right; margin-right: 5px;" pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn"
+            (click)="cancelBearer()"></button>
+    </div>
+</p-dialog> -->

@@ -1,0 +1,9 @@
+{
+  "/ababil/api": {
+    "target": "http://172.16.215.18:8080",
+    "secure": false,
+    "pathRewrite": {
+      "/ababil/api": "/ababil/api"
+    }
+  }
+}

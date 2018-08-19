@@ -1,0 +1,243 @@
+[
+   {
+      "id":1,
+      "reportName":"Statement Of Affairs Report",
+      "reportFileName":"rpt_statement_of_affairs_cfg_n.rep",
+      "reportFormControls":[
+         {
+            "name":"PBRANCHID",
+            "label":"Branch",
+            "parameterName":"PBRANCHID",
+            "min":null,
+            "max":null,
+            "minimumlength":null,
+            "maximumlength":null,
+            "class":"ui-g-12 ui-md-6",
+            "validators":[
+
+            ],
+            "labelClass":"md-inputlabel-2",
+            "formControlClass":"",
+            "inputType":"dropdown",
+            "inputValues":{
+               "type":"service",
+               "serviceEndpoint":"/banks/1/branches",
+               "mapper":{
+                  "contentProperty":"data",
+                  "label":"name+'('+id+')'",
+                  "value":"id"
+               },
+               "values":null
+            },
+            "valueConverter":null
+         },
+         {
+            "name":"PDATE",
+            "label":"Date",
+            "parameterName":"PDATE",
+            "class":"ui-g-12 ui-md-6",
+            "min":null,
+            "max":null,
+            "minimumlength":null,
+            "maximumlength":null,
+            "validators":[
+               {
+                  "type":"required",
+                  "msg":"Date is required",
+                  "typeValue":null
+               }
+            ],
+            "defaultValue":null,
+            "labelClass":"md-inputlabel-2",
+            "formControlClass":"",
+            "inputType":"date",
+            "inputValues":{
+               "type":"userinput",
+               "serviceEndpoint":null,
+               "mapper":null,
+               "values":null
+            },
+            "valueConverter":null
+         },
+         {
+            "name":"PCURRENCY",
+            "label":"Currency",
+            "parameterName":"PCURRENCY",
+            "min":null,
+            "max":null,
+            "minimumlength":null,
+            "maximumlength":null,
+            "class":"ui-g-12 ui-md-6",
+            "validators":[
+               {
+                  "type":"required",
+                  "msg":"Currency is required",
+                  "typeValue":"none"
+               }
+            ],
+            "defaultValue":null,
+            "labelClass":"md-inputlabel-2",
+            "formControlClass":null,
+            "inputType":"dropdown",
+            "inputValues":{
+               "type":"service",
+               "serviceEndpoint":"/currencies",
+               "mapper":{
+                  "contentProperty":"content",
+                  "label":"code",
+                  "value":"id"
+               },
+               "values":"none"
+            },
+            "valueConverter":"none"
+         }
+      ],
+      "valueChangeSubscribers":[
+         {
+            "onChange":"PCURRENCY",
+            "workers":[
+               {
+                  "expression":"return this.reportForm.controls['PCURRENCY'].value == null;",
+                  "true":{
+                     "controlModifiers":[
+                        {
+                           "controlName":"PBRANCHID",
+                           "enabled":true,
+                           "validators":[
+                              {
+                                 "type":"required",
+                                 "msg":"Branch is required",
+                                 "typeValue":"none"
+                              }
+                           ]
+                        }
+                     ],
+                     "execute":[
+
+                     ]
+                  },
+                  "false":{
+                     "controlModifiers":[
+                        {
+                           "controlName":"PBRANCHID",
+                           "enabled":true,
+                           "validators":[
+
+                           ]
+                        }
+                     ],
+                     "execute":[
+
+                     ]
+                  }
+               }
+            ]
+         }
+      ]
+   },
+   {
+      "id":2,
+      "reportName":"IBTA Transaction Report",
+      "reportFileName":"rpt_ibta_originating.rep",
+      "reportFormControls":[
+         {
+            "name":"TRANSACTIONDATA",
+            "label":"Transaction Data",
+            "parameterName":"TDATA",
+            "min":null,
+            "max":null,
+            "minimumlength":null,
+            "maximumlength":null,
+            "class":"ui-g-12 ui-md-6",
+            "validators":[
+               {
+                  "type":"required",
+                  "msg":"Date is required",
+                  "typeValue":"none"
+               }
+            ],
+            "labelClass":"md-inputlabel-2",
+            "formControlClass":"",
+            "inputType":"dropdown",
+            "inputValues":{
+               "type":"enum",
+               "serviceEndpoint":null,
+               "mapper":null,
+               "values":[
+                  {
+                     "label":"Select Transaction Data",
+                     "value":null
+                  },
+                  {
+                     "label":"Originating",
+                     "value":"ORIGINATING"
+                  },
+                  {
+                     "label":"Responding",
+                     "value":"RESPONDING"
+                  },
+                  {
+                     "label":"Summary",
+                     "value":"SUMMARY"
+                  }
+               ]
+            },
+            "valueConverter":"none"
+         },
+         {
+            "name":"PDATE",
+            "label":"Date",
+            "parameterName":"PDATE",
+            "class":"ui-g-12 ui-md-6",
+            "min":null,
+            "max":null,
+            "minimumlength":null,
+            "maximumlength":null,
+            "validators":[
+               {
+                  "type":"required",
+                  "msg":"Date is required",
+                  "typeValue":null
+               }
+            ],
+            "defaultValue":null,
+            "labelClass":"md-inputlabel-2",
+            "formControlClass":"",
+            "inputType":"date",
+            "inputValues":{
+               "type":"userinput",
+               "serviceEndpoint":null,
+               "mapper":null,
+               "values":null
+            },
+            "valueConverter":null
+         }
+      ],
+      "valueChangeSubscribers":[
+         {
+            "onChange":"TRANSACTIONDATA",
+            "workers":[
+               {
+                  "expression":"(this.reportForm.controls['TRANSACTIONDATA'].value=='ORIGINATING')?this.reportFileName='rpt_ibta_originating.rep':(this.reportForm.controls['TRANSACTIONDATA'].value=='RESPONDING'?this.reportFileName='rpt_ibta_responding.rep':this.reportFileName='rpt_ibta_summary.rep'); return true;",
+                  "true":{
+                     "controlModifiers":[
+
+                     ],
+                     "execute":[
+
+                     ]
+                  },
+                  "false":{
+                     "controlModifiers":[
+
+                     ],
+                     "execute":[
+
+                     ]
+                  }
+               }
+            ]
+         }
+      ]
+   }
+]

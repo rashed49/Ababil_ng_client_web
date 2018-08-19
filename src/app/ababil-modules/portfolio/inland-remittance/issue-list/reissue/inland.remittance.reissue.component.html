@@ -1,0 +1,147 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header"> Reissue</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveInlandRemittanceReissue()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+
+<div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+    <mat-card style="margin-right: 5px;flex: 1">
+        <mat-card-title>Basic Information</mat-card-title>
+
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Inland Product Type</th>
+                        <td>{{productType}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Currency Code</th>
+                        <td>{{currencyCode}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-4">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Instrument Number</th>
+                        <td>{{instrumentNo}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </mat-card>
+</div>
+
+<form class="ui-g-12 ui-fluid all" [formGroup]="reissueForm">
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Transaction Information</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-3" *ngIf="showExchangeRate">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="exchangeRateTypes" [autoWidth]="false" formControlName="exchangeRateTypeId"></p-dropdown>
+                        <label class="md-inputlabel-2">Exchange Rate Type</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" *ngIf="showExchangeRate">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="exchangeRate">
+                        <label>Currency Rate</label>
+                        <div *ngIf="reissueForm.controls['exchangeRate'].errors && !reissueForm.controls['exchangeRate'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!reissueForm.controls['exchangeRate'].errors.required">Exchange rate is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <p-dataTable [value]="inlandRemittanceChargeInformations" selectionMode="single">
+                    <p-column field="chargeName" header="name"></p-column>
+                    <p-column field="chargeAmount" header="Commission CCY"></p-column>
+                    <p-column field="commissionLCY" header="Commission LCY"></p-column>
+                    <p-column field="vatAmount" header="VAT CCY"></p-column>
+                    <p-column field="vatLCY" header="VAT LCY"></p-column>
+                    <p-column field="totalAmount" header="Total CCY"></p-column>
+                    <p-column field="totalAmountLCY" header="Total LCY"></p-column>
+                </p-dataTable>
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex: 1">
+            <mat-card-title>Debit Information</mat-card-title>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown appendTo="body" [options]="purchaseMethod" [autoWidth]="false" formControlName="purchaseMethod"></p-dropdown>
+                        <div *ngIf="reissueForm.controls['purchaseMethod'].errors && !reissueForm.controls['purchaseMethod'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!reissueForm.controls['purchaseMethod'].errors.required">Purchase type is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserAccountNo">
+                        <label> Purshase Account No</label>
+                        <div *ngIf="reissueForm.controls['purchaserAccountNo'].errors && !reissueForm.controls['purchaserAccountNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!reissueForm.controls['purchaserAccountNo'].errors.required">Purchaser account number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-5" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserChequeNo">
+                        <label>Cheque No</label>
+                        <div *ngIf="reissueForm.controls['purchaserChequeNo'].errors && !reissueForm.controls['purchaserChequeNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!reissueForm.controls['purchaserChequeNo'].errors.required">Purchaser cheque number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-5" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <p-calendar hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true" utc="true"
+                            [minDate]="minStartDate"></p-calendar>
+                        <label>Cheque Date</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-2" style="float:right" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <button pButton type="button" label="Signature" icon="ui-icon-gesture" class="default-btn" (click)="showSignature()"></button>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</form>
+
+<p-dialog header="Demand deposit account signature" [(visible)]="demandDepositSignatureDisplay" [width]="900" modal="true"
+closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+<common-signature [accountId]="signatureAccountId" [customerId]="signatureCustomerInputId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Fixed deposit account signature" [(visible)]="fixedDepositSignatureDisplay" [width]="900" modal="true"
+closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+<common-signature [accountId]="signatureFixedDepositAccountId" [customerId]="signatureFixedDepositCustomerInputId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Recurring deposit account signature" [(visible)]="recurringDepositSignatureDisplay" [width]="900" modal="true"
+closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+<common-signature [accountId]="signatureRecurringDepositAccountId" [customerId]="signatureRecurringDepositCustomerInputId"></common-signature>
+</p-dialog>

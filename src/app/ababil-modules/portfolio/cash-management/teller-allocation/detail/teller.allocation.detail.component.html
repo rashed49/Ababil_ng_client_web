@@ -1,0 +1,44 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Teller allocation detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" [routerLink]="['edit']"></button>
+            <button pButton type="button"label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1">
+            <mat-card-title style="display: flex;flex-direction: row">
+                <div style="flex:1">Basic information:</div>
+            </mat-card-title>
+            <div style="display: flex; flex-direction: row; width: 100%;">
+                <div style="flex: 1">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Allocated user</th>
+                            <td>{{tellerAllocationDetails.allocatedTo}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Teller</th>
+                            <td>{{tellerAllocationDetails.teller.title}}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Auto allocation</th>
+                            <td align="left">
+                                <i class='material-icons-done-close'>
+                                    {{tellerAllocationDetails.autoAllocate? "done":"close"}}</i>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

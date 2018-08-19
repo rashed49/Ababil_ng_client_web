@@ -1,0 +1,79 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Istrument List</span>
+        <div class="ababil-toolbar-button-group">
+            <button type="button" pButton label="Search" icon="ui-icon-search" (click)="op.show($event)"></button>
+            <button pButton type="button" label="Create Issue" icon="ui-icon-add" class="default-btn" (click)="createInlandRemittanceIssue()"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refreash(dt)"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="inlandRemittanceInstrument" selectionMode="single" [paginator]="true" [rows]="20" [totalRecords]="totalRecords"
+            [lazy]="true" (onLazyLoad)="loadInlandRemittanceInstrumentsLazily($event)" #dt> 
+            <p-column [sortable]="true" header="Remittance Type" [style]="{'text-align':'center'}">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{remittanceProductTypeMap.get(data['inlandRemittanceProduct']['id'])}}
+                </ng-template>
+            </p-column>
+            <p-column field="instrumentNo" [sortable]="true" header=" Instrument No" [style]="{'text-align':'center'}"></p-column>
+            <p-column field="status" [sortable]="true" header="Status" [style]="{'text-align':'left'}"></p-column>
+            <p-column field="currencyCode" header="Currency" [sortable]="true"></p-column>
+            <p-column header="Destroy Instrument">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton tooltipPosition="top" icon="ui-icon-delete" (click)="destroyInlandRemittanceInstrument(data)"
+                            *ngIf="data.status=='RECEIVED'"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<p-dialog header="Destroy Instrument" [closable]="false" positionTop="30" [(visible)]="displayDestroyInstrument" modal="modal"
+    [responsive]="true" [width]="400">
+    <destroy-instrument #destroyInstrument></destroy-instrument>
+
+    <div class="dialogButton">
+        <button type="button" class="default-btn" pButton icon="ui-icon-delete" (click)="saveInlandRemittanceInstrumentDestroy()"
+            label="Destroy"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" (click)="cancelDestroyInstrument()" label="Cancel"></button>
+    </div>
+</p-dialog>
+
+<p-overlayPanel #op [style]="{'width':'500px'}">
+    <div [formGroup]="instrumentSearchForm">
+        <br/>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="instrumentNo">
+                    <label>Instrument Number</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="inlandRemittanceProductId">
+                    <label>Product Type</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="status">
+                    <label>Status</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="currencyCode">
+                    <label>Currency</label>
+                </span>
+            </div>
+        </div>
+        <button pButton type="button" label="Search" class="primary-btn" style="float:right;margin-bottom: 10px" (click)="inlandRemittanceInstrumentsearch(null);op.hide($event)"></button>
+    </div>
+</p-overlayPanel>

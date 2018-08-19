@@ -1,0 +1,58 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Lot List</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="New Lot" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="inlandRemittanceLot" selectionMode="single" [paginator]="true" [rows]="20" [totalRecords]="totalRecords"
+            [lazy]="true" (onLazyLoad)="loadInlandRemittanceLotLazily($event)">
+
+            <p-column [sortable]="true" header="Inland Remittance Product" [style]="{'text-align':'center'}">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data['inlandRemittanceProduct']?remittanceProductTypeMap.get(data['inlandRemittanceProduct']['id']):'N/A'}}
+                </ng-template>
+            </p-column>
+            <p-column field="startLeafNo" [sortable]="true" header=" Start Leaf No" [style]="{'text-align':'center'}"></p-column>
+            <p-column field="endLeafNo" [sortable]="true" header=" End Leaf No" [style]="{'text-align':'center'}"></p-column>
+            <p-column field="noOfLeaf" [sortable]="true" header="Total Leaf " [style]="{'text-align':'center'}"></p-column>
+            <p-column field="currencyCode" [sortable]="true" header="Currency" [style]="{'text-align':'center'}"></p-column>
+
+            <p-column header="Correction">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton tooltipPosition="top" icon="ui-icon-edit" (click)="correction(data)"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+
+            <p-column header="Delete">
+                <ng-template let-col let-i="rowData" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton tooltipPosition="top" (click)="deleteLot(i)" icon="ui-icon-delete"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<p-dialog [closable]="false" positionTop="50" header="Lot Creation" [(visible)]="lotDisplay" modal="modal" [responsive]="true"
+    [width]="400">
+    <lot-create #instrument></lot-create>
+
+    <div style="float:right">
+        <button type="button" class="default-btn" pButton icon="ui-icon-save" (click)="save()" label="Save"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" (click)="cancel()" label="Cancel"></button>
+    </div>
+</p-dialog>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

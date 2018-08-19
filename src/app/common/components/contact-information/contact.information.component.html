@@ -1,0 +1,60 @@
+<div class="ui-g">
+    <form class="ui-g ui-fluid form-group" [formGroup]="contactInformationForm">
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" maxlength="13" pInputText formControlName="phoneNumber">
+                <label>Phone Number</label>
+                <div *ngIf="contactInformationForm.controls['phoneNumber'].errors && !contactInformationForm.controls['phoneNumber'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['phoneNumber'].errors.required">Phone number is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['phoneNumber'].errors.pattern">Phone number format is invalid.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" maxlength="13" pInputText formControlName="mobileNumber">
+                <label>Mobile Number*</label>
+                <div *ngIf="contactInformationForm.controls['mobileNumber'].errors && !contactInformationForm.controls['mobileNumber'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['mobileNumber'].errors.required">Mobile number is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['mobileNumber'].errors.pattern">Mobile number format is invalid.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" maxlength="13" pInputText formControlName="alternateMobileNumber">
+                <label>Alternate Mobile Number</label>
+                <div *ngIf="contactInformationForm.controls['alternateMobileNumber'].errors && !contactInformationForm.controls['alternateMobileNumber'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['alternateMobileNumber'].errors.required">Alternate mobile number is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['alternateMobileNumber'].errors.pattern">Alternate mobile number format is invalid.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="email">
+                <label>Email</label>
+                <div *ngIf="contactInformationForm.controls['email'].errors && !contactInformationForm.controls['email'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['email'].errors.required">Email is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['email'].errors.pattern">Email format is invalid.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="fax" maxlength="15">
+                <label>Fax</label>
+                <div *ngIf="contactInformationForm.controls['fax'].errors && !contactInformationForm.controls['fax'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['fax'].errors.required">Fax is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!contactInformationForm.controls['fax'].errors.pattern">Fax format is invalid.</div>
+                </div>
+            </span>
+        </div>
+
+    </form>
+</div>

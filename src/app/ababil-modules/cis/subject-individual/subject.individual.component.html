@@ -1,0 +1,109 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g" [hidden]="view=='GUARD'">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">{{panelHeader}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Existing individual" *ngIf="!id" icon="ui-icon-search" (click)="individualsLookup.display=true"
+                class="default-btn"></button>
+            <button pButton type="button" label="Activate" *ngIf="!customerActive && !!id && customerType=='INDIVIDUAL'" icon="ui-icon-check-circle"
+                class="default-btn" (click)="activate()"></button>
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+
+        </div>
+    </div>
+
+</div>
+
+<br/>
+<div style="position: relative;padding-top:10px">
+    <mat-tab-group [hidden]="view=='GUARD'">
+        <mat-tab label="Individual Information" class="tab-invalid">
+            <div class="ui-g">
+                <div class="ui-fluid ui-g-12 ui-md-12" *ngIf="customerType=='JOINT'" style="padding-right: 20px;padding-left: 20px;">
+                    <br/>
+                    <p-dropdown [options]="applicantTypes | applicantTypePipe" [autoWidth]="false" [(ngModel)]="applicantTypeId" placeholder="Applicant Type"
+                        [ngModelOptions]="{standalone: true}" required #applicantTypeControl="ngModel"></p-dropdown>
+                    <div *ngIf="applicantTypeControl.errors && !applicantTypeControl.pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!applicantTypeControl.errors.required">Applicant type is required</div>
+                    </div>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-12" *ngIf="customerType=='ORGANIZATION'">
+                    <br/>
+                    <label style="font-size: 14px">Share Percentage: {{sharedPercentage}}%</label>
+                    <span class="md-inputfield">
+                        <p-slider [(ngModel)]="sharedPercentage" [min]="lowerLimit" [max]="upperLimit" name="sharedPercentage" [animate]="true" [disabled]="upperLimit==0"></p-slider>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <individual-form [formData]="subjectFormData" #subjectFormComponent (onAgeCheck)="onAgeCheck($event)">
+                    </individual-form>
+                </div>
+
+            </div>
+        </mat-tab>
+
+        <mat-tab label="FATCA Information">
+            <div class="ui-g">
+                <div style="display: flex; width:100%" class="ui-fluid ui-g-12 ui-md-12">
+                    <fatca-form #fatcaComponent [fatcaCisIndividualInformation]="fatcaCisIndividualInformation" [foreignAccountTaxComplianceActs]="foreignAccountTaxComplianceActs"></fatca-form>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab label="Document">
+            <br/>
+            <document-component [clientId]="clientId" [profileCode]="profileCode" #individualDoc></document-component>
+        </mat-tab>
+
+        <mat-tab label="Guardian Information" *ngIf="isMinor">
+            <br/>
+            <div class="ui-g">
+                <div style="display: flex; width:100%; margin: -5px 15px 0px 15px" class="ui-fluid ui-g-12 ui-md-12">
+                    <mat-card style="flex: 2">
+                        <mat-card-title>Guardian Information</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <div class="ui-g-12 ui-md-5">
+                                    <span class="md-inputfield">
+                                        <input [disabled]="true" [value]="guardiansFullName" type="text" pInputText>
+                                        <label>Guardian name</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <button pButton type="button" icon="ui-icon-search" (click)="individualLookup.display=true" class="default-btn"></button>
+                                    <button pButton type="button" *ngIf="guardianChecker" icon="ui-icon-add" class="default-btn" (click)="addGuardian()"></button>
+                                    <button pButton type="button" *ngIf="!guardianChecker" icon="ui-icon-edit" class="default-btn" (click)="addGuardian()"></button>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-5">
+                                    <span class="md-inputfield">
+                                        <input type="text" name="relationWithAccountHolder" [value]="relationWithAccountHolder" [(ngModel)]="relationWithAccountHolder"
+                                            pInputText>
+                                        <label>Relation with account holder</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </mat-tab>
+
+
+
+    </mat-tab-group>
+
+</div>
+
+
+<button id="goToTop" icon="ui-icon-arrow-drop-up" class="goToTop" type="button" pButton class="default-btn" (click)="goToTop()"></button>
+<individual-lookup #individualLookup (onSelect)="onGuardianSelect($event)"></individual-lookup>
+<individual-lookup #individualsLookup (onSelect)="onSelect($event)"></individual-lookup>
+<short-individual-form [hidden]="view=='IND'" [guardianFormData]="guardianFormData" (onSave)="onNewGuardianAdded($event)"></short-individual-form>
+
+<!-- <subject-individual-view></subject-individual-view> -->

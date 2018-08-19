@@ -1,0 +1,79 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <p-panel>
+            <p-header>
+                <div class="ui-helper-clearfix">
+
+                    <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">Profile: {{organization.name}}</span>
+
+                    <div class="ui-toolbar-group-right">
+                        <button pButton type="button" label="back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+                    </div>
+                </div>
+            </p-header>
+
+            <br/>
+            <div class="row">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{organization.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Phone Number</th>
+                                <td>{{contactInformation.phoneNumber}}</td>
+
+                            </tr>
+                            <tr>
+                                <th>Mobile Number</th>
+                                <td>{{contactInformation.mobileNumber}}</td>
+
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{contactInformation.email}}</td>
+
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Business Address</th>
+                                <td>{{businessAddress.addressLine}}</td>
+                            </tr>
+                            <tr>
+                                <th>Registered Address</th>
+                                <td>{{registeredAddress.addressLine}}</td>
+                            </tr>
+                            <tr>
+                                <th>Permanent Address</th>
+                                <td>{{factoryAddress.addressLine}}</td>
+                            </tr>
+                            <tr>
+                                <th>Assignable Share</th>
+                                <td>{{assignableShare}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                    <div class="ui-g-12">
+                        <p-dataTable [value]="owners" selectionMode="single">
+                            <p-header>Owners of {{organization.name}}</p-header>
+
+                            <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+                            <p-column field="subjectType" header="Owner Type" [filter]="true" filterPlaceholder="Search"></p-column>
+                            <p-column field="sharePercentage" header="Share Percentage" [filter]="true" filterPlaceholder="Search"></p-column>
+
+
+                        </p-dataTable>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+        <br/>
+    </div>
+</div>

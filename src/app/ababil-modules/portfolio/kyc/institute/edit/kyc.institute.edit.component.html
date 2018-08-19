@@ -1,0 +1,444 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">KYC Institute edit - {{kycInstitute.accountName}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="kycInstituteForm">
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <mat-card-title>Basic:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th class="ui-lg-3">Account name</th>
+                                    <td class="ui-lg-3" align="center">{{ kycInstitute.accountName }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Nature of account</th>
+                                    <td align="center">{{ kycInstitute.natureOfAccount }}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <th class="ui-lg-3">Net worth of institute</th>
+                                    <td class="ui-lg-3" align="right">{{ kycInstitute.netWorthOfInstitute | number:'1.2-2' }}</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Overall risk rating</th>
+                                    <td align="center" [ngClass]="{'red': overallRiskRating=='High'}">{{overallRiskRating}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="natureOfInstitute" pInputText>
+                                <label>Nature of institute</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" pKeyFilter="pint" formControlName="overallRiskScoreValue" pInputText>
+                                <label>Overall risk score</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="addressVerificationMethods" pInputText>
+                                <label>Address verification methods</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="beneficialOwner" [autoWidth]="false" formControlName="beneficialOwner" appendTo="body"></p-dropdown>
+                                <label class="md-inputlabel-2">Beneficial owner</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="natureOfAccountOther" pInputText>
+                                <label>Nature of account other</label>
+                            </span>
+                        </div>
+                    </div> -->
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3;">
+                <mat-card-title>Source of fund</mat-card-title>
+                <p-dataTable [value]="sourceOfFunds" [editable]="true" [responsive]="true">
+                    <p-column field="sourceOfFund.description" header="Source of fund description">
+                    </p-column>
+                    <p-column field="documentConfirmation1" header="Document confirmation 1" [editable]="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.documentConfirmation1}}
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <input type="text" pInputText [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="documentConfirmation2" header="Document confirmation 2" [editable]="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.documentConfirmation2}}
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <input type="text" pInputText [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="documentConfirmation3" header="Document confirmation 3" [editable]="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.documentConfirmation3}}
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <input type="text" pInputText [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="instituteRelatedFiles" header="Institute related files" [editable]="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.instituteRelatedFiles}}
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <input type="text" pInputText [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" />
+                        </ng-template>
+                    </p-column>
+                    <p-column field="isDocumentVerified" header="Document verified (No/Yes)" [style]="{'width':'150px'}">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            <div align="center">
+                                <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                            </div>
+                        </ng-template>
+                        <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                            <div align="center">
+                                <p-inputSwitch [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                            </div>
+                        </ng-template>
+                    </p-column>
+                    <p-column field="scoreType" header="Risk score" [style]="{'overflow':'visible','text-align':'center'}">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            <p-dropdown [options]="scoreType" [(ngModel)]="data[col.field]" [ngModelOptions]="{standalone: true}" [autoWidth]="true"
+                                appendTo="body"></p-dropdown>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3;">
+                <mat-card-title>Document</mat-card-title>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3; margin-right: 5px">
+                <mat-card-title>Type of buisness:</mat-card-title>
+                <p-dataTable [value]="kycInstitute.businessTypeRiskScores" [responsive]="true">
+                    <p-column field="id" header="#SL" [style]="{'width':'40px','text-align':'center'}">
+                        <ng-template let-i="rowIndex" pTemplate="body">
+                            {{i+1}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="name" header="Name"></p-column>
+                    <p-column field="riskScore" [style]="{'text-align':'center','width':'100px'}" header="Risk score"></p-column>
+                </p-dataTable>
+            </mat-card>
+
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Net worth:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">From</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.netWorthRiskScore.from | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>To</th>
+                                <td align="right">{{ kycInstitute.netWorthRiskScore.to | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.netWorthRiskScore.riskScore }}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Type of account opening:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">Reference</th>
+                                <td class="ui-lg-3" align="center">{{ kycInstitute.accountOpeningChannelRiskScore.name }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.accountOpeningChannelRiskScore.riskScore }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3; margin-right: 5px">
+                <mat-card-title>Expected amount of monthly transactions : {{kycInstitute.amountOfMonthlyCashTransactionRiskScore.profitBearing
+                    ? 'Mudaraba Savings account' : 'Al-Wadiah Current account' }} (In lac)</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">Form</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.amountOfMonthlyTransactionRiskScore.from | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>To</th>
+                                <td align="right">{{ kycInstitute.amountOfMonthlyTransactionRiskScore.to | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.amountOfMonthlyTransactionRiskScore.riskScore }} </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Expected number of monthly transactions: {{kycInstitute.numberOfMonthlyTransactionRiskScore.profitBearing
+                    ? 'Mudaraba Savings account' : 'Al-Wadiah Current account' }}</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">From</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.numberOfMonthlyTransactionRiskScore.from | number }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>To</th>
+                                <td align="right">{{ kycInstitute.numberOfMonthlyTransactionRiskScore.to | number }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.numberOfMonthlyTransactionRiskScore.riskScore }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3; margin-right: 5px">
+                <mat-card-title>Expected amount of monthly cash transactions: {{kycInstitute.amountOfMonthlyCashTransactionRiskScore.profitBearing
+                    ? 'Mudaraba Savings account' : 'Al-Wadiah Current account' }} (In lac)</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">From</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.amountOfMonthlyCashTransactionRiskScore.from | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>To</th>
+                                <td align="right">{{ kycInstitute.amountOfMonthlyCashTransactionRiskScore.to | number:'1.2-2' }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.amountOfMonthlyCashTransactionRiskScore.riskScore }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+
+            <mat-card style="flex: 3;">
+                <mat-card-title>Expected number of monthly cash transactions: {{kycInstitute.amountOfMonthlyCashTransactionRiskScore.profitBearing
+                    ? 'Mudaraba Savings account' : 'Al-Wadiah Current account' }}</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">From</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.numberOfMonthlyCashTransactionRiskScore.from | number }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>To</th>
+                                <td align="right">{{ kycInstitute.numberOfMonthlyCashTransactionRiskScore.to | number }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Risk score</th>
+                                <td align="right">{{ kycInstitute.numberOfMonthlyCashTransactionRiskScore.riskScore }}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+
+            <!-- <mat-card style="flex: 3;">
+                <mat-card-title>Overall risk assessment:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">Risk score</th>
+                                <td class="ui-lg-3" align="right">{{ kycInstitute.overallRiskScore.riskScore }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-6 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" pKeyFilter="pint" formControlName="overallRiskScoreFrom" pInputText>
+                                <label>Overall risk score from</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-6 ui-md-6">
+                            <span class="md-inputfield">
+                                <input type="text" pKeyFilter="pint" formControlName="overallRiskScoreTo" pInputText>
+                                <label>Overall risk score to</label>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card> -->
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+            <mat-card style="flex: 3;">
+                <mat-card-title>Other</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="foreignerPurposeOfAccount" pInputText>
+                                <label>Foreigner purpose of account</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="foreignerControllingAuthority" pInputText>
+                                <label>Foreigner controlling authority</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="foreignerPermissionDetails" pInputText>
+                                <label>Foreigner permission details</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <p-checkbox formControlName="isBlackListedChecked" binary="true"></p-checkbox>
+                            <span class="task-name">Black listed checked</span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="displayBlackListedActionTaken">
+                            <span class="md-inputfield">
+                                <input type="text" formControlName="blackListedActionTaken" pInputText>
+                                <label>Black listed action taken</label>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <p-dataTable [value]="kycOrganizationOtherInformations" [responsive]="true" sortField="name" rowGroupMode="rowspan">
+                            <p-column field="name" header="Name" [style]="{'width':'120px'}"></p-column>
+                            <p-column field="topic" header="Topic"></p-column>
+                            <p-column field="otherInformationTopic.seniorManagementPermissionRequired" header="Permission required from senior management"
+                                [style]="{'width':'150px'}">
+                                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <i class='material-icons-done-close'> {{rowData.permissionGranted? "done":"close"}}</i>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="permissionGranted" header="Permission granted from senior management" [style]="{'width':'150px'}">
+                                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <i class='material-icons-done-close'> {{rowData.permissionGranted? "done":"close"}}</i>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="otherInformationTopic.interviewWithCustomerRequired" header="Interview with customer required" [style]="{'width':'150px'}">
+                                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <i class='material-icons-done-close'> {{rowData.customerInterviewed? "done":"close"}}</i>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="customerInterviewed" header="Customer interviewed" [style]="{'width':'100px'}">
+                                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <i class='material-icons-done-close'> {{rowData.customerInterviewed? "done":"close"}}</i>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                            <p-column field="status" header="Status" [style]="{'width':'60px'}">
+                                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <i class='material-icons-done-close'> {{rowData.status? "done":"close"}}</i>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </form>
+</div>

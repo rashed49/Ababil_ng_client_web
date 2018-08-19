@@ -1,0 +1,43 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Product</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Create" type="button" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton label="Refresh" type="button" icon="ui-icon-refresh" class="default-btn" (click)="fetchProducts(null)"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <p-dataTable [value]="products" selectionMode="single" dataKey="id" [lazy]="true" [rows]="20" [paginator]="true"
+            [totalRecords]="totalRecords" (onLazyLoad)="loadCommandMappingsLazy($event)" (onRowSelect)="onRowSelect($event)"
+            #dt>
+            <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="description" header="Description" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="status" [style]="{'text-align':'center'}" header="Status" [filter]="true" filterPlaceholder="Search">
+                <ng-template let-col let-product="rowData" pTemplate="body">
+                    {{
+                        product.status == 'ACTIVE' ? 'Active' 
+                        : product.status == 'CLOSE' ? 'Close'
+                        : 'Inactive'
+                    }}
+                </ng-template>
+            </p-column>
+            <p-column field="currencyRestriction" [style]="{'text-align':'center'}" header="Currency restriction" [filter]="true" filterPlaceholder="Search">
+                <ng-template let-col let-product="rowData" pTemplate="body">
+                    {{
+                        product.currencyRestriction == 'LOCAL_CURRENCY' ? 'Local currency' 
+                        : product.currencyRestriction == 'MULTIPLE_CURRENCY' ? 'Multiple currency'
+                        : ''
+                    }}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<!-- <verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form class="ui-g ui-fluid form-group" [formGroup]="lotForm">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="inlandRemittanceProduct" appendTo="body" [autoWidth]="false" formControlName="inlandRemittanceProductId"
+                            name="inlandRemittanceProductId"></p-dropdown>
+                        <label class="md-inputlabel-2">Inland remittance product*</label>
+                        <div *ngIf="lotForm.controls['inlandRemittanceProductId'].errors && !lotForm.controls['inlandRemittanceProductId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['inlandRemittanceProductId'].errors.required">Inland remittance product is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['inlandRemittanceProductId'].errors.pattern">Inland remittance product is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="currencyCode" [autoWidth]="false" formControlName="currencyCode"></p-dropdown>
+                        <label class="md-inputlabel-2">Currency*</label>
+                        <div *ngIf="lotForm.controls['currencyCode'].errors && !lotForm.controls['currencyCode'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['currencyCode'].errors.required">Currency code is required.</div>
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['currencyCode'].errors.pattern">Currency code is invalid.</div>
+                            </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pKeyFilter="pint" formControlName="startLeafNo" pInputText>
+                        <label>Start Leaf No*</label>
+                        <div *ngIf="lotForm.controls['startLeafNo'].errors && !lotForm.controls['startLeafNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['startLeafNo'].errors.required ">Start Leaf No is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['startLeafNo'].errors.min ">Start Leaf No can not be less than One</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pint" (input)="isValid('noOfLeaf')" formControlName="noOfLeaf">
+                        <label>Number of Leaf</label>
+                        <div *ngIf="lotForm.controls['noOfLeaf'].errors && !lotForm.controls['noOfLeaf'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['noOfLeaf'].errors.required">Number of Leaf is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['noOfLeaf'].errors.min">Number of Leaf can not be less then One.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText (input)="isValid('endLeafNo')" formControlName="endLeafNo">
+                        <label> End Leaf No </label>
+                        <div *ngIf="lotForm.controls['endLeafNo'].errors && !lotForm.controls['endLeafNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!lotForm.controls['endLeafNo'].errors.min">End leaf number can not be less than start leaf number</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

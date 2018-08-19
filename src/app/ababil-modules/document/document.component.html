@@ -1,0 +1,103 @@
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Document</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div *ngFor="let fromGroupEntry of resultantFormGroupSet">
+
+    <p-panel [style]="{'margin-bottom':'7px'}">
+
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{fromGroupEntry.name}}</span>
+            </div>
+        </p-header>
+
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g ui-fluid form-group">
+                    <div class="ui-g-12 ui-md-5">
+
+                        <div [formGroup]="formgroupMap.get(fromGroupEntry.name)">
+                            <div *ngFor="let property of fromGroupEntry.properties">
+                                <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Text'">
+                                    <span class="md-inputfield">
+                                        <input type="text" pInputText [formControlName]="property.documentPropertyType.id+''">
+                                        <label>{{property.documentPropertyType.propertyName}}</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Date'">
+                                    <span class="md-inputfield">
+                                        <p-calendar [formControlName]="property.documentPropertyType.id+''" hourFormat="12" showButtonBar="true" monthNavigator="true" yearNavigator="true"
+                                            yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate"></p-calendar>
+                                        <label>{{property.documentPropertyType.propertyName}}</label>
+                                    </span>
+                                </div>
+                                <br/>
+                                <br/>
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="ui-g-12 ui-md-7">
+                        <p-fileUpload [showCancelButton]="true" [maxFileSize]="500000" name="docFiles[]" mode="advanced" customUpload="true" (uploadHandler)="onFileUpload($event,fromGroupEntry.doc.id)"
+                            #fileUploader></p-fileUpload>
+                    </div> -->
+                    <div class="ui-g-12 ui-md-12" style="margin-bottom: 10px;">
+
+                        <div class="ui-g ui-fluid form-group">
+                            <h6>Uploaded files:</h6>
+                            <div class="ui-g-12 ui-md-12" style="display: flex;flex-direction: row;flex-wrap: wrap;">
+                                <div *ngFor="let fileName of fromGroupEntry.doc.filePaths" style="margin-bottom:5px;margin-right:5px;">
+                                    <div class="container" *ngIf="fileName.includes('JPG')">
+                                        <img class="image" [src]="'http://172.16.215.22:8081/document/url/stamp?url='+fileName" alt="Photo of a user" style="height: 50px"
+                                            alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                                            (click)="onFileClick(fileName)">
+                                    </div>
+                                    <div class="container" *ngIf="fileName.includes('PDF')">
+                                        <img class="image" [src]="'assets/images/pdfIcon.png'" alt="PDF file" style="height: 50px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/pdfIcon.png';"
+                                            (click)="onFileClick(fileName)">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!-- 
+        <p-footer>
+            <button pButton type="button" icon="ui-icon-save" label="Save" class="ui-button-success" (click)="extractFormData(fromGroupEntry.name)"></button>
+        </p-footer> -->
+
+    </p-panel>
+
+</div>
+
+
+<!-- <p-dialog header="Preview" [(visible)]="showImagePreview" modal="true">
+    <img class="image" [src]="'http://172.16.215.22:8081/document/url?url='+previewFile" alt="Photo of a user" alt="Image not found"
+        onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" style="width:400px;height:300px" *ngIf="previewFile.includes('JPG') || previewFile.includes('PNG')">
+
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-trash" (click)="deleteDocumentUrl()" label="Delete"></button>
+    </p-footer>
+</p-dialog>
+
+<p-sidebar [(visible)]="showPdfPreview" [fullScreen]="true" [baseZIndex]="10000">
+    <button type="button" class="ui-button-success" pButton icon="ui-icon-trash" (click)="deleteDocumentUrl()" label="Delete"
+        style="float:right"></button>
+    <br>
+    <iframe id="pdf-iframe" type="application/pdf" class="ui-g-12 ui-md-12" style="height: 900px;" #pdfIframe></iframe>
+</p-sidebar> -->

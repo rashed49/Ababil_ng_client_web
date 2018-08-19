@@ -1,0 +1,125 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Transaction profile</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()" [disabled]="errorSet.size > 0"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account name</th>
+                <td>{{account.name}}</td>
+            </tr>
+            <tr>
+                <th>Account number</th>
+                <td>{{account.number}}</td>
+            </tr>
+            <!-- <tr>
+                <th>Unique customer ID</th>
+                <td>{{account.customerId}}</td>
+            </tr>
+            <tr>
+                <th>Probable monthly income</th>
+                <td>{{account.balance}}</td>
+            </tr> -->
+        </table>
+    </div>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Transaction profile:</mat-card-title>
+    <p-dataTable [value]="accountTransactionProfile" [editable]="true" [responsive]="true">
+
+        <p-headerColumnGroup>
+            <p-row>
+                <p-column header="Transaction profile type" rowspan="2"></p-column>
+                <p-column header="Number of transactions(monthly)" colspan="2" [style]="{'width':'200px'}"></p-column>
+                <p-column header="Maximum ammount of transactions(per transaction)" colspan="2" [style]="{'width':'350px'}"></p-column>
+                <p-column header="Total transactions(monthly)" colspan="2" [style]="{'width':'350px'}"></p-column>
+            </p-row>
+            <p-row>
+                <p-column header="Deposit" colspan="1"></p-column>
+                <p-column header="Withdrawal" colspan="1"></p-column>
+                <p-column header="Deposit" colspan="1"></p-column>
+                <p-column header="Withdrawal" colspan="1"></p-column>
+                <p-column header="Deposit" colspan="1"></p-column>
+                <p-column header="Withdrawal" colspan="1"></p-column>
+            </p-row>
+        </p-headerColumnGroup>
+
+        <p-column field="transactionProfileDescription" header="TP type">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.transactionLimitMandatory? (data.transactionProfileDescription)+'*' : data.transactionProfileDescription}}
+            </ng-template>
+        </p-column>
+
+        <p-column field="monthlyTotalDebitTxnCount" [editable]="true" header="Probable number of deposit (monthly)" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalDebitTxnCount? (data.monthlyTotalDebitTxnCount | number) : data.monthlyTotalDebitTxnCount}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="monthlyTotalCreditTxnCount" [editable]="true" header="Probable number of withdrawal (monthly)" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalCreditTxnCount? (data.monthlyTotalCreditTxnCount | number) : data.monthlyTotalCreditTxnCount}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="maxDebitAmountPerTransaction" [editable]="true" header="Maximum amount of deposit (per transaction)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.maxDebitAmountPerTransaction? (data.maxDebitAmountPerTransaction | number) : data.maxDebitAmountPerTransaction}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="maxCreditAmountPerTransaction" [editable]="true" header="Maximum amount of withdrawal (per transaction)"
+            [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.maxCreditAmountPerTransaction? (data.maxCreditAmountPerTransaction | number) : data.maxCreditAmountPerTransaction}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="monthlyTotalDebitTxnAmount" [editable]="true" header="Probable total deposit amount (monthly)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalDebitTxnAmount? (data.monthlyTotalDebitTxnAmount | number) : data.monthlyTotalDebitTxnAmount}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+        <p-column field="monthlyTotalCreditTxnAmount" [editable]="true" header="Probable total withdrawal amount (monthly)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalCreditTxnAmount? (data.monthlyTotalCreditTxnAmount | number) : data.monthlyTotalCreditTxnAmount}}
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <input type="text" pKeyFilter="int" pInputText [(ngModel)]="data[col.field]" (input)="onEditValidation(data,index,col.field)"
+                />
+            </ng-template>
+        </p-column>
+
+    </p-dataTable>
+</mat-card>

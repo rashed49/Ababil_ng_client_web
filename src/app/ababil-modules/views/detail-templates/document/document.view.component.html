@@ -1,0 +1,69 @@
+<mat-card *ngFor="let fromGroupEntry of resultantFormGroupSet;let i = index" style="margin-top: 10px;margin-left:10px;margin-right:10px; margin-bottom: 5px;">
+
+    <mat-card-title>
+        <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{fromGroupEntry.name}}</span>
+    </mat-card-title>
+
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group">
+                <div class="ui-g-12 ui-md-5">
+
+                    <div [formGroup]="formgroupMap.get(fromGroupEntry.id)">
+                        <div *ngFor="let property of fromGroupEntry.properties">
+                            <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Text'">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText [formControlName]="property.documentPropertyType.id+''" readonly>
+                                    <label>{{property.documentPropertyType.propertyName}}</label>
+                                </span>
+                            </div>
+
+                            <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Date'">
+                                <span class="md-inputfield">
+                                    <p-calendar [formControlName]="property.documentPropertyType.id+''" hourFormat="12" showButtonBar="true" monthNavigator="true"
+                                        yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate" disabled="true"></p-calendar>
+                                    <label>{{property.documentPropertyType.propertyName}}</label>
+                                </span>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-7">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g ui-fluid form-group">
+                            <h6>Uploaded files:</h6>
+                            <div class="ui-g-12 ui-md-12" style="display: flex;flex-direction: row;flex-wrap: wrap;">
+                                <div *ngFor="let file of fromGroupEntry.doc.files" style="margin-bottom:5px;margin-right:5px;">
+                                    <div class="container" *ngIf="file.type.includes('JPG')">
+                                        <img class="image" [src]="serviceUrl+'/documents/0/files/'+file.id" alt="Image" style="height: 60px" alt="Image not found"
+                                            onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" (click)="onFileClick(file)">
+                                    </div>
+                                    <div class="container" *ngIf="file.type.includes('PDF')">
+                                        <img class="image" [src]="'assets/images/pdfIcon.png'" alt="PDF file" style="height: 60px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/pdfIcon.png';"
+                                            (click)="onFileClick(file)">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+
+<p-dialog header="Preview" [(visible)]="showImagePreview" [modal]="true" appendTo="body">
+    <img class="image" [src]="showImagePreview?(serviceUrl+'/documents/0/files/'+selectedFile.id):'assets/images/noimage.jpg'"
+        alt="Photo of a user" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" style="width:400px;height:300px">
+</p-dialog>
+
+<p-sidebar [(visible)]="showPdfPreview" [fullScreen]="true" appendTo="body">
+    <iframe id="pdf-iframe" type="application/pdf" class="ui-g-12 ui-md-12" style="height: 900px;" #pdfIframe></iframe>
+</p-sidebar>

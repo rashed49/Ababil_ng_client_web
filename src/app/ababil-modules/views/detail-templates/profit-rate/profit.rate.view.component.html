@@ -1,0 +1,43 @@
+<!-- <verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection> -->
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Profit Rates of Product: {{productDetails.name}}</span>
+
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dataTable [value]="profitRateMergedTotal" sortField="fromDate" rowGroupMode="rowspan" [style]="{'margin-top':'50px'}"
+    [lazy]="true" dataKey="id" [rows]="20" [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadProfitRateLazy($event)"
+    selectionMode="single">
+
+    <p-column field="fromDate" header="From date" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-row="rowData" pTemplate="body">
+            {{row.fromDate | date}}
+        </ng-template>
+    </p-column>
+    <p-column field="currency" header="Currency code" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+    <p-column field="fromTenor" header="Form tenor" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+    <p-column field="toTenor" header="To tenor" [filter]="true" filterPlaceholder="Search" sortable="true"></p-column>
+    <p-column field="amountRangeFrom" header="Amount range from" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+            {{data.amountRangeFrom | number:'1.2-4'}}
+        </ng-template>
+    </p-column>
+    <p-column field="amountRangeTo" header="Amount range to" [filter]="true" filterPlaceholder="Search" sortable="true">
+        <ng-template let-col let-data="rowData" pTemplate="body">
+            {{data.amountRangeTo | number:'1.2-4'}}
+        </ng-template>
+    </p-column>
+    <p-column field="annualProvisionalRate" header="Annual provisional rate" [filter]="true" filterPlaceholder="Search" sortable="true"
+        *ngIf="apr"></p-column>
+    <p-column field="psr" header="Profit sharing ratio" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="psr"></p-column>
+    <p-column field="weightage" header="Weighatge" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="weightage"></p-column>
+
+</p-dataTable>

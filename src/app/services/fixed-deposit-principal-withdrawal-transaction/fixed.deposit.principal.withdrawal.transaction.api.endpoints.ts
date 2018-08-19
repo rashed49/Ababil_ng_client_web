@@ -1,0 +1,3 @@
+export const UPDATE_FIXED_DEPOSIT_WITHDRAWAL_TRANSACTION_CREDIT = "/fixed-deposit-withdrawal-transaction/recovery/{fixedDepositAccountId}";
+export const UPDATE_FIXED_DEPOSIT_WITHDRAWAL_TRANSACTION_DEBIT = "/fixed-deposit-withdrawal-transaction/withdraw/{fixedDepositAccountId}";
+export const FETCH_GLOBAL_TRANSACTION_NUMBER = "/fixed-deposit-withdrawal-transaction/{fixedDepositAccountId}/globaltxnno";

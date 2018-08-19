@@ -1,0 +1,229 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)">
+</verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Issue Create</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<div class="ui-g-12 ui-fluid all">
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Basic Information</mat-card-title>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceProductType" readonly>
+                        <label>Inland remittance product*</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.instrumentCurrencyCode" readonly>
+                        <label>Currency*</label>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 2">
+
+            <mat-card-title>Purshaser Information</mat-card-title>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserName " readonly>
+                        <label>Purshaser Name</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserMobile" readonly>
+                        <label>Purshaser mobile No</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserNid" readonly>
+                        <label>Purshaser NID No</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserAddress" readonly>
+                        <label>Purshaser Address</label>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card style="flex: 2">
+            <mat-card-title>Payee Information</mat-card-title>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.payeeName" readonly>
+                        <label>payee Name</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.payeeMobile" readonly>
+                        <label>payee Mobile No*</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.payeeNid" readonly>
+                        <label>payee NID No</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.payeeAddress" readonly>
+                        <label>payee Address</label>
+                    </span>
+                </div>
+            </div>
+
+        </mat-card>
+    </div>
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Transaction Information</mat-card-title>
+            <div class="ui-g">
+                <!-- <div class="ui-g-12 ui-md-3">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="exchangeRateTypes" [autoWidth]="false" formControlName="exchangeRateTypeId"></p-dropdown>
+                        <label class="md-inputlabel-2">Exchange Rate Type</label>
+                    </span>
+                </div> -->
+                <div class="ui-g-12 ui-md-4" *ngIf="showExchangeRate">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="exchangeRateType" readonly>
+                        <label>Exchange Rate Type</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4" *ngIf="showExchangeRate">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.exchangeRate" readonly>
+                        <label>Currency Rate</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaseAmount" readonly>
+                        <label>Amount</label>
+                    </span>
+                </div>
+                <!-- <div class="ui-g-12 ui-md-3" >
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="baseamount">
+                        <label> Base Currency amount</label>
+                    </span>
+                </div> -->
+
+                <p-dataTable [value]="inlandRemittanceInstrumentIssueInfos.inlandRemittanceChargeInformations" selectionMode="single">
+                    <p-column field="chargeName" header="name"></p-column>
+                    <p-column field="chargeAmount" header="Commission CCY"></p-column>
+                    <p-column header="Commission LCY">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.chargeAmount * BasedExchangeRate}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="vatAmount" header="VAT CCY"></p-column>
+                    <p-column header="VAT LCY">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.vatAmount * BasedExchangeRate}}
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Total CCY">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.chargeAmount + data.vatAmount}}
+                        </ng-template>
+                    </p-column>
+                    <p-column header="Total LCY">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{(data.chargeAmount + data.vatAmount) * BasedExchangeRate}}
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+                <hr>
+                <!-- <h6>Total Amount : {{baseTotalAmount}}</h6> -->
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex: 1">
+            <mat-card-title>Debit Information</mat-card-title>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaseMethod" readonly>
+                        <label> Purshase Type</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserAccountNo" readonly>
+                        <label> Purshase Account No</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaserChequeNo" readonly>
+                        <label>Purshase Cheque Number</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="chequeDate | date" readonly>
+                        <label>Cheque Date</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="inlandRemittanceInstrumentIssueInfos.purchaseRemark" readonly>
+                        <label>Narration</label>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

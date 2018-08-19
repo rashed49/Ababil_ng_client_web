@@ -1,0 +1,108 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">{{headerLabel}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveNominee()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<form class="form-group" #nomineeForm="ngForm">
+    <div class="ui-g ui-fluid">
+
+
+        <div class="ui-g">
+
+            <mat-card style="width:100%; margin-bottom: 10px;">
+                <mat-card-title>Nominee details</mat-card-title>
+                <br/>
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-6 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" value={{accountDetails.name}} [disabled]="true" pInputText style="opacity:1">
+                            <label>Account name</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-6 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" value={{accountDetails.number}} [disabled]="true" pInputText style="opacity:1">
+                            <label>Account number</label>
+                        </span>
+                    </div>
+
+                    <br>
+                    <br>
+                    <br>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+
+                    <div class="ui-g-6 ui-md-4">
+                        <span class="md-inputfield">
+                            <input type="text" [value]="individualsFullName" [disabled]="true" pInputText style="opacity:1">
+                            <label>Nominee name</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-6 ui-md-2">
+                        <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="individualLookup.display=true" [disabled]="nomineeId"></button>
+                        <button pButton type="button" icon="ui-icon-add" class="default-btn" (click)="addNominee()" [disabled]="nomineeId"></button>
+                        <button pButton type="button" icon="ui-icon-edit" class="default-btn" (click)="editShortInduvidual()" [disabled]="!nomineeId"></button>
+                    </div>
+
+                    <individual-lookup #individualLookup (onSelect)="onSelect($event)"></individual-lookup>
+
+                    <div class="ui-g-6 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" #accountHolder="ngModel" name="relationWithAccountHolder" pInputText required [(ngModel)]="relationWithAccountHolder">
+                            <label>Relation with account holder</label>
+                            <div *ngIf="accountHolder.errors && !accountHolder.pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all"[hidden]="!accountHolder.errors.required">Relation with account holder is required.</div>
+                            </div>
+                        </span>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <br/>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-6 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" [value]="individualDetails.contactInformation.mobileNumber?individualDetails.contactInformation.mobileNumber:' '"
+                                [disabled]="true" pInputText style="opacity:1">
+                            <label>Mobile number</label>
+                        </span>
+                    </div>
+
+                    <div class="ui-g-6 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" [value]="individualDetails.contactInformation.email?individualDetails.contactInformation.email:' '" [disabled]="true"
+                                pInputText style="opacity:1">
+                            <label>Email address</label>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-6 ui-md-6">
+                        <div class="ui-g-12 ui-md-12">
+                            <label style="color:teal">Share percentage : {{sharePercentage}}%</label>
+                            <p-slider [(ngModel)]="sharePercentage" required [min]="availablePercentage.lowerLimit" [max]="availablePercentage.upperLimit"
+                                name="sharePercentage" [disabled]="availablePercentage.upperLimit==0"></p-slider>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card>
+        </div>
+    </div>
+</form>

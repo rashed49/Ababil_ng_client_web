@@ -1,0 +1,60 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+
+    <div class="ui-g">
+            <div class="ui-g-12 ui-md-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <td>{{demandDepositAccount.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{demandDepositAccount.number}}</td>
+                        </tr>
+                    </table>
+                </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group" [formGroup]="accountMinimumBalanceForm">
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pnum" [ngModel]="accountMinimumBalance | number:'1.2-4'"
+                            [ngModelOptions]="{standalone: true}" pInputText readonly>
+                        <label>Minimum balance</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pnum" formControlName="minimumBalance" pInputText readonly>
+                        <label>Override minimum balance</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="comment" readonly> 
+                        <label>Comment</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

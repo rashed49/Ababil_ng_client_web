@@ -1,0 +1,418 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Installment deposit product</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Save" type="button" icon="ui-icon-save" class="default-btn" (click)="submit()"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+    <form class="ui-fluid form-group" [formGroup]="recurringDepositProductForm">
+
+        <div style="width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 1">
+                <mat-card-title>Basic information:</mat-card-title>
+                <div class="ui-g">
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="name">
+                                <label>Name*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['name'].errors && !recurringDepositProductForm.controls['name'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['name'].errors.required">Product name is required.</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['name'].errors.pattern">Product name format is invalid.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="description">
+                                <label>Description</label>
+                                <div *ngIf="recurringDepositProductForm.controls['description'].errors && !recurringDepositProductForm.controls['description'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['description'].errors.pattern">Description format is invalid.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="code">
+                                <label>Code*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['code'].errors && !recurringDepositProductForm.controls['code'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['code'].errors.required">Code is required.</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['code'].errors.maxlength">Code is three digits long.</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['code'].errors.minlength">Code is three digits long.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-4">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="currencyRestriction" [autoWidth]="false" formControlName="currencyRestriction" (onChange)="onCurrencyChange()"></p-dropdown>
+                                <label class="md-inputlabel-2">Currency restriction*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['currencyRestriction'].errors && !recurringDepositProductForm.controls['currencyRestriction'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['currencyRestriction'].errors.required">Currency restriction is required.</div>
+                                </div>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-4" *ngIf="multipleCurrency">
+                            <span class="md-inputfield-2">
+                                <p-multiSelect [options]="currencies" formControlName="currencies"></p-multiSelect>
+                                <label class="md-inputlabel-2">Currencies*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['currencies'].errors && !recurringDepositProductForm.controls['currencies'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['currencies'].errors.required">Currencies required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Installment amount:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isInitialDepositAllowed" binary="true"></p-checkbox>
+                            <span>Initial deposit required</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="initialDeposit" [attr.disabled]="disableInitialDeposit ? 'disabled' : null">
+                                <label>Initial deposit</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isInstallmentFixed" binary="true"></p-checkbox>
+                            <span class="task-name">Installment Fixed</span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12" *ngIf="!isInstallmentFixed">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="minimumDepositAmount" [attr.disabled]="isInstallmentFixed ? 'disabled' : null">
+                                <label>Minimum deposit amount*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['minimumDepositAmount'].errors && !recurringDepositProductForm.controls['minimumDepositAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['minimumDepositAmount'].errors.required">Minimum deposit amount is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="!isInstallmentFixed">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="maximumDepositAmount" [attr.disabled]="isInstallmentFixed ? 'disabled' : null">
+                                <label>Maximum deposit amount*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['maximumDepositAmount'].errors && !recurringDepositProductForm.controls['maximumDepositAmount'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['maximumDepositAmount'].errors.min">Maximum deposit can not be less than minimum deposit</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="!isInstallmentFixed">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="depositAmountMultiplier" [attr.disabled]="isInstallmentFixed ? 'disabled' : null">
+                                <label>Deposit amount multiplier*</label>
+                                <div *ngIf="displayAmountErrorMessage">
+                                    <div class="ui-message ui-messages-error ui-corner-all">
+                                        Maximum and minimum deposit amount have to satisfy deposit amount multiplier.
+                                    </div>
+                                </div>
+                                <div *ngIf="recurringDepositProductForm.controls['depositAmountMultiplier'].errors && !recurringDepositProductForm.controls['depositAmountMultiplier'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['depositAmountMultiplier'].errors.required">Deposit amount multiplier is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="isInstallmentFixed">
+                        <div class="ui-g-12 ui-md-11">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="installmentSizes" [attr.disabled]="isInstallmentFixed ? null : 'disabled'">
+                                <label>Installment size</label>
+                                <div *ngIf="recurringDepositProductForm.controls['installmentSizes'].errors && !recurringDepositProductForm.controls['installmentSizes'].pristine && (tenors.installmentSizes <= 0)">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['installmentSizes'].errors.required">Atleast 1 installment size is required for fixed installment.</div>
+                                </div>
+                                <div *ngIf="recurringDepositProductForm.controls['installmentSizes'].errors && !recurringDepositProductForm.controls['installmentSizes'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['installmentSizes'].errors.duplicateTenor">Duplicate installment sizes not allowed.</div>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="ui-g-12 ui-md-1">
+                            <button pButton type="button" icon="ui-icon-plus" class="default-btn" (click)="addInstallmentSize()" [disabled]="disableAddFixedInstallmentSizeButton"></button>
+                        </div>
+                    </div>
+
+
+                    <div class="ui-g-12 ui-md-12" *ngIf="isInstallmentFixed">
+                        <p-dataTable [value]="installmentSizes" [rows]="4" [paginator]="true">
+                            <p-column field="id" header="#SL" [style]="{'width':'40px','text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    {{i+1}}
+                                </ng-template>
+                            </p-column>
+                            <p-column header="Installment size" [style]="{'text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    {{installmentSizes[i]}}
+                                </ng-template>
+                            </p-column>
+                            <p-column header="Delete" [style]="{'width':'70px','text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" pButton (click)="deleteInstallmentSize(i)" tooltipPosition="top" icon="ui-icon-delete"></button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+
+
+
+                </div>
+            </mat-card>
+
+            <mat-card style="flex:3; margin-right: 5px;">
+                <mat-card-title>Product calculation:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isProfitAppliedBeforeMaturity" binary="true"></p-checkbox>
+                            <span class="task-name">Profit applied before maturity</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="profitPostingPeriod" [autoWidth]="false" formControlName="profitPostingPeriod" [disabled]="disableProfitAppliedBeforeMaturity"></p-dropdown>
+                                <label class="md-inputlabel-2">Profit posting period</label>
+                                <div *ngIf="recurringDepositProductForm.controls['profitPostingPeriod'].errors && !recurringDepositProductForm.controls['profitPostingPeriod'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['profitPostingPeriod'].errors.required">Profit posting period field is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="profitPostingPeriodType" [autoWidth]="false" formControlName="profitPostingPeriodType" [disabled]="disableProfitAppliedBeforeMaturity"></p-dropdown>
+                                <label class="md-inputlabel-2">Profit posting period type</label>
+                                <div *ngIf="recurringDepositProductForm.controls['profitPostingPeriodType'].errors && !recurringDepositProductForm.controls['profitPostingPeriodType'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['profitPostingPeriodType'].errors.required">Profit posting period field is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isCompoundingBeforeMaturityAllowed" binary="true" [disabled]="compoundingBeforeMaturityAllowed"></p-checkbox>
+                            <span class="task-name">Compounding before maturity allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isWithdrawProfitBeforeMaturityAllowed" binary="true" [disabled]="withdrawProfitBeforeMaturityAllowed"></p-checkbox>
+                            <span class="task-name">Withdraw profit before maturity allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12 dropdown-padding">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield-2">
+                                <p-dropdown [options]="daysInYear" [autoWidth]="false" formControlName="daysInYear"></p-dropdown>
+                                <label class="md-inputlabel-2">Days in year*</label>
+                                <div *ngIf="recurringDepositProductForm.controls['daysInYear'].errors && !recurringDepositProductForm.controls['daysInYear'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['daysInYear'].errors.required">Days in year field is required.</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 3; margin-right: 5px;">
+                <mat-card-title>Tenor:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12" style="padding-bottom: 20px;">
+                        <p-inputSwitch formControlName="isTenorRequired"></p-inputSwitch>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div style="display: flex; flex-direction: row; width: 100%;">
+                            <div style="flex:4.5; margin-right: 5px;">
+                                <span class="md-inputfield-2 dropdown-align-padding">
+                                    <p-dropdown [options]="tenorType" [autoWidth]="false" formControlName="tenorType" [disabled]="disableTenorType"></p-dropdown>
+                                    <label class="md-inputlabel-2">Tenor type</label>
+                                    <div *ngIf="recurringDepositProductForm.controls['tenorType'].errors && !recurringDepositProductForm.controls['tenorType'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['tenorType'].errors.required">Tenor type is required.</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div style="flex:4.5; margin-right: 5px;">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText pKeyFilter="pint" formControlName="tenor" [attr.disabled]="disableTenor ? 'disabled' : null">
+                                    <label>Tenor</label>
+                                    <!-- <div *ngIf="recurringDepositProductForm.controls['tenor'].errors && !recurringDepositProductForm.controls['tenor'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['tenor'].errors.required">Tenor is required.</div>
+                                    </div> -->
+
+                                    <div *ngIf="recurringDepositProductForm.controls['tenor'].errors && !recurringDepositProductForm.controls['tenor'].pristine && (tenors.length <= 0)">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['tenor'].errors.required">Tenor is required.</div>
+                                    </div>
+                                    <div *ngIf="recurringDepositProductForm.controls['tenor'].errors && !recurringDepositProductForm.controls['tenor'].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['tenor'].errors.duplicateTenor">Duplicate tenor not allowed.</div>
+                                    </div>
+                                </span>
+                            </div>
+
+                            <div style="flex:1;">
+                                <button pButton type="button" icon="ui-icon-plus" class="default-btn" (click)="addTenor()" [disabled]="disableAddTenorButton"></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <p-dataTable [value]="tenors" [rows]="4" [paginator]="true">
+                            <p-column field="id" header="#SL" [style]="{'width':'40px','text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    {{i+1}}
+                                </ng-template>
+                            </p-column>
+                            <p-column header="Tenor type" [style]="{'text-align':'center'}">
+                                <ng-template pTemplate="body">
+                                    {{datatableTenorType}}
+                                </ng-template>
+                            </p-column>
+                            <p-column header="Tenor" [style]="{'text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    {{tenors[i]}}
+                                </ng-template>
+                            </p-column>
+                            <p-column header="Delete" [style]="{'width':'70px','text-align':'center'}">
+                                <ng-template let-i="rowIndex" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" pButton (click)="deleteTenor(i)" tooltipPosition="top" icon="ui-icon-delete"></button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+
+            <mat-card style="flex:3;">
+                <mat-card-title>Lien:</mat-card-title>
+                <div class="ui-g">
+
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isLienAllowed" binary="true"></p-checkbox>
+                            <span class="task-name">Lien allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="money" formControlName="lienPercentage" [attr.disabled]="disableLienPercentage ? 'disabled' : null">
+                                <label>Lien percentage</label>
+                                <div *ngIf="recurringDepositProductForm.controls['lienPercentage'].errors && !recurringDepositProductForm.controls['lienPercentage'].pristine">
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['lienPercentage'].errors.required">Lien percentage is required.</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['lienPercentage'].errors.max">Lien percentage is within 0 and 100</div>
+                                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!recurringDepositProductForm.controls['lienPercentage'].errors.min">Lien percentage is within 0 and 100</div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+            <mat-card style="flex: 3;margin-right: 5px;">
+                <mat-card-title>Over due:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="noOfOverDueAllowed">
+                                <label>Number of over due allowed</label>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText pKeyFilter="pint" formControlName="noOfOverDueAllowedBetweenSlab">
+                                <label>Number of over due allowed between slab</label>
+                            </span>
+                        </div>
+                    </div>
+
+
+                </div>
+            </mat-card>
+            <mat-card style="flex:3; margin-right: 5px;">
+                <mat-card-title>Other:</mat-card-title>
+                <div class="ui-g">
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isPensionScheme" binary="true"></p-checkbox>
+                            <span>Pension scheme</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isAdvanceInstallAllowed" binary="true"></p-checkbox>
+                            <span>Advance install allowed</span>
+                        </div>
+                    </div>
+
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isCalculateProfitOnAdvance" binary="true"></p-checkbox>
+                            <span>Calculate profit on advance</span>
+                        </div>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <div class="ui-g-12 ui-md-12">
+                            <p-checkbox formControlName="isLinkAccountRequired" binary="true"></p-checkbox>
+                            <span class="task-name">Link account required</span>
+                        </div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+
+    </form>
+</div>
+<p-footer>
+    * indicates required field.
+</p-footer>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

@@ -1,0 +1,64 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Create cheque books</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()" [disabled]="formsInvalid()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-12">
+
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Account number</th>
+                    <td>{{demandDepositAccount.number}}</td>
+                </tr>
+                <tr>
+                    <th>Account name</th>
+                    <td>{{demandDepositAccount.name}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <form class="ui-g ui-fluid form-group" [formGroup]="chequeBookForm">
+        <div class="ui-g-12 ui-md-12" *ngIf="chequeBookForm && chequeBookForm.controls['chequePrefix']">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="productChequePrefixes | chequePrefixPipe" [style]="{'width':'380px'}" formControlName="chequePrefix"
+                    pInputText></p-dropdown>
+                <label class="md-inputlabel-2">Cheque prefix</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield">
+                <input type="number" pKeyFilter="int" formControlName="startLeafNumber" pInputText>
+                <label>Start leaf number</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield">
+                <input type="number" pKeyFilter="int" formControlName="endLeafNumber" pInputText>
+                <label>End leaf number</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-4">
+            <span class="md-inputfield">
+                <input type="number" value={{chequeBookSize}} [disabled]="true" pInputText>
+                <label>Cheque book size</label>
+            </span>
+        </div>
+    </form>
+    <comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component> 
+    
+</mat-card>

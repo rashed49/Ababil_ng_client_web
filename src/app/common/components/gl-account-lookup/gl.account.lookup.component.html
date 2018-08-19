@@ -1,0 +1,58 @@
+<p-dialog header="GL Account Search" [(visible)]="display" modal="modal" width="800" [responsive]="true" [positionTop]="50"
+    [draggable]="false" [contentStyle]="{'height': '450px'}" (onHide)="close(); dt.reset();">
+
+    <div>
+        <div class="ui-g ui-fluid form-group" [formGroup]="glAccountSearchForm">
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="name">
+                    <label>Name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="code">
+                    <label>Code</label>
+                </span>
+            </div>
+
+             <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="accountNatures" [autoWidth]="false" appendTo="body" formControlName="accountNature"></p-dropdown>
+                    <label class="md-inputlabel-2">Account Nature</label>                    
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <p-checkbox binary="true" formControlName="parent"></p-checkbox>
+                    <span class="taskName">Parent GL</span>                                                  
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-2">
+                <button type="button" pButton (click)="dt.reset();searchGlAccounts(0);" label="Search"></button>
+                <!-- <button type="button" pButton (click)="clear()" label="Clear"></button> -->
+            </div>
+
+        </div>
+    </div>
+
+    <p-dataTable [rows]="20" [paginator]="true" [totalRecords]="totalRecords" [lazy]="true" [value]="glAccountsSearchResults" selectionMode="single" 
+         [(selection)]="selectedGlAccount" (onRowSelect)="handleGlAccountSelect($event)" (onLazyLoad)="fetchGlAccountLazily($event)" #dt>
+        <p-column field="name" header="Name"></p-column>
+        <p-column field="code" header="Code"></p-column>
+        <p-column field="parent" header="Parent">
+           <ng-template let-col let-rowData="rowData" pTemplate="body">
+                <i class='material-icons-done-close'>
+                                {{rowData.parent? "done":"close"}}</i>
+           </ng-template>
+        </p-column>
+        <p-column field="type" header="Type"></p-column>
+        <p-column field="subType" header="SubType"></p-column>
+        <p-column field="accountNature" header="Account Nature"></p-column>
+    </p-dataTable>
+
+</p-dialog>    

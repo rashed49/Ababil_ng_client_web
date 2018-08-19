@@ -1,0 +1,98 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Identity : {{identityType.typeName}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()" [disabled]="formsInvalid()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <form class="ui-g ui-fluid form-group" [formGroup]="identityTypeForm">
+            <div class="ui-g-12 ui-md-12 content-section implementation">
+                <p-dropdown [options]="identityTypes" [autoWidth]="false" formControlName="identitySubjectType"></p-dropdown>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <span class="md-inputfield">
+                    <input type="text" formControlName="typeName" pInputText>
+                    <label>Type name</label>
+                </span>
+            </div>
+        </form>
+
+        <br/>
+
+        <span class="ababil-toolbar-header">Attributes</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Add" icon="ui-icon-plus" class="default-btn" (click)="editAttribute(null,null)" *ngIf="!attributeEditView"></button>
+            <button pButton type="button" label="Done" icon="ui-icon-save" class="default-btn" (click)="done()" [disabled]="attributeformInvalid()"
+                *ngIf="attributeEditView"></button>
+            <button pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn" (click)="cancelAdd()" *ngIf="attributeEditView"></button>
+        </div>
+
+        <br/>
+        <hr>
+
+        <form class="ui-g ui-fluid form-group" [formGroup]="attributeForm" *ngIf="attributeEditView">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" formControlName="attributeName" pInputText>
+                    <label>Attribute name</label>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <p-dropdown [options]="attributeTypes" [autoWidth]="false" formControlName="attributeDataType"></p-dropdown>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p-checkbox binary="true" formControlName="mandatory"></p-checkbox>
+                        <span class="task-name">Mandatory</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="number" formControlName="length" pInputText>
+                    <label>Attribute data length</label>
+                </span>
+            </div>
+        </form>
+
+        <p-dataTable [value]="identityType.identityAdditionalAttributes" #dt *ngIf="!attributeEditView">
+            <p-column field="attributeName" header="Attribute Name"></p-column>
+            <p-column field="attributeDataType" header="Data Type">
+                <ng-template let-col let-rowData="rowData" pTemplate="body">
+                    <div align="center">
+                        {{rowData.attributeDataType=='STRING'?'TEXT':rowData.attributeDataType}}
+                    </div>
+                </ng-template>
+            </p-column>
+            <p-column field="length" header="Length"></p-column>
+            <p-column header="Edit">
+                <ng-template let-col let-rowData="rowData" let-i="rowIndex" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton (click)="editAttribute(rowData,i)" tooltipPosition="top" icon="ui-icon-create" align="center"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+            <p-column header="Delete">
+                <ng-template let-col let-i="rowIndex" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton (click)="deleteAttribute(i)" tooltipPosition="top" icon="ui-icon-close"></button>
+                    </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+
+    </div>
+</div>

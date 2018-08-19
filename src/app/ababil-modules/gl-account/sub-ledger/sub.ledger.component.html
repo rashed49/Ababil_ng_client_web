@@ -1,0 +1,76 @@
+<gl-account-lookup [display]="glAccountLookUpDisplay" [resultType]="glAccountLookUpMode" (onSelect)="onSearchResult($event)"
+    (onClose)="onSearchModalClose($event)"></gl-account-lookup>
+
+    <!-- <sub-ledger-lookup [display]="glAccountLookUpDisplay" (onSelect)="onSubGlSearchResult($event)"
+    (onClose)="onSearchModalClose($event)"></sub-ledger-lookup> -->
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Subsidiary Ledger</span>
+
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Add subsidiary ledger" icon="ui-icon-plus" class="default-btn"
+                    (click)="createSubLedger()" *ngIf="generalLedgerAccountId"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-card style="margin-top: 50px">
+    <mat-card-title>Accounts</mat-card-title>
+    <br/>
+    
+
+
+        <div style="display: flex; flex-direction: row; width: 100%;">
+        <div style="flex: 1; margin-right: 22px;">
+            <span class="md-inputfield">
+        <input type="text" pInputText [(ngModel)]="generalLedgerAccountCode" readonly/>
+        <label>GL Code</label>
+    </span>
+    </div>
+    <div style="flex: 4; margin-right: 10px;">
+        <span class="md-inputfield">
+    <input type="text" pInputText [(ngModel)]="generalLedgerAccountName" size="60" 
+    readonly/>
+    <label>GL name</label>
+</span>
+</div>
+<div style="flex: 7;">
+    <button pButton type="button" icon="ui-icon-search" class="default-btn" (click)="searchGlAccount()">
+    </button>
+</div>
+        </div>
+
+
+    <p-dataTable [value]="subLedgers" selectionMode="single" [style]="{'margin-top':'50px'}" [lazy]="true" dataKey="id" [rows]="20"
+        [paginator]="true" [totalRecords]="totalRecords" (onLazyLoad)="loadSubLedgerLazy($event)" (onRowSelect)="onRowSelect($event)"
+        #dt>
+
+        <p-column field="code" header="Code" [filter]="true" filterPlaceholder="Search"></p-column>
+        <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+        <p-column field="generalLedgerAccountId" header="General Ledger Account Id" [filter]="true" filterPlaceholder="Search"></p-column>
+        <p-column field="branchId" header="Branch" [filter]="true" filterPlaceholder="Search"></p-column>
+
+    </p-dataTable>
+</mat-card>
+
+<p-dialog [positionTop]=100 [contentStyle]="{'overflow':'visible'}" [closable]="false" [(visible)]="display"
+    modal="modal" responsive="true" [width]="800" appendTo="body">
+    <p-header style="font-weight: 600">
+        Subsidiary Ledger Creation
+    </p-header>
+
+    <sub-ledger-form [generalLedgerAccountId]="generalLedgerAccountId" #form></sub-ledger-form>
+
+    <hr>
+    <div style="padding: 0px 0px 10px 0px;float: right;">
+        <button style="background: #299788; color: white;" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn"
+            (click)="save()"></button>
+        <button style="background: #299788; color: white;" pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn"
+            (click)="dialogcancel()"></button>
+    </div>
+</p-dialog>

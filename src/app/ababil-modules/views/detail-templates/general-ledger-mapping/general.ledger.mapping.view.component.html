@@ -1,0 +1,48 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">General ledgerof Product: {{product.name}}</span>
+
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+
+    <mat-card>
+        <div class="ui-g">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th>Product code</th>
+                    <td>{{product.code}}</td>
+                </tr>
+                <tr>
+                    <th>Product description</th>
+                    <td>{{product.description}}</td>
+                </tr>
+            </table>
+        </div>
+    </mat-card>
+
+    <mat-card style="flex: 1;">
+        <div style="display: flex; flex-direction: column; width: 100%;">
+            <p-dataTable [value]="productGeneralLedgerMapping" dataKey="id" #dt>
+                <p-column field="generalLedgerTypeName" header="General ledger type name"></p-column>
+                <p-column field="generalLedgerName" header="General ledger name">
+                    <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="body">
+                        {{ data.generalLedgerName}} ( {{data.generalLedgerCode}} )
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+    </mat-card>
+
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

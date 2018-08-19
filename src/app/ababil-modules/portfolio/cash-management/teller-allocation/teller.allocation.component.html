@@ -1,0 +1,38 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Teller Allocation</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Create" type="button" icon="ui-icon-plus" class="default-btn" (click)="create()"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<mat-card>
+    <mat-card-title>Allocated tellers:</mat-card-title>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="tellerAllocations" [lazy]="true" (onLazyLoad)="loadTellerAllocationsLazy($event)" [paginator]="true"
+            selectionMode="single" [rows]="20" [totalRecords]="totalRecords" (onRowSelect)="onRowSelect($event)" #dt>
+            <p-column field="allocatedTo" header="Allocated To" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="teller.title" header="Teller" [filter]="true" filterPlaceholder="Search"></p-column>
+            <p-column field="autoAllocate" header="Auto Allocation" [filter]="true" filterPlaceholder="Search">
+                <ng-template  align="center" let-col let-data="rowData" pTemplate="body">
+                    <i class='material-icons-done-close'>
+                        {{data.autoAllocate? "done":"close"}}</i>
+                </ng-template>
+            </p-column>
+            <p-column header="Delete">
+                    <ng-template let-rowIndexValue="rowIndex" let-data="rowData" pTemplate="body">
+                        <div align="center">
+                            <button type="text" (click)="deleteTeller(data)" pButton icon="ui-icon-delete"></button>
+                        </div>
+                    </ng-template>
+                </p-column>
+        </p-dataTable>
+    </div>
+</div>
+</mat-card>
+
+<p-confirmDialog header="Delete teller allocation entry" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

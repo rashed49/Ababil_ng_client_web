@@ -1,0 +1,62 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Demand deposit product cheque prefix</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Refresh" type="button" icon="ui-icon-refresh" class="default-btn"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="ui-g ui-fluid form-group" [formGroup]='chequePrefixForm'>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h3>
+                            <b>Cheque Book Size</b>
+                        </h3>
+                        <br>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-5">
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="ui-g-12 ui-md-5">
+                                <span class="md-inputfield">
+                                    <input type="text" pInputText formControlName="prefix">
+                                    <label>Prefix</label>
+                                </span>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="ui-g-12 ui-md-2">
+                                <button pButton type="button" label="Add" icon="ui-icon-plus" class="default-btn" (click)="create()">
+                                </button>
+                            </div>
+                        </div>
+                        <p-dataTable [value]="chequePrefixes" selectionMode="single" dataKey="id" [totalRecords]="totalRecords" #dt>
+                            <p-column field="id" header="Serial"></p-column>
+                            <p-column field="prefix" header="Cheque Prefix"></p-column>
+                            <p-column header="Action">
+                                <ng-template let-col let-i="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" pButton icon="ui-icon-delete" (click)="deleteChequePrifix(i)" tooltipPosition="top"></button>
+                                    </div>
+                                </ng-template>
+
+                            </p-column>
+                        </p-dataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

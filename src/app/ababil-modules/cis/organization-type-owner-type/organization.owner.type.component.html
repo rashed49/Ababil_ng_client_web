@@ -1,0 +1,89 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Organization Type & Owner Type Mapping</span>
+    </div>
+</div>
+<br/>
+<br/>
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <div class="ui-g-12 ui-md-6">
+
+
+            <mat-card style="margin-right: 5px;">
+
+                <mat-card-title style="display: flex;flex-direction: row">
+                    <div style="flex:1">Organization Types:</div>
+                    <div align="right">
+                        <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add Organization Type" tooltipPosition="top"
+                            (click)="popOrganizationTypeCreateUi()"></button>
+                    </div>
+                </mat-card-title>
+
+                <p-dataTable [value]="organizationTypes" selectionMode="single" (onRowSelect)="onOrgRowSelect($event)">
+
+                    <p-column field="typeName" [sortable]="true" header=" Type Name" [style]="{'text-align':'center'}"></p-column>
+
+                    <p-column header="Correction">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            <div align="center">
+                                <button type="button" pButton tooltipPosition="top" icon="ui-icon-edit" (click)="organizationTypeCorrection(data)"></button>
+                            </div>
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+
+            </mat-card>
+
+        </div>
+        <div class="ui-g-12 ui-md-6">
+
+            <mat-card style="margin-right: 5px;">
+
+                <mat-card-title style="display: flex;flex-direction: row">
+                    <div style="flex:1">Owner Types:</div>
+                    <div align="right" *ngIf="showOwnerTypeCreateButton">
+                        <button pButton type="button" icon="ui-icon-plus" class="default-btn" pTooltip="Add Owner Type" tooltipPosition="top" (click)="popOwnerTypeCreateUi()"></button>
+                    </div>
+                </mat-card-title>
+
+                <p-dataTable [value]="ownerTypes" selectionMode="single">
+
+                    <p-column field="name" [sortable]="true" header=" Type Name" [style]="{'text-align':'center'}"></p-column>
+
+                    <p-column header="Correction">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            <div align="center">
+                                <button type="button" pButton tooltipPosition="top" icon="ui-icon-edit" (click)="ownerTypeCorrection(data)"></button>
+                            </div>
+                        </ng-template>
+                    </p-column>
+
+                </p-dataTable>
+
+            </mat-card>
+
+        </div>
+    </div>
+</div>
+
+<p-dialog [closable]="false" positionTop="50" header="Organization Type" [(visible)]="orgTypeDisplay" modal="modal" [responsive]="true"
+    [width]="400">
+    <organization-type-create #childOrganizationType></organization-type-create>
+
+    <div style="float:right">
+        <button type="button" class="default-btn" pButton icon="ui-icon-save" (click)="saveOrgType()" label="Save"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" (click)="orgCancel()" label="Cancel"></button>
+    </div>
+</p-dialog>
+
+<p-dialog [closable]="false" positionTop="50" header="Owner Type" [(visible)]="ownTypeDisplay" modal="modal" [responsive]="true"
+    [width]="400">
+    <owner-type-create #childOwnerType></owner-type-create>
+
+    <div style="float:right">
+        <button type="button" class="default-btn" pButton icon="ui-icon-save" (click)="saveOwnerType()" label="Save"></button>
+        <button type="button" class="default-btn" pButton icon="ui-icon-cancel" (click)="ownCancel()" label="Cancel"></button>
+    </div>
+</p-dialog>

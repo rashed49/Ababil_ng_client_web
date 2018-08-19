@@ -1,0 +1,146 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Withdrawal Transaction</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="updateFixedDepositWithdrawalTransaction()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="ui-g ui-fluid">
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex:3">
+            <mat-card-title>Fixed Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Lien Amount</th>
+                            <td>{{lienAmount | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th>Quard Amonut</th>
+                            <td>{{quardAmount | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Current Balance</th>
+                            <td class="ui-lg-3">{{ (fixedDepositAccount.fixedDepositAccountBalance) ? (fixedDepositAccount.fixedDepositAccountBalance.balance
+                                | number:'1.2-2') : ""}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+        <mat-card style="margin-right: 5px;flex:3">
+            <mat-card-title>Demand Deposit Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{DemandDepositAccount.number}}</td>
+                        </tr>
+                        <tr>
+                            <th>Lien Amount</th>
+                            <td>{{((lienAmonut)?(lienAmonut):0) | number:'1.2-2' : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Current Balance</th>
+                            <td class="ui-lg-3">{{((availableBalance)?(availableBalance):0) | number:'1.2-2' : ""}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card style="margin-right: 10px;flex: 3">
+            <mat-card-title>Withdrawal Mapping Information</mat-card-title>
+
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Withdrawal Limit</th>
+                            <td>{{((withdrawalAdvice.withdrawalLimit) ?(withdrawalAdvice.withdrawalLimit):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Recovered Amount</th>
+                            <td class="ui-lg-3">{{((withdrawalAdvice.recoveredAmount) ?(withdrawalAdvice.recoveredAmount):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                        <tr>
+                            <th class="ui-lg-3">Withdrawal Amount</th>
+                            <td class="ui-lg-3">{{((withdrawalAdvice.withdrawnAmount) ?(withdrawalAdvice.withdrawnAmount):0) | number:'1.2-2'
+                                : ""}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <form style="display: flex;flex-direction: row;width:100%;padding-bottom:12px" [formGroup]="fixedDepositWithdrawalTransactionForm">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Transactional Information</mat-card-title>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-3" style="margin-top:18px">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="TransectionTypes" appendTo="body" [autoWidth]="false" [(ngModel)]="selectedTransactionType" [ngModelOptions]="{standalone: true}"
+                            (onChange)="showChequeInformation()" required #transactionType="ngModel" name="transactionType"></p-dropdown>
+                        <label class="md-inputlabel-2">Transaction Type </label>
+                        <div *ngIf="transactionType.errors && !transactionType.prestine && transactionTypeCall">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!transactionType.errors.required"> Transaction type is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" style="margin-top:18px">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText currencyMask [options]="{ prefix: '',allowNegative: false,align:'right' }" formControlName="transactionAmount">
+                        <label>Amount</label>
+                        <div *ngIf="fixedDepositWithdrawalTransactionForm.controls['transactionAmount'].errors && !fixedDepositWithdrawalTransactionForm.controls['transactionAmount'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalTransactionForm.controls['transactionAmount'].errors.required">Amonut is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <textarea style="opacity: 1;" pInputTextarea [(ngModel)]="amountInWords" [ngModelOptions]="{standalone: true}" [disabled]="true"
+                            placeholder="Amount in words"></textarea>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-4" *ngIf="showChequeInfo">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="instrumentNumber" (keyup.enter)="formatInstrumentNumber()" (blur)="formatInstrumentNumber()">
+                        <label>Cheque Number</label>
+                        <div *ngIf="fixedDepositWithdrawalTransactionForm.controls['instrumentNumber'].errors && !fixedDepositWithdrawalTransactionForm.controls['instrumentNumber'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalTransactionForm.controls['instrumentNumber'].errors.required">Cheque number is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4" *ngIf="showChequeInfo">
+                    <span class="md-inputfield">
+                        <p-calendar appendTo="body" [maxDate]="today" [showIcon]="true" hourFormat="12" monthNavigator="true" yearNavigator="true"
+                            yearRange="1900:2050" readonlyInput="true" utc="true" formControlName="instrumentDate"></p-calendar>
+                        <label>Cheque Date</label>
+                        <div *ngIf="fixedDepositWithdrawalTransactionForm.controls['instrumentDate'].errors && !fixedDepositWithdrawalTransactionForm.controls['instrumentDate'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!fixedDepositWithdrawalTransactionForm.controls['instrumentDate'].errors.required">Cheque date is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="narration">
+                        <label>Narration</label>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </form>
+</div>

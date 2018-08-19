@@ -1,0 +1,259 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Fixed Deposit Account</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Signature" icon="ui-icon-gesture" (click)="goToSignature()"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Customer Name</th>
+                        <td class="ui-lg-3">{{customer.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account No</th>
+                        <td>{{fixedDepositAccount.number}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Code</th>
+                        <td>{{productDetails.code}}</td>
+                    </tr>
+
+                    <!-- <tr>
+                        <th>Open Date</th>
+                        <td>{{fixedDepositAccount.openingDate | date:'medium'}}</td>
+                    </tr> -->
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Currency</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.currencyCode}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Account Status</th>
+                        <td>{{fixedDepositAccount.status}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Product Description</th>
+                        <td>{{productDetails.description}}</td>
+                    </tr>
+
+                    <!-- <tr>
+                        <th>Last Transaction Date</th>
+                        <td>{{ (fixedDepositAccount.balance) ? (fixedDepositAccount.balance.lastClientTransactionDate | date:'medium')
+                            : "" }}</td>
+                    </tr> -->
+                </table>
+            </div>
+
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-12">
+                <h6>Tenor:</h6>
+                <hr/>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <!-- <tr>
+                        <th class="ui-lg-3">Tenor Type</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.tenorType}}</td>
+                    </tr> -->
+                    <tr>
+                        <th class="ui-lg-3">Tenor</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.tenor}} ({{fixedDepositAccount.tenorType}}) </td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Initial Deposit</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.initialDeposit}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Renewal Tenor</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.renewalTenor}} ({{fixedDepositAccount.tenorType}})</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Renewal Option</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.renewalOption}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Renewal Principal</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.renewalPrincipal}}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-12">
+                <h6>Introducer and Link Accounts:</h6>
+                <hr/>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Link Account Number</th>
+                        <td class="ui-lg-3">{{linkAccountDetail.number}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Link Account Name</th>
+                        <td class="ui-lg-3">{{linkAccountDetail.name}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Introducer Account Number</th>
+                        <td class="ui-lg-3">{{introducerDetail.number}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Introducer Account Name</th>
+                        <td class="ui-lg-3">{{introducerDetail.name}}</td>
+                    </tr>
+
+
+                </table>
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-12">
+                <h6>Account opening information:</h6>
+                <hr/>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Account opening purpose</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.purpose}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Account opening channel</th>
+                        <td class="ui-lg-3">{{accountOpeningChannel.channelName}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Relationship manager</th>
+                        <td class="ui-lg-3">{{fixedDepositAccount.relationshipManager}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-12">
+                <h6>Nominees:</h6>
+                <hr/>
+            </div>
+            <p-dataTable [value]="nominees" selectionMode="single" [(selection)]="selectedNominee" (onRowSelect)="goToNomineeDetail()"
+                #dt>
+                <p-column [style]="{'text-align':'left'}" field="individualId" header="Nominee Name">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        {{nomineeName(rowData.individualId)}}
+                    </ng-template>
+                </p-column>
+                <p-column [style]="{'text-align':'left','width':'200px'}" field="relationWithAccountHolder" header="Relation with account holder">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        {{rowData.relationWithAccountHolder}}
+                    </ng-template>
+                </p-column>
+                <p-column [style]="{'text-align':'center','width':'200px'}" field="sharePercentage" header="Share Percentage">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        {{rowData.sharePercentage}}%
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+            <br>
+            <br>
+        </div>
+
+        <div class="ui-g-12">
+            <div class="ui-g-12 ui-md-12">
+                <h6>Contact information and address:</h6>
+                <hr/>
+            </div>
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Phone number</th>
+                        <td class="ui-lg-3">{{contactInformation.phoneNumber}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Mobile number</th>
+                        <td class="ui-lg-3">{{contactInformation.mobileNumber}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Alternate mobile number</th>
+                        <td class="ui-lg-3">{{contactInformation.alternateMobileNumber}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Email</th>
+                        <td class="ui-lg-3">{{contactInformation.email}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Fax</th>
+                        <td class="ui-lg-3">{{contactInformation.fax}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th class="ui-lg-3">Address</th>
+                        <td class="ui-lg-3">{{address.addressLine}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Country</th>
+                        <td class="ui-lg-3">{{country.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Division</th>
+                        <td class="ui-lg-3">{{division.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">District</th>
+                        <td class="ui-lg-3">{{district.name}}</td>
+                    </tr>
+                    <tr>
+                        <th class="ui-lg-3">Upazilla</th>
+                        <td class="ui-lg-3">{{upazilla.name}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>
+    </div>
+</mat-card>

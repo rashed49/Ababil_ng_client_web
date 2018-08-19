@@ -1,0 +1,240 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Inland remittance charge configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+
+<div style="display: flex; flex-direction: column; width: 100%;">
+
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1">
+            <mat-card-title>Charge configuration:</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">Product name</th>
+                                <td class="ui-lg-3" align="center">{{chargeConfiguration.inlandRemittanceProduct.name}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Charge GL</th>
+                                <td align="center">{{chargeConfiguration.chargeGl}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>VAT GL</th>
+                                <td align="center">{{chargeConfiguration.vatGl}}</td>
+                            </tr>
+
+                            <tr *ngIf="!chargeConfiguration.defaultConfiguration">
+                                <th>Currency code</th>
+                                <td align="center">{{chargeConfiguration.currencyCode}}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="ui-g-6">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th class="ui-lg-3">Default configuration</th>
+                                <td class="ui-lg-3" align="center">
+                                    <i class='material-icons-done-close'> {{chargeConfiguration.defaultConfiguration? "done":"close"}}</i>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Calculation currency</th>
+                                <td align="center">{{chargeConfiguration.calculationCurrency | sentenceCasePipe}}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Transaction currency</th>
+                                <td align="center">{{chargeConfiguration.transactionCurrency | sentenceCasePipe}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1;">
+            <mat-card-title>Charge calculation:</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Slab based</th>
+                            <td class="ui-lg-3" align="center">
+                                <i class='material-icons-done-close'> {{chargeConfiguration.inlandRemittanceChargeCalculationInfo.slabBased? "done":"close"}}</i>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!chargeConfiguration.inlandRemittanceChargeCalculationInfo.slabBased">
+                            <th>Fixed charge</th>
+                            <td align="center">
+                                <i class='material-icons-done-close'> {{chargeConfiguration.inlandRemittanceChargeCalculationInfo.fixed? "done":"close"}}</i>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!chargeConfiguration.inlandRemittanceChargeCalculationInfo.slabBased">
+                            <th>Charge amount {{chargeConfiguration.inlandRemittanceChargeCalculationInfo.fixed?'':'(%)'}}</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceChargeCalculationInfo.chargeAmount | number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngIf="chargeConfiguration.inlandRemittanceChargeCalculationInfo.minCharge">
+                            <th>Minimum charge</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceChargeCalculationInfo.minCharge | number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngIf="chargeConfiguration.inlandRemittanceChargeCalculationInfo.maxCharge">
+                            <th>Maximum charge</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceChargeCalculationInfo.maxCharge | number:'1.2-2'}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div *ngIf="chargeConfiguration.inlandRemittanceChargeCalculationInfo.slabBased">
+                    <br>
+                    <mat-card-title>Slab based charge configuration list:</mat-card-title>
+
+                    <p-dataTable [value]="chargeConfiguration.inlandRemittanceChargeCalculationInfo.inlandRemittanceSlabChargeConfigs" [responsive]="true">
+                        <p-column field="fromAmount" header="From amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.fromAmount)? (data.fromAmount | number:'1.2-4'):(data.fromAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="toAmount" header="To amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.toAmount)? (data.toAmount | number:'1.2-4'):(data.toAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="fixed" header="Fixed">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                <div align="center">
+                                    <i class='material-icons-done-close'> {{rowData.fixed? "done":"close"}}</i>
+                                </div>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="chargeAmount" header="Charge amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.chargeAmount)? (data.chargeAmount | number:'1.2-4'):(data.chargeAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="minCharge" header="Minimum charge" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.minCharge)? (data.minCharge | number:'1.2-4'):(data.minCharge)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="maxCharge" header="Maximum charge" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.maxCharge)? (data.maxCharge | number:'1.2-4'):(data.maxCharge)}}
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+        <mat-card style="flex: 1;">
+            <mat-card-title>VAT calculation:</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Slab based</th>
+                            <td class="ui-lg-3" align="center">
+                                <i class='material-icons-done-close'> {{chargeConfiguration.inlandRemittanceVatCalculationInfo.slabBased? "done":"close"}}</i>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!chargeConfiguration.inlandRemittanceVatCalculationInfo.slabBased">
+                            <th>Fixed VAT</th>
+                            <td align="center">
+                                <i class='material-icons-done-close'> {{chargeConfiguration.inlandRemittanceVatCalculationInfo.fixed? "done":"close"}}</i>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="!chargeConfiguration.inlandRemittanceVatCalculationInfo.slabBased">
+                            <th>VAT amount {{chargeConfiguration.inlandRemittanceVatCalculationInfo.fixed?'':'(%)'}}</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceVatCalculationInfo.vatAmount | number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngIf="chargeConfiguration.inlandRemittanceVatCalculationInfo.minVat">
+                            <th>Minimum VAT</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceVatCalculationInfo.minVat | number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngIf="chargeConfiguration.inlandRemittanceVatCalculationInfo.maxVat">
+                            <th>Maximum VAT</th>
+                            <td align="right">{{chargeConfiguration.inlandRemittanceVatCalculationInfo.maxVat | number:'1.2-2'}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div *ngIf="chargeConfiguration.inlandRemittanceVatCalculationInfo.slabBased">
+                    <br>
+                    <mat-card-title>Slab based VAT configuration list: </mat-card-title>
+
+                    <p-dataTable [value]="chargeConfiguration.inlandRemittanceVatCalculationInfo.inlandRemittanceSlabVatConfigs" [responsive]="true">
+                        <p-column field="fromAmount" header="From amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.fromAmount)? (data.fromAmount | number:'1.2-4'):(data.fromAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="toAmount" header="To amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.toAmount)? (data.toAmount | number:'1.2-4'):(data.toAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="fixed" header="Fixed">
+                            <ng-template let-col let-rowData="rowData" pTemplate="body">
+                                <div align="center">
+                                    <i class='material-icons-done-close'> {{rowData.fixed? "done":"close"}}</i>
+                                </div>
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="vatAmount" header="VAT amount" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.vatAmount)? (data.vatAmount | number:'1.2-4'):(data.vatAmount)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="minVat" header="Minimum VAT" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.minVat)? (data.minVat | number:'1.2-4'):(data.minVat)}}
+                            </ng-template>
+                        </p-column>
+
+                        <p-column field="maxVat" header="Maximum VAT" [style]="{'text-align':'right'}">
+                            <ng-template let-col let-data="rowData" pTemplate="body">
+                                {{isNumber(data.maxVat)? (data.maxVat | number:'1.2-4'):(data.maxVat)}}
+                            </ng-template>
+                        </p-column>
+                    </p-dataTable>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+</div>

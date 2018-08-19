@@ -1,0 +1,85 @@
+<mat-card *ngFor="let fromGroupEntry of resultantFormGroupSet;let i = index" style="margin-top: 10px;margin-left:10px;margin-right:10px">
+
+    <mat-card-title>
+        <span class="ui-panel-title" style="font-size:16px;display:inline-block;margin-top:2px">{{fromGroupEntry.name}}</span>
+    </mat-card-title>
+
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-fluid form-group">
+                <div class="ui-g-12 ui-md-5">
+
+                        <div [formGroup]="formgroupMap.get(fromGroupEntry.id)">
+                            <div *ngFor="let property of fromGroupEntry.properties">
+                                
+                                <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Text'" style="margin-bottom: 12px">
+                                    <span class="md-inputfield">
+                                        <input type="text" pInputText [formControlName]="property.documentPropertyType.id+''">
+                                        <label>{{property.documentPropertyType.propertyName}}</label>
+                                        <div *ngIf="formgroupMap.get(fromGroupEntry.id) && formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].errors && !formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].pristine">
+                                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="formgroupMap.get(fromGroupEntry.id) && !formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].errors.required">{{property.documentPropertyType.propertyName}} is required.</div>
+                                        </div>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-12" *ngIf="property.documentPropertyType.propertyDataType=='Date'" style="margin-bottom: 12px">
+                                    <span class="md-inputfield">
+                                        <p-calendar [formControlName]="property.documentPropertyType.id+''" hourFormat="12" showButtonBar="true" monthNavigator="true"
+                                            yearNavigator="true" yearRange="1900:2050" utc="true" [maxDate]="maxBirthdayDate"></p-calendar>
+                                        <label>{{property.documentPropertyType.propertyName}}</label>
+                                    </span>
+                                    <div *ngIf="formgroupMap.get(fromGroupEntry.id) && formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].errors && !formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].pristine">
+                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="formgroupMap.get(fromGroupEntry.id) && !formgroupMap.get(fromGroupEntry.id).controls[property.documentPropertyType.id+''].errors.required">{{property.documentPropertyType.propertyName}} is required.</div>
+                                    </div>
+                                </div>
+                                                               
+                            </div>
+                        </div>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-7">
+                    <p-fileUpload [maxFileSize]="500000" accept=".jpg,.png,.doc,.docx,.xls,.xlsx,.pdf,.ppt,.txt" name="docFiles[]" mode="advanced" customUpload="true" (uploadHandler)="onFileUpload($event,i)"
+                    [showCancelButton]="false" #fileUploader></p-fileUpload>
+                </div>
+                <div class="ui-g-12 ui-md-12">
+
+                    <div class="ui-g ui-fluid form-group">
+                        <h6>Uploaded files:</h6>
+                        <div class="ui-g-12 ui-md-12" style="display: flex;flex-direction: row;flex-wrap: wrap;">
+                            <div *ngFor="let file of fromGroupEntry.doc.files;let fileIndex=index" style="margin-bottom:5px;margin-right:5px;">
+                                <div class="container" *ngIf="!file.type.includes('PDF')">
+                                    <img class="image" [src]="serviceUrl+'/documents/0/files/'+file.id" alt="Image" style="height: 60px" alt="Image not found"
+                                        onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" (click)="onFileClick(file,fileIndex,i)">
+                                </div>
+                                <div class="container" *ngIf="file.type.includes('PDF')">
+                                    <img class="image" [src]="'assets/images/pdfIcon.png'" alt="PDF file" style="height: 60px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/pdfIcon.png';"
+                                        (click)="onFileClick(file)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+
+<p-dialog header="Preview" [(visible)]="showImagePreview" [modal]="true" appendTo="body">
+    <img class="image" [src]="showImagePreview?(serviceUrl+'/documents/0/files/'+selectedFile.id):'assets/images/noimage.jpg'"
+        alt="Photo of a user" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" style="width:400px;height:300px">
+    <p-footer>
+        <a [href]="selectedFile?serviceUrl+'/documents/0/files/'+selectedFile.id:'assets/images/noimage.jpg'" download="test" style="float: left;margin-right: 15px;color:teal">Download</a>
+        <a href="javascript:void(0)" role="button" (click)="deleteDocument()" style="color:teal">Delete</a>
+    </p-footer>
+</p-dialog>
+
+
+<p-sidebar [(visible)]="showPdfPreview" [fullScreen]="true" appendTo="body">
+    <div style="margin: 0 auto;width:100%;text-align: center">
+        <a [href]="selectedFile?serviceUrl+'/documents/0/files/'+selectedFile.id:'assets/images/noimage.jpg'" download="test" style="margin-right: 15px;color:teal">Download</a>
+        <a href="javascript:void(0)" role="button" (click)="deleteDocument()" style="color:teal">Delete</a>
+    </div>
+    <iframe id="pdf-iframe" type="application/pdf" class="ui-g-12 ui-md-12" style="height: 900px;" #pdfIframe></iframe>
+</p-sidebar>

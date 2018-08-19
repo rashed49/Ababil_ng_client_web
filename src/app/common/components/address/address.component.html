@@ -1,0 +1,71 @@
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+    <form class="ui-g ui-fluid form-group" [formGroup]="addressForm">
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" name="addressLine" pInputText formControlName="addressLine"  maxlength="50" [attr.disabled]="viewMode ? 'disabled' : null"  >
+                <label>Address Line*</label>
+                <div *ngIf="addressForm.controls['addressLine'].errors && !addressForm.controls['addressLine'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!addressForm.controls['addressLine'].errors.required">Address is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!addressForm.controls['addressLine'].errors.pattern">Address is invalid.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!addressForm.controls['addressLine'].errors.maxlength">Maximum length of address is 50 characters.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown name="countryId" [options]="countries | countryPipe" [autoWidth]="false" [filter]="true" filterBy="label" (onChange)="onCountrySelected()"
+                    formControlName="countryId"  [disabled]="viewMode"></p-dropdown>
+                <div *ngIf="addressForm.controls['countryId'].errors && !addressForm.controls['countryId'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!addressForm.controls['countryId'].errors">Country is required.</div>
+                </div>
+                <label class="md-inputlabel-2">Country</label>
+            </span>
+        </div>
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield">
+                <input type="text" name="postCode" pInputText [(ngModel)]="postCode" [ngModelOptions]="{standalone: true}"  [attr.disabled]="viewMode ? 'disabled' : null" maxlength="50" (keyup.enter)="onPostCodeSelected()">
+                <label>Post code</label>
+            </span>
+        </div> 
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown name="divisionId" [options]="divisions | divisionPipe" [autoWidth]="false" [filter]="true" filterBy="label" (onChange)="onDivisionSelected()"
+                    formControlName="divisionId"  [disabled]="viewMode" ></p-dropdown>
+                <div *ngIf="addressForm.controls['divisionId'].errors && !addressForm.controls['divisionId'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!addressForm.controls['divisionId'].errors">Division is required.</div>
+
+                </div>
+                <label class="md-inputlabel-2">Division</label>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown name="districtId" [options]="districts | districtPipe" [autoWidth]="false" [filter]="true" filterBy="label" (onChange)="onDistrictSelected()"
+                    formControlName="districtId"  [disabled]="viewMode" ></p-dropdown>
+                <div *ngIf="addressForm.controls['districtId'].errors && !addressForm.controls['districtId'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!addressForm.controls['districtId'].errors">District is required.</div>
+                </div>
+                <label class="md-inputlabel-2">District</label>
+            </span>
+
+        </div>
+
+        <div class="ui-g-12 ui-md-6">
+            <span class="md-inputfield-2">
+                <p-dropdown name="upazillaId" [options]="upazillas | upazillaPipe" [autoWidth]="false" [filter]="true" filterBy="label" formControlName="upazillaId"
+             [disabled]="viewMode"></p-dropdown>
+                <div *ngIf="addressForm.controls['upazillaId'].errors && !addressForm.controls['upazillaId'].pristine">
+                    <div class="dropdown-error-msg" [hidden]="!addressForm.controls['upazillaId'].errors">Upazilla is required.</div>
+                </div>
+                <label class="md-inputlabel-2">Upazilla</label>
+            </span>
+        </div>
+
+
+    </form>
+    </div>
+</div>

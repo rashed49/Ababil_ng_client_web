@@ -1,0 +1,34 @@
+<p-dialog header="Approval flow" [(visible)]="showDialog" modal="modal" [responsive]="true" [width]="550" [minWidth]="200"
+    [closable]="false">
+
+    <div class="ui-g ui-fluid form-group" [formGroup]='approvalflowForm'>
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="code" name="code" #code>
+                <label>Code*</label>
+                <div *ngIf="approvalflowForm.controls['code'].errors && !approvalflowForm.controls['code'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!approvalflowForm.controls['code'].errors.required">Code is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!approvalflowForm.controls['code'].errors.minlength && !approvalflowForm.controls['code'].errors.maxlength">Code should be of 4 charachters.</div>
+                </div>
+            </span>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <span class="md-inputfield">
+                <input type="text" pInputText formControlName="name" name="name" #name>
+                <label>Name*</label>
+                <div *ngIf="approvalflowForm.controls['name'].errors && !approvalflowForm.controls['name'].pristine">
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!approvalflowForm.controls['name'].errors.required">Name is required.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!approvalflowForm.controls['name'].errors.minlength">Name should be at least 2 charachters.</div>
+                    <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!approvalflowForm.controls['name'].errors.maxlength">Name should be at most 32 charachters.</div>
+                </div>
+            </span>
+        </div>
+    </div>
+
+    <p-footer>
+        <button type="button" pButton icon="ui-icon-save" (click)="save()" label="Save"></button>
+        <button type="button" pButton icon="ui-icon-cancel" (click)="close()" label="Close"></button>
+    </p-footer>
+
+</p-dialog>

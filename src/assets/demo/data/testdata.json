@@ -1,0 +1,6 @@
+{
+    "data":[
+    {"id":0, "name":"GLAccountCreateCommand", "group":"GLAccount", "approvalflowId": 1},
+    {"id":1, "name":"GLAccountUpdateCommand", "group":"GLAccount", "approvalflowId": null},
+    {"id":2, "name":"GLAccountDeleteCommand", "group":"GLAccount", "approvalflowId": null}]
+}

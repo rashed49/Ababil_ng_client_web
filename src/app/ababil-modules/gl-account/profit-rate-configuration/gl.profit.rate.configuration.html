@@ -1,0 +1,99 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">GL account profit rate</span>
+
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton *ngIf="generalLedgerAccountId" type="button" label="Add profit rate" icon="ui-icon-plus" class="default-btn"
+                    (click)="createProfitRate()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-card style="margin-top: 50px">
+    <mat-card-title>Profit rate information</mat-card-title>
+    <div class="ui-g ui-fluid">
+        <div class="ui-g-12 ui-md-12" style="padding: 40px 0px 5px 0px">
+            <span class="md-inputfield-2">
+                <p-dropdown [options]="interBranchGlAccounts | generalLedgerPipe" [autoWidth]="false" [(ngModel)]="generalLedgerAccountId"
+                    (onChange)="fetchProfitRates(null)"></p-dropdown>
+                <label class="md-inputlabel-2">Interbranch general ledger account</label>
+            </span>
+        </div>
+    </div>
+    <p-dataTable expandableRows="true" *ngIf="generalLedgerAccountId" [value]="profitRates" sortField="effectiveDate" rowGroupMode="rowspan"
+        [style]="{'margin-top':'50px'}" [lazy]="true" dataKey="id" [rows]="20" [paginator]="true" [totalRecords]="totalRecords"
+        (onLazyLoad)="loadProfitRateLazy($event)"  #dt>
+        <p-column expander="true" styleClass="col-icon">
+        </p-column>
+
+        <p-column [style]="{'width':'12%'}" field="effectiveDate" header="Effective date" [filter]="true" filterPlaceholder="Search">
+            <ng-template let-row="rowData" pTemplate="body">
+                {{row.effectiveDate | date}}
+            </ng-template>
+        </p-column>
+        <p-column field="incomeGeneralLedgerAccountId" header="Income General Ledger Account" [filter]="true" filterPlaceholder="Search">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{incomeGlAccounts.get(data.incomeGeneralLedgerAccountId)}}
+            </ng-template>
+        </p-column>
+        <p-column field="expenseGeneralLedgerAccountId" header="Expense General Ledger Account" [filter]="true" filterPlaceholder="Search">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{expenseGlAccounts.get(data.expenseGeneralLedgerAccountId)}}
+            </ng-template>
+        </p-column>
+        <p-column field="landingRate" [style]="{'width':'8%'}" header="Lending rate"></p-column>
+        <p-column field="borrowingRate" [style]="{'width':'8%'}" header="Borrowing rate"></p-column>
+        <p-column header="Slab status" [style]="{'width':'10%', 'word-break': 'break-all'}">
+            <ng-template let-col let-slab="rowData" pTemplate="body">
+                {{slab.isSlabApplicable == true ? 'Slab based' : 'Non slab based'}}
+            </ng-template>
+        </p-column>
+        <p-column [style]="{'width':'5%'}" header="Edit">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="center">
+                    <button *ngIf="isPast(data.effectiveDate)" type="button" pButton tooltipPosition="top" icon="ui-icon-edit" class="default-btn"
+                        (click)=edit(data.id)></button>
+                </div>
+            </ng-template>
+        </p-column>
+        <ng-template let-profitRate pTemplate="rowexpansion">
+            <p-dataTable [style]="{'margin':'2%'}" [value]="profitRate.productProfitRateSlabs" *ngIf="profitRate.productProfitRateSlabs.length>0">
+                <p-column field="amountRangeFrom" header="Amount range from">
+                    <ng-template let-col let-slabdata="rowData" pTemplate="body">
+                        <div align="right">
+                            {{slabdata.amountRangeFrom | number:'1.2-4'}}
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="amountRangeTo" header="Amount range to">
+                    <ng-template let-col let-slabdata="rowData" pTemplate="body">
+                        <div align="right">
+                            {{slabdata.amountRangeTo | number:'1.2-4'}}
+                        </div>
+                    </ng-template>
+                </p-column>
+                <p-column field="landingRate" header="Lending Rate"></p-column>
+                <p-column field="borrowingRate" header="Borrowing Rate"></p-column>
+            </p-dataTable>
+        </ng-template>
+    </p-dataTable>
+</mat-card>
+
+<p-dialog [positionTop]=100 [contentStyle]="{'overflow':'visible'}" [closable]="false" *ngIf="generalLedgerAccountId" [(visible)]="display"
+    modal="modal" responsive="true" [width]="800" appendTo="body">
+    <p-header style="font-weight: 600">
+        Profit rate configuration
+    </p-header>
+    <gl-account-profit-rate-form [generalLedgerAccountId]="generalLedgerAccountId" [generalLedgerAccountProfitRateId]="generalLedgerAccountProfitRateId"
+        (onSave)="onProfitRateSaved($event)" #form></gl-account-profit-rate-form>
+        <hr>
+    <div style="padding: 0px 0px 10px 0px;float: right;">
+        <button style="background: #299788; color: white;" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn"
+            (click)="save()"></button>
+        <button style="background: #299788; color: white;" pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn"
+            (click)="dialogcancel()"></button>
+    </div>
+</p-dialog>

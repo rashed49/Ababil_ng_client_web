@@ -1,0 +1,67 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Demand deposit product cheque book size</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton label="Refresh" type="button" icon="ui-icon-refresh" class="default-btn" (click)="fetchDemandDepositProductChequeBookSizes()"></button>
+            <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <div class="ui-g ui-fluid form-group" [formGroup]='chequeBookSizeForm'>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h3>
+                            <b>Cheque Book Size</b>
+                        </h3>
+                        <br>
+                        <div class="ui-g">
+                            <div class="ui-g-12 ui-md-5">
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="ui-g-12 ui-md-5">
+                                <span class="md-inputfield">
+                                    <input type="number"  pInputText formControlName="bookSize" pKeyFilter="pnum">
+                                    <label>Book Size</label>
+                                </span>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="ui-g-12 ui-md-2">
+                                <button pButton type="button" label="Add" icon="ui-icon-plus" class="default-btn" (click)="create()">
+                                </button>
+                            </div>
+                        </div>
+                        <p-dataTable [value]="chequeBookSizes" selectionMode="single" dataKey="id" [totalRecords]="totalRecords" #dt>
+                            <p-column field="id" header="Serial"></p-column>
+                            <p-column field="bookSize" header="Book Size"></p-column>
+
+
+                            <p-column header="Action">
+                                <ng-template let-col let-i="rowData" pTemplate="body">
+                                    <div align="center">
+                                        <button type="button" pButton tooltipPosition="top" (click)="deleteCheckBookSize(i)" icon="ui-icon-delete"></button>
+                                    </div>
+                                </ng-template>
+                            </p-column>
+
+
+                        </p-dataTable>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="fa fa-question-circle" width="425" [closable]="false"></p-confirmDialog>

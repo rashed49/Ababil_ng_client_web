@@ -1,0 +1,17 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+        <form class="ui-g ui-fluid form-group" [formGroup]="organizationTypeForm">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="typeName" >
+                        <label>Organization Type Name*</label>
+                        <div *ngIf="organizationTypeForm.controls['typeName'].errors && !organizationTypeForm.controls['typeName'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationTypeForm.controls['typeName'].errors.required ">Organization Type Name is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

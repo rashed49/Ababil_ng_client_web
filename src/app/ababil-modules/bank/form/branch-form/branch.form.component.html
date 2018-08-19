@@ -1,0 +1,159 @@
+<verifier-selection [visible]="verifierSelectionModalVisible" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ui-g-12">
+
+        <div class="card card-w-title">
+
+            <p-toolbar>
+                <div class="ui-toolbar-group-left">
+                    <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Branch</label>
+                </div>
+                <div class="ui-toolbar-group-right">
+                    <button pButton type="button" label="Save" icon="ui-icon-plus" class="default-btn" (click)="submit()"></button>
+                    <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+                </div>
+            </p-toolbar>
+
+            <br/>
+
+
+            <div *ngIf="ownBank">
+                <div class="ui-g ui-fluid form-group" [formGroup]="ownBranchForm">
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="name">
+                            <label>Name</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="code">
+                            <label>Code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="phoneNumber">
+                            <label>Phone Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="mobileNumber">
+                            <label>Mobile Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="email">
+                            <label>Email</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="adCode">
+                            <label>Ad Code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="routingNumber">
+                            <label>Routing Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p-dropdown [options]="branchTypes" [autoWidth]="false" formControlName="branchType" pInputText></p-dropdown>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="swiftCode">
+                            <label>Swift Code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="managerName">
+                            <label>Manager Name</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="managerDesignation">
+                            <label>Manager Designation</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="number" pInputText formControlName="numberOfConcurrentUser">
+                            <label>Number Of Concurrent User</label>
+                        </span>
+                    </div>
+                    <div style="width:100%; margin-bottom: 10px;">
+                        <span>Address:</span>
+                        <address-component [address]='address' #addressComponent></address-component>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p-checkbox binary="false" label="Online" formControlName="online"></p-checkbox>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <p-checkbox binary="false" label="Head Office" formControlName="headOffice"></p-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="!ownBank">
+                <div class="ui-g ui-fluid form-group" [formGroup]="otherBranchForm">
+
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="name">
+                            <label>Name</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="code">
+                            <label>Code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="phoneNumber">
+                            <label>Phone Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="mobileNumber">
+                            <label>Mobile Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="email">
+                            <label>Email</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="adCode">
+                            <label>Ad Code</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-6">
+                        <span class="md-inputfield">
+                            <input type="text" pInputText formControlName="routingNumber">
+                            <label>Routing Number</label>
+                        </span>
+                    </div>
+                    <div class="ui-g-12 ui-md-12">
+                        <span>Address:</span>
+                        <address-component [address]='address' #addressComponent></address-component>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

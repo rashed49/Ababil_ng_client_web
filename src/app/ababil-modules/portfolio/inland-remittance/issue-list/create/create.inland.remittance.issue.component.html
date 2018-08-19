@@ -1,0 +1,375 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Create Issue</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="saveInlandRemittanceInstrumentInstrumentIssue()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<form class="ui-g-12 ui-fluid all" [formGroup]="createIssueForm">
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Basic Information</mat-card-title>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="inlandRemittanceProduct" appendTo="body" [autoWidth]="false" formControlName="inlandRemittanceProductId"
+                            name="inlandRemittanceProductId"></p-dropdown>
+                        <label class="md-inputlabel-2">Inland remittance product*</label>
+                        <div *ngIf="createIssueForm.controls['inlandRemittanceProductId'].errors && !createIssueForm.controls['inlandRemittanceProductId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['inlandRemittanceProductId'].errors.required">Inland remittance product is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="currencyCode" [autoWidth]="false" formControlName="currencyCode"></p-dropdown>
+                        <label class="md-inputlabel-2">Currency*</label>
+                        <div *ngIf="createIssueForm.controls['currencyCode'].errors && !createIssueForm.controls['currencyCode'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['currencyCode'].errors.required">Currency is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 2">
+
+            <mat-card-title>Purshaser Information</mat-card-title>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <span>
+                        <p-inputSwitch [(ngModel)]="samePurshaserChecker" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                        Same Purshaser Information
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserName">
+                        <label>Purshaser Name</label>
+                        <div *ngIf="createIssueForm.controls['purchaserName'].errors && !createIssueForm.controls['purchaserName'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserName'].errors.required">Purchaser name is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserName'].errors.pattern">Name format is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserMobile">
+                        <label>Purshaser mobile No</label>
+                        <div *ngIf="createIssueForm.controls['purchaserMobile'].errors && !createIssueForm.controls['purchaserMobile'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserMobile'].errors.required">Purchaser mobile number is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserMobile'].errors.pattern">Mobile number format is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserNid">
+                        <label>Purshaser NID No</label>
+                        <div *ngIf="createIssueForm.controls['purchaserNid'].errors && !createIssueForm.controls['purchaserNid'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserNid'].errors.required">Purchaser NID number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserAddress">
+                        <label>Purshaser Address</label>
+                        <div *ngIf="createIssueForm.controls['purchaserAddress'].errors && !createIssueForm.controls['purchaserAddress'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserAddress'].errors.required">Purchaser address is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+
+        <mat-card style="flex: 2">
+            <mat-card-title>Payee Information</mat-card-title>
+
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <span>
+                        <p-inputSwitch [(ngModel)]="samePayeeChecker" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                        Same Payee Information
+                    </span>
+                </div>
+            </div>
+            <br>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="payeeName">
+                        <label>payee Name</label>
+                        <div *ngIf="createIssueForm.controls['payeeName'].errors && !createIssueForm.controls['payeeName'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeName'].errors.required">Payee name is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeName'].errors.pattern">Name format is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="payeeMobile">
+                        <label>payee Mobile No</label>
+                        <div *ngIf="createIssueForm.controls['payeeMobile'].errors && !createIssueForm.controls['payeeMobile'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeMobile'].errors.required">Payee mobile number is required.</div>
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeMobile'].errors.pattern">Mobile number format is invalid.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="payeeNid">
+                        <label>payee NID No</label>
+                        <div *ngIf="createIssueForm.controls['payeeNid'].errors && !createIssueForm.controls['payeeNid'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeNid'].errors.required">Payee NID number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="payeeAddress">
+                        <label>payee Address</label>
+                        <div *ngIf="createIssueForm.controls['payeeAddress'].errors && !createIssueForm.controls['payeeAddress'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['payeeAddress'].errors.required">Payee address is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+        </mat-card>
+    </div>
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="margin-right: 5px;flex: 1">
+            <mat-card-title>Transaction Information</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-3" *ngIf="showExchangeRate">
+                    <span class="md-inputfield-2">
+                        <p-dropdown [options]="exchangeRateTypes" [autoWidth]="false" formControlName="exchangeRateTypeId"></p-dropdown>
+                        <label class="md-inputlabel-2">Exchange Rate Type</label>
+                        <div *ngIf="createIssueForm.controls['exchangeRateTypeId'].errors && !createIssueForm.controls['exchangeRateTypeId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['exchangeRateTypeId'].errors.required">Exchange rate type is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" *ngIf="showExchangeRate">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="exchangeRate">
+                        <label>Currency Rate</label>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3">
+                    <span class="md-inputfield">
+                        <input type="text" currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" pInputText formControlName="purchaseAmount"
+                            (keyup.enter)="fatchInladRemittanceCharges(amount.value)" #amount>
+                        <!-- (blur)="fatchInladRemittanceCharges(amount.value)" -->
+                        <label>Amount</label>
+                        <div *ngIf="(createIssueForm.controls['purchaseAmount'].value &&!createIssueForm.controls['inlandRemittanceProductId'].value ) || (!createIssueForm.controls['inlandRemittanceProductId'].value && createIssueForm.controls['inlandRemittanceProductId'].dirty) && (createIssueForm.controls['purchaseAmount'].value &&!createIssueForm.controls['currencyCode'].value ) || (!createIssueForm.controls['currencyCode'].value && createIssueForm.controls['currencyCode'].dirty)">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="createIssueForm.controls['inlandRemittanceProductId'].value && createIssueForm.controls['currencyCode'].value">Inland Remittance Product and Currency code is required.</div>
+                        </div>
+                        <div *ngIf="(createIssueForm.controls['inlandRemittanceProductId'].value && createIssueForm.controls['currencyCode'].value )">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="createIssueForm.controls['purchaseAmount'].value">Amount is required.</div>
+                        </div>
+                    </span>
+                </div>
+                <div class="ui-g-12 ui-md-3" *ngIf="showExchangeRate">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" formControlName="baseamount">
+                        <label> Base Currency amount</label>
+                    </span>
+                </div>
+
+                <p-dataTable [value]="inlandRemittanceChargeInformations" selectionMode="single">
+
+
+                    <p-column field="chargeName" header="name" [style]="{'text-align':'left','width':'180px'}"></p-column>
+                    <p-column header="Commission CCY">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.chargeAmount | number}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="chargeAmount" header="Commission CCY" [style]="{'text-align':'right'}"></p-column>
+                    <p-column field="commissionLCY" header="Commission LCY" [style]="{'text-align':'right'}"></p-column>
+                    <p-column field="vatAmount" header="VAT CCY" [style]="{'text-align':'right'}"></p-column>
+                    <p-column field="vatLCY" header="VAT LCY" [style]="{'text-align':'right'}"></p-column>
+                    <p-column field="totalAmount" header="Total CCY" [style]="{'text-align':'right'}"></p-column>
+                    <p-column field="totalAmountLCY" header="Total LCY" [style]="{'text-align':'right'}"></p-column>
+                </p-dataTable>
+
+                <div class="ui-g-12" style="border-top:1px solid black;text-align:right;margin-top:10px">
+                    <!-- <span>
+                        Total Amount : {{totalChargeLCY}}
+                    </span> -->
+                    <span>
+                        Total Amount : {{baseTotalAmount}}
+                    </span>
+
+                    <!-- <p>Total Amount : {{baseTotalAmount}}</p> -->
+                </div>
+
+            </div>
+        </mat-card>
+    </div>
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex: 1">
+            <mat-card-title>Debit Information</mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <span>
+                        <p-inputSwitch [(ngModel)]="sameDebitChecker" [ngModelOptions]="{standalone: true}"></p-inputSwitch>
+                        Same Debit Information
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <p-dropdown appendTo="body" [options]="purchaseMethod" [autoWidth]="false" formControlName="purchaseMethod"></p-dropdown>
+                        <div *ngIf="createIssueForm.controls['purchaseMethod'].errors && !createIssueForm.controls['purchaseMethod'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaseMethod'].errors.required">Purchase type is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserAccountNo">
+                        <label> Purshase Account Number</label>
+                        <div *ngIf="createIssueForm.controls['purchaserAccountNo'].errors && !createIssueForm.controls['purchaserAccountNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserAccountNo'].errors.required">Purchaser account number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-4" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaserChequeNo">
+                        <label>Cheque Nnumber</label>
+                        <div *ngIf="createIssueForm.controls['purchaserChequeNo'].errors && !createIssueForm.controls['purchaserChequeNo'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaserChequeNo'].errors.required">Purchaser cheque number is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-4" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <p-calendar hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true" utc="true"
+                            [minDate]="minStartDate" formControlName="chequeDate"></p-calendar>
+                        <label>Cheque Date</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-4">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="purchaseRemark">
+                        <label>Narration</label>
+                        <div *ngIf="createIssueForm.controls['purchaseRemark'].errors && !createIssueForm.controls['purchaseRemark'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createIssueForm.controls['purchaseRemark'].errors.required">Purchase remark is required.</div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-2" style="float:right" *ngIf="showAccountOptions">
+                <div class="ui-g-12 ui-md-12">
+                    <button pButton type="button" label="Signature" icon="ui-icon-gesture" class="default-btn" (click)="showSignature()"></button>
+                </div>
+            </div>
+        </mat-card>
+
+    </div>
+    <div class="ui-g-12 ui-md-1" style="float:right">
+        <div class="ui-g-12 ui-md-12">
+            <button pButton type="button" label="Add" icon="ui-icon-add" class="default-btn" (click)="addInlandRemittanceInstrumentInstrumentIssue()"></button>
+        </div>
+    </div>
+</form>
+
+<div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+    <mat-card style="margin-right: 5px;flex: 1">
+        <mat-card-title>Multiple Issue List </mat-card-title>
+        <p-dataTable [value]="inlandRemittanceInstrumentIssueInfoses">
+            <p-column header="Purshaser Name">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.purchaserName}}
+                </ng-template>
+            </p-column>
+            <p-column header="Purshaser Mobile">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.purchaserMobile}}
+                </ng-template>
+            </p-column>
+            <p-column header="Payee Name">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.payeeName}}
+                </ng-template>
+            </p-column>
+            <p-column header="Currency">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.instrumentCurrencyCode}}
+                </ng-template>
+            </p-column>
+            <p-column header="Amonut">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.purchaseAmount}}
+                </ng-template>
+            </p-column>
+
+            <p-column header="Delete">
+                <ng-template let-col let-i="rowIndex" let-data="rowData" pTemplate="body">
+                    <div align="center">
+                        <button type="button" pButton tooltipPosition="top" icon="ui-icon-delete" class="default-btn" (click)="deleteInlandRemittanceInstrumentInstrumentIssue()"></button>
+
+                    </div>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </mat-card>
+</div>
+
+
+<p-dialog header="Demand deposit account signature" [(visible)]="demandDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="signatureAccountId" [customerId]="signatureCustomerInputId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Fixed deposit account signature" [(visible)]="fixedDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="signatureFixedDepositAccountId" [customerId]="signatureFixedDepositCustomerInputId"></common-signature>
+</p-dialog>
+
+<p-dialog header="Recurring deposit account signature" [(visible)]="recurringDepositSignatureDisplay" [width]="900" modal="true"
+    closeOnEscape="true" dismissableMask="true" responsive="true" appendTo="body" maximizable="true">
+    <common-signature [accountId]="signatureRecurringDepositAccountId" [customerId]="signatureRecurringDepositCustomerInputId"></common-signature>
+</p-dialog>

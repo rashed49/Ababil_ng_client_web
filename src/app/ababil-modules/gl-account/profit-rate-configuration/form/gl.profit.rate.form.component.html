@@ -1,0 +1,288 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g" *ngIf="taskId">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Profit rate of {{generalLedgerAccountName}}</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="formcancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+
+
+
+
+
+
+<!-- correction page -->
+<div *ngIf="taskId">
+<mat-card  style="margin-bottom: 15px;" >
+    <mat-card-title>Basic configuration</mat-card-title>
+    <div class="ui-g ui-fluid form-group" [formGroup]="profitRateForm">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-calendar [minDate]="today" hourFormat="12" monthNavigator="true" [showIcon]="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                        utc="true" formControlName="effectiveDate"></p-calendar>
+                    <label class="md-inputlabel-2">Effective date</label>
+                    <div *ngIf="profitRateForm.controls['effectiveDate'].errors && !profitRateForm.controls['effectiveDate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['effectiveDate'].errors.required">Effective date is required.</div>
+                    </div>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="incomeGeneralLedgerAccount | generalLedgerPipe" [autoWidth]="false" formControlName="incomeGeneralLedgerAccountId"></p-dropdown>
+                    <label class="md-inputlabel-2">Income general ledger account</label>
+                    <div *ngIf="profitRateForm.controls['incomeGeneralLedgerAccountId'].errors && !profitRateForm.controls['incomeGeneralLedgerAccountId'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['incomeGeneralLedgerAccountId'].errors.required">Income general ledger account Id is required.</div>
+                    </div>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="expenseGeneralLedgerAccount | generalLedgerPipe" [autoWidth]="false" formControlName="expenseGeneralLedgerAccountId"></p-dropdown>
+                    <label class="md-inputlabel-2">Expense general ledger account</label>
+                    <div *ngIf="profitRateForm.controls['expenseGeneralLedgerAccountId'].errors && !profitRateForm.controls['expenseGeneralLedgerAccountId'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['expenseGeneralLedgerAccountId'].errors.required">Expense general ledger account Id is required.</div>
+                    </div>
+                </span>
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <p-checkbox binary="true" formControlName="isSlabApplicable"></p-checkbox>
+                <span>Slab applicable</span>
+            </div>
+
+            <div class="ui-g-12 ui-md-4" *ngIf="!isSlabApplicable">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="landingRate">
+                    <label>Lending rate*</label>
+                    <div *ngIf="profitRateForm.controls['landingRate'].errors && !profitRateForm.controls['landingRate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.required">Lending rate is required.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.max">Lending rate should be between 0 to 100.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.min">Lending rate 0 to 100.</div>
+                    </div>
+                </span>
+            </div>
+
+            <div class="ui-g-12 ui-md-4" *ngIf="!isSlabApplicable">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="borrowingRate">
+                    <label>Borrowing rate*</label>
+                    <div *ngIf="profitRateForm.controls['borrowingRate'].errors && !profitRateForm.controls['borrowingRate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.required">Borrowing rate is required.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.max">Borrowing rate should be between 0 to 100.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.min">Borrowing rate 0 to 100.</div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+</mat-card>
+<mat-card *ngIf="isSlabApplicable">
+<div > 
+    <mat-card-title>Slab configuration</mat-card-title>
+
+    <div class="ui-g" style="width:100%;">
+        <button *ngIf="isSlabApplicable" pButton type="button" label="Add Slab" icon="ui-icon-plus" class="default-btn"
+            (click)="addSlab()" style=" margin-bottom:10px;">
+        </button>
+    </div>
+
+    <p-dataTable [rowStyleClass]="showError" [value]="glSlabs" [editable]="true" *ngIf="isSlabApplicable" (onRowSelect)="console.log($event)">
+        <p-column field="amountRangeFrom" header="Amount range from" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="right">
+                    {{isNumber(data.amountRangeFrom)? (data.amountRangeFrom | number:'1.2-4'):(data.amountRangeFrom)}}
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" type="text" pInputText [(ngModel)]="data[col.field]" />
+                </div>
+            </ng-template>
+ 
+        </p-column>
+
+        <p-column field="amountRangeTo" header="Amount range to" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="right">
+                    {{isNumber(data.amountRangeTo)? (data.amountRangeTo | number:'1.2-4'):(data.amountRangeTo)}}
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" type="text" pInputText [(ngModel)]="data[col.field]"  (input)="onEditValidation(data,index)" [disabled]="index!=glSlabs.length-1 && glSlabs.length>1"
+                    />
+                </div>
+            </ng-template>
+        </p-column>
+
+        <p-column field="landingRate" header="Lending rate" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor" align="center">
+                <input maxlength="5" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" pKeyFilter="pnum" type="text" pKeyFilter="pnum" pInputText [(ngModel)]="data[col.field]" [(ngModel)]="landingRate" (input)="onEditValidation(data,index)"
+                    [disabled]="index!=glSlabs.length-1 && glSlabs.length>1" />
+            </ng-template>
+        </p-column>
+
+        <p-column field="borrowingRate" header="Borrowing rate" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor" align="center">
+                <input maxlength="5" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" pKeyFilter="pnum" type="text" pKeyFilter="pnum" pInputText [(ngModel)]="data[col.field]" [(ngModel)]="borrowingRate" (input)="onEditValidation(data,index)"
+                    [disabled]="index!=glSlabs.length-1 && glSlabs.length>1" />
+            </ng-template>
+        </p-column>
+
+        <p-column *ngIf="isSlabApplicable" header="Delete">
+            <ng-template let-rowIndexValue="rowIndex" pTemplate="body">
+                <div align="center">
+                    <button type="text" (click)="onDeleteRow()" pButton icon="ui-icon-delete" *ngIf="rowIndexValue==(glSlabs.length-1) && glSlabs.length>1"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+    </div>
+</mat-card>
+
+</div>
+
+<!-- Dialog box -->
+
+<div *ngIf="!taskId">
+    <div class="ui-g ui-fluid form-group" [formGroup]="profitRateForm">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-calendar [minDate]="today" hourFormat="12" monthNavigator="true" [showIcon]="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                        utc="true" formControlName="effectiveDate"></p-calendar>
+                    <label class="md-inputlabel-2">Effective date</label>
+                    <div *ngIf="profitRateForm.controls['effectiveDate'].errors && !profitRateForm.controls['effectiveDate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['effectiveDate'].errors.required">Effective date is required.</div>
+                    </div>
+                </span>
+            </div>
+    
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="incomeGeneralLedgerAccount | generalLedgerPipe" [autoWidth]="false" formControlName="incomeGeneralLedgerAccountId"></p-dropdown>
+                    <label class="md-inputlabel-2">Income general ledger account</label>
+                    <div *ngIf="profitRateForm.controls['incomeGeneralLedgerAccountId'].errors && !profitRateForm.controls['incomeGeneralLedgerAccountId'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['incomeGeneralLedgerAccountId'].errors.required">Income general ledger account Id is required.</div>
+                    </div>
+                </span>
+            </div>
+    
+            <div class="ui-g-12 ui-md-4">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="expenseGeneralLedgerAccount | generalLedgerPipe" [autoWidth]="false" formControlName="expenseGeneralLedgerAccountId"></p-dropdown>
+                    <label class="md-inputlabel-2">Expense general ledger account</label>
+                    <div *ngIf="profitRateForm.controls['expenseGeneralLedgerAccountId'].errors && !profitRateForm.controls['expenseGeneralLedgerAccountId'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['expenseGeneralLedgerAccountId'].errors.required">Expense general ledger account Id is required.</div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g-12 ui-md-4">
+                <p-checkbox binary="true" formControlName="isSlabApplicable"></p-checkbox>
+                <span>Slab applicable</span>
+            </div>
+    
+            <div class="ui-g-12 ui-md-4" *ngIf="!isSlabApplicable">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="landingRate">
+                    <label>Lending rate*</label>
+                    <div *ngIf="profitRateForm.controls['landingRate'].errors && !profitRateForm.controls['landingRate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.required">Lending rate is required.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.max">Lending rate should be between 0 to 100.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['landingRate'].errors.min">Lending rate 0 to 100.</div>
+                    </div>
+                </span>
+            </div>
+    
+            <div class="ui-g-12 ui-md-4" *ngIf="!isSlabApplicable">
+                <span class="md-inputfield">
+                    <input type="text" pInputText pKeyFilter="pnum" formControlName="borrowingRate">
+                    <label>Borrowing rate*</label>
+                    <div *ngIf="profitRateForm.controls['borrowingRate'].errors && !profitRateForm.controls['borrowingRate'].pristine">
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.required">Borrowing rate is required.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.max">Borrowing rate should be between 0 to 100.</div>
+                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!profitRateForm.controls['borrowingRate'].errors.min">Borrowing rate 0 to 100.</div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div *ngIf="isSlabApplicable">
+    <div class="ui-g" style="width:100%;">
+        <button *ngIf="isSlabApplicable" pButton type="button" label="Add Slab" icon="ui-icon-plus" class="default-btn"
+            (click)="addSlab()" style=" margin-bottom:10px;">
+        </button>
+    </div>
+    
+    <p-dataTable [rowStyleClass]="showError" [value]="glSlabs" [editable]="true" *ngIf="isSlabApplicable" (onRowSelect)="console.log($event)">
+        <p-column field="amountRangeFrom" header="Amount range from" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="right">
+                    {{isNumber(data.amountRangeFrom)? (data.amountRangeFrom | number:'1.2-4'):(data.amountRangeFrom)}}
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input  currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" type="text" pInputText [(ngModel)]="data[col.field]" />
+                </div>
+            </ng-template>
+        </p-column>
+    
+        <p-column field="amountRangeTo" header="Amount range to" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                <div align="right">
+                    {{isNumber(data.amountRangeTo)? (data.amountRangeTo | number:'1.2-4'):(data.amountRangeTo)}}
+                </div>
+            </ng-template>
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor">
+                <div align="center">
+                    <input  currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" type="text" pInputText [(ngModel)]="data[col.field]"  (input)="onEditValidation(data,index)" [disabled]="index!=glSlabs.length-1 && glSlabs.length>1"
+                    />
+                </div>
+            </ng-template>
+        </p-column>
+    
+        <p-column field="landingRate" header="Lending rate" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor" align="center">
+                <input maxlength="5" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" pKeyFilter="pnum" type="text" pKeyFilter="pnum" pInputText [(ngModel)]="data[col.field]" [(ngModel)]="landingRate" (input)="onEditValidation(data,index)"
+                    [disabled]="index!=glSlabs.length-1 && glSlabs.length>1" />
+            </ng-template>
+        </p-column>
+    
+        <p-column field="borrowingRate" header="Borrowing rate" [editable]="true" *ngIf="isSlabApplicable">
+            <ng-template let-col let-data="rowData" let-index="rowIndex" pTemplate="editor" align="center">
+                <input maxlength="5" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.'}" pKeyFilter="pnum" type="text" pKeyFilter="pnum" pInputText [(ngModel)]="data[col.field]" [(ngModel)]="borrowingRate" (input)="onEditValidation(data,index)"
+                    [disabled]="index!=glSlabs.length-1 && glSlabs.length>1" />
+            </ng-template>
+        </p-column>
+    
+        <p-column *ngIf="isSlabApplicable" header="Delete">
+            <ng-template let-rowIndexValue="rowIndex" pTemplate="body">
+                <div align="center">
+                    <button type="text" (click)="onDeleteRow()" pButton icon="ui-icon-delete" *ngIf="rowIndexValue==(glSlabs.length-1) && glSlabs.length>1"></button>
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+    </div>
+    

@@ -1,0 +1,87 @@
+<h6>
+    Total amount: {{(noteTotal + coinTotal) | number}} {{ tellerCurrencyCode}}
+</h6>
+<mat-tab-group dynamicHeight  [selectedIndex]="0">
+    <mat-tab label="Notes">
+        <p-dataTable [value]="DenominationNotes" [editable]="true" >
+            <p-column field="denomination.denominationValue" header="Denomination Value"></p-column>
+            <p-column field="quantity" header="Present quantity" *ngIf="denominationRequird"></p-column>
+            <p-column header="Present balance" *ngIf="denominationRequird">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{ (data.quantity * data.denomination.denominationValue) | number }}
+                </ng-template>
+            </p-column>
+            <p-column field="debitQuantity" header="Debit quantity" [editable]="true" *ngIf="debitChecker">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.debitQuantity}}
+                </ng-template>
+                <ng-template let-col let-data="rowData" pTemplate="editor" let-i="rowIndex">
+                    <input type="text" pInputText [(ngModel)]="data[col.field]" pKeyFilter="pint" #debit="ngModel" [attr.disabled]="receiveChecker ? receiveChecker : null" (keyup.enter)="update(debit.value,data,i)" (blur)="update(debit.value,data,i)">
+                </ng-template>
+            </p-column>
+            <p-column field="creditQuantity" header="Credit quantity" [editable]="true" *ngIf="creditChecker">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.creditQuantity}}
+                </ng-template>
+                <ng-template let-col let-data="rowData" pTemplate="editor" let-i="rowIndex">
+                    <input type="text" pInputText [(ngModel)]="data[col.field]" pKeyFilter="pint" #credit="ngModel" (keyup.enter)="update(credit.value,data,i)" (blur)="update(credit.value,data,i)">
+                </ng-template>
+            </p-column>
+            <p-column field="balanceQuantity" header="Balance quantity" *ngIf="denominationRequird">
+                <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                    {{DenominationNotes[i].balanceQuantity}}
+                </ng-template>
+            </p-column>
+            <p-column field="netBalance" header="Net balance">
+                <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                    {{DenominationNotes[i].netBalance | number}}
+                </ng-template>
+            </p-column>
+
+        </p-dataTable>
+        <h6>Note total: {{noteTotal | number}} {{ tellerCurrencyCode}}</h6>
+    </mat-tab>
+    <mat-tab label="Coins">
+        <p-dataTable [value]="DenominationCoins" [editable]="true">
+
+            <p-column field="denomination.denominationValue" header="Denomination Value"></p-column>
+            <p-column field="quantity" header="Present quantity" *ngIf="denominationRequird"></p-column>
+            <p-column header="Present balance" *ngIf="denominationRequird">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{ (data.quantity * data.denomination.denominationValue) | number }}
+                </ng-template>
+            </p-column>
+            <p-column field="debitCoinQuantity" header="Debit quantity" [editable]="true" *ngIf="debitChecker">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.debitCoinQuantity}}
+                </ng-template>
+                <ng-template let-col let-data="rowData" pTemplate="editor" let-i="rowIndex">
+                    <input pInputText  type="text" [(ngModel)]="data[col.field]" pKeyFilter="pint" #debitCoin="ngModel" [attr.disabled]="receiveChecker ? receiveChecker : null" (keyup.enter)="updateCoin(debitCoin.value,data,i) "
+                        (blur)="updateCoin(debitCoin.value,data,i)">
+                </ng-template>
+            </p-column>
+            <p-column field="creditCoinQuantity" header="Credit quantity" [editable]="true" *ngIf="creditChecker">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.creditCoinQuantity}}
+                </ng-template>
+                <ng-template let-col let-data="rowData" pTemplate="editor" let-i="rowIndex">
+                    <input pInputText type="text" [(ngModel)]="data[col.field]" pKeyFilter="pint" #creditCoin="ngModel" (keyup.enter)="updateCoin(creditCoin.value,data,i)"
+                        (blur)="updateCoin(creditCoin.value,data,i)">
+                </ng-template>
+            </p-column>
+            <p-column field="balanceQuantity" header="Balance quantity" *ngIf="denominationRequird">
+                <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                    {{DenominationCoins[i].balanceQuantity}}
+                </ng-template>
+            </p-column>
+            <p-column field="netBalance" header="Net balance">
+                <ng-template let-col let-data="rowData" let-i="rowIndex" pTemplate="body">
+                    {{DenominationCoins[i].netBalance | number}}
+                </ng-template>
+            </p-column>
+
+        </p-dataTable>
+        <h6>Coin total: {{coinTotal | number}} {{ tellerCurrencyCode}}</h6>
+    </mat-tab>
+
+</mat-tab-group>

@@ -1,0 +1,256 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Organization Owner</span>
+        <div class="ababil-toolbar-button-group">
+            <button type="button" pButton label="Search" icon="ui-icon-search" class="default-btn" (click)="organizationLookup.display=true"
+                *ngIf="!organization.id"></button>
+            <button type="button" pButton label="Save" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button type="button" pButton label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<organization-lookup #organizationLookup (onSelect)="onSelect($event)"></organization-lookup>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+
+        <form class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-12">
+                <label style="font-size: 14px">Share Percentage: {{sharedPercentage}}%</label>
+                <span class="md-inputfield">
+                    <p-slider [(ngModel)]="sharedPercentage" [min]="lowerLimit" [max]="upperLimit" name="sharedPercentage" [animate]="true" [disabled]="maxAssignableShare==0"></p-slider>
+                </span>
+            </div>
+        </form>
+
+        <div style="position: relative;padding-top:10px">
+            <form class="ui-fluid form-group" [formGroup]="organizationForm">
+                <mat-tab-group>
+
+                    <mat-tab label="Organization Information">
+                        <br/>
+                        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                            <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                                <mat-card-title>Basic Information:</mat-card-title>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+                                        <div class="ui-g ui-fluid form-group">
+
+                                            <div class="ui-g-12 ui-md-12">
+                                                <span class="md-inputfield">
+                                                    <input name="name" type="text" pInputText formControlName="orgName" maxlength="50">
+                                                    <label>Company Name*</label>
+                                                    <div *ngIf="organizationForm.controls['orgName'].errors && !organizationForm.controls['orgName'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgName'].errors.required">Company name is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgName'].errors.pattern">Company name is invalid.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgName'].errors.maxlength">Max length of company name is 50 characters.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield-2">
+                                                    <p-dropdown name="organizationTypeId" [options]="organizationTypes | organizationTypePipe" [autoWidth]="false" formControlName="orgType"
+                                                        [disabled]="!!organization.organizationTypeId"></p-dropdown>
+                                                    <label class="md-inputlabel-2">Organization Type*</label>
+                                                    <div *ngIf="organizationForm.controls['orgType'].errors && !organizationForm.controls['orgType'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgType'].errors.required">Organization type is required.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="phonenumber" type="text" pKeyFilter="pint" pInputText formControlName="orgContactPhoneNumber">
+                                                    <label>Phone Number</label>
+                                                    <div *ngIf="organizationForm.controls['orgContactPhoneNumber'].errors && !organizationForm.controls['orgContactPhoneNumber'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactPhoneNumber'].errors.required">Phone number is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactPhoneNumber'].errors.minlength">Minimum length of phone number is 11.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactPhoneNumber'].errors.maxlength">Miximum length of phone number is 13.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="mobilenumber" type="text" pKeyFilter="pint" pInputText formControlName="orgContactMobileNumber">
+                                                    <label>Mobile Number*</label>
+                                                    <div *ngIf="organizationForm.controls['orgContactMobileNumber'].errors && !organizationForm.controls['orgContactMobileNumber'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactMobileNumber'].errors.required">Mobile number is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactMobileNumber'].errors.minlength">Minimum length of mobile number is 11.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactMobileNumber'].errors.maxlength">Miximum length of mobile number is 13.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="altmobileumber" type="text" pKeyFilter="pint" pInputText formControlName="orgContactAlternateMobileNumber">
+                                                    <label>Alternate Number</label>
+                                                    <div *ngIf="organizationForm.controls['orgContactAlternateMobileNumber'].errors && !organizationForm.controls['orgContactAlternateMobileNumber'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactAlternateMobileNumber'].errors.required">Alternate mobile number is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactAlternateMobileNumber'].errors.minlength">Minimum length of alternate mobile number is 11.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactAlternateMobileNumber'].errors.maxlength">Miximum length of alternate mobile number is 13.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="email" type="email" pInputText formControlName="orgContactEmail">
+                                                    <label>Email</label>
+                                                    <div *ngIf="organizationForm.controls['orgContactEmail'].errors && !organizationForm.controls['orgContactEmail'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactEmail'].errors.required">Contact email is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactEmail'].errors.pattern">Contact email is invalid.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="fax" type="text" pKeyFilter="pint" pInputText formControlName="orgContactFax">
+                                                    <label>Fax</label>
+                                                    <div *ngIf="organizationForm.controls['orgContactFax'].errors && !organizationForm.controls['orgContactFax'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactFax'].errors.required">Fax number required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgContactFax'].errors.pattern">Fax number is invalid.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card>
+                        </div>
+
+                        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                            <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                                <mat-card-title>Business Details:</mat-card-title>
+                                <div class="ui-g">
+                                    <div class="ui-g-12 ui-md-12">
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="regmanpower" type="text" pKeyFilter="pint" pInputText formControlName="orgBusinessDetailsPermanentManpower">
+                                                    <label>Permanent Employees</label>
+                                                    <div *ngIf="organizationForm.controls['orgBusinessDetailsPermanentManpower'].errors && !organizationForm.controls['orgBusinessDetailsPermanentManpower'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsPermanentManpower'].errors.required">Number of permanent manpower is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsPermanentManpower'].errors.min">Should be a positive number.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="regcontpower" type="text" pKeyFilter="pint" pInputText formControlName="orgBusinessDetailsContractualManpower">
+                                                    <label>Contractual Employees</label>
+                                                    <div *ngIf="organizationForm.controls['orgBusinessDetailsContractualManpower'].errors && !organizationForm.controls['orgBusinessDetailsContractualManpower'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsContractualManpower'].errors.required">Number of contractual manpower is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsContractualManpower'].errors.min">Should be a positive number.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="netWorth" type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                                        formControlName="orgBusinessDetailsNetWorth" [maxlength]="balanceLength">
+                                                    <label>Net Worth</label>
+                                                    <div *ngIf="organizationForm.controls['orgBusinessDetailsNetWorth'].errors && !organizationForm.controls['orgBusinessDetailsNetWorth'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsNetWorth'].errors">Net worth is required.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="monthlyTurnover" type="text" pInputText currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                                        formControlName="orgBusinessDetailsMonthlyTurnover" [maxlength]="balanceLength">
+                                                    <label>Monthly Turnover</label>
+                                                    <div *ngIf="organizationForm.controls['orgBusinessDetailsMonthlyTurnover'].errors && !organizationForm.controls['orgBusinessDetailsMonthlyTurnover'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsMonthlyTurnover'].errors">Monthly turnover is required.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="ui-g-12 ui-md-12">
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield-2">
+                                                    <p-multiSelect [options]="typeOfBusiness | typeOfBusinessPipe" formControlName="orgBusinessDetailsTypeOfBusiness"></p-multiSelect>
+                                                    <label class="md-inputlabel-2">Type Of Business</label>
+                                                </span>
+                                            </div>
+
+                                            <div class="ui-g-12 ui-md-6">
+                                                <span class="md-inputfield">
+                                                    <input name="otherInfo" type="text" pInputText formControlName="orgBusinessDetailsOtherInfo">
+                                                    <label>Other Information</label>
+                                                    <div *ngIf="organizationForm.controls['orgBusinessDetailsOtherInfo'].errors && !organizationForm.controls['orgBusinessDetailsOtherInfo'].pristine">
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsOtherInfo'].errors.required">Other info is required.</div>
+                                                        <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!organizationForm.controls['orgBusinessDetailsOtherInfo'].errors.maxlength">Maximum length of other info is 50 characters.</div>
+                                                    </div>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </mat-card>
+
+                            <mat-card style="flex: 5; margin-right: 5px;">
+                                <mat-card-title>Present Address:</mat-card-title>
+                                <address-component [address]='businessAddress' #businessAddressComponent></address-component>
+                            </mat-card>
+                        </div>
+
+                        <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+                            <mat-card style="flex: 5; margin-left: 5px; margin-right: 5px;">
+                                <mat-card-title>Factory Address:</mat-card-title>
+                                <div class="ui-g">
+                                    <div class="ui-g-12">
+                                        <span>
+                                            <p-inputSwitch formControlName="factoryAdressAsPresentChceker"></p-inputSwitch>
+                                            Same as present address
+                                        </span>
+                                    </div>
+                                </div>
+                                <address-component [address]='factoryAddress' #factoryAddressComponent></address-component>
+                            </mat-card>
+
+                            <mat-card style="flex: 5; margin-right: 5px;">
+                                <mat-card-title>Registered Address:</mat-card-title>
+                                <div class="ui-g">
+                                    <div class="ui-g-6">
+                                        <span>
+                                            <p-inputSwitch formControlName="registeredAdressAsPresentChceker" [disabled]="factoryAddressCheckerStatus"></p-inputSwitch>
+                                            Same as present address
+                                        </span>
+                                    </div>
+                                    <div class="ui-g-6">
+                                        <span>
+                                            <p-inputSwitch formControlName="registeredAddressAsFactoryChceker" [disabled]="presentAddressCheckerStatus"></p-inputSwitch>
+                                            Same as factory address
+                                        </span>
+                                    </div>
+                                </div>
+                                <address-component [address]='registeredAddress' #registeredAddressComponent></address-component>
+                            </mat-card>
+                        </div>
+                    </mat-tab>
+
+                    <mat-tab label="Document">
+                        <br/>
+                        <document-component [clientId]="clientId" [profileCode]="profileCode" #docComponent></document-component>
+                    </mat-tab>
+
+                </mat-tab-group>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Create Bank Notice</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()" [disabled]="formInvalid()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group" [formGroup]="bankNoticeForm">
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <p-calendar placeholder="Start Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                            utc="true" [minDate]="minStartDate" formControlName="startDate"></p-calendar>
+                        <label>Start Date</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <p-calendar placeholder="Expire Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                            utc="true" [minDate]="bankNoticeForm.get('startDate').value" formControlName="expireDate"></p-calendar>
+                        <label>Expire Date</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" formControlName="noticeAmount">
+                        <label>Amount*</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="chequeNumber">
+                        <label>Cheque No</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="description">
+                        <label>Description*</label>
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component> 

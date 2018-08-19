@@ -1,0 +1,74 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Lien Details</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-edit" class="default-btn" (click)="editTimeDepositLien()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+
+<div class="ui-g ui-fluid">
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Reference Information</mat-card-title>
+            <div class="row ui-g">
+                <div class="ui-g-12">
+                    <div class="ui-g-4">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Reference Type</th>
+                                <td>{{referenceType}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-4">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Reference Number</th>
+                                <td>{{timeDepositLien.lienReferenceNumber}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="ui-g-4">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Remarks</th>
+                                <td>{{timeDepositLien.note}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div style="display: flex;flex-direction: row;width:100%;padding-bottom:12px">
+        <mat-card style="flex:1">
+            <mat-card-title>Account Information</mat-card-title>
+            <p-dataTable [value]="timeDepositLienDetails" [responsive]="false">
+                <p-column field="accountId" header="Account Number" [style]="{'text-align':'left'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{accountTypeMap.get(data.accountId)}}
+                    </ng-template>
+                </p-column>
+                <p-column header="Lien Balance" [style]="{'text-align':'right'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.lienBalance | number:'1.2-2': ""}}
+                    </ng-template>
+                </p-column>
+                <p-column header="Impose Amount" [style]="{'text-align':'right'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.imposeAmount | number:'1.2-2': ""}}
+                    </ng-template>
+                </p-column>
+                <p-column header="Recovered Amount" [style]="{'text-align':'right'}">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{data.withdrawalAmount | number:'1.2-2': ""}}
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </mat-card>
+    </div>
+</div>

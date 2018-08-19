@@ -1,0 +1,51 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approval flow detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" (click)="edit()"></button>
+            <button pButton type="button" label="Add task" icon="ui-icon-plus" class="default-btn" (click)="createTask()"></button>
+            <button pButton type="button" label="Delete" icon="ui-icon-delete" class="default-btn"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+
+    <table class="table table-bordered">
+        <tr>
+            <th>Code</th>
+            <td>{{approvalflowProfile.code}}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{approvalflowProfile.name}}</td>
+        </tr>
+    </table>
+
+    <br/>
+
+    <h6>Approval flow tasks:</h6>
+    <hr/>
+
+    <div style="position:relative;">
+
+        <p-organizationChart selectionMode="single" [value]="taskNodes" (onNodeSelect)="onTaskSelect($event)" styleClass="company">
+            <ng-template let-node pTemplate="person">
+                <div class="node-header ui-corner-top">{{node.label}}</div>
+                <div class="node-content">
+                    <div>Assignment restriction: {{approverAssignmentRestrictionMap.get(node.data.approverAssignmentRestriction)}}</div>
+                    <div>Branch restriction: {{approverBranchRestrictionMap.get(node.data.approverRuleBranchRestriction)}}</div>
+                    <div>User level restriction: {{userLevelRestrictionMap.get(node.data.approverRuleUserLevelRestriction)}}</div>
+                </div>
+            </ng-template>
+        </p-organizationChart>
+
+    </div>
+
+</mat-card>
+
+<approvalflow-form #form (onSave)="onSave($event)" [formData]="approvalflowProfile" #approvalFlowDialog></approvalflow-form>

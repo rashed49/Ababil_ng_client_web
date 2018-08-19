@@ -1,0 +1,42 @@
+<div class="ui-g">
+        <div class="ababil-toolbar">
+            <span class="ababil-toolbar-header">Teller activity log</span>
+            <div class="ababil-toolbar-button-group">
+                <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+
+<mat-card style="margin-top:50px">
+    <mat-card-title>Transaction history:</mat-card-title>
+ <div class="ui-g">
+        <div class="ui-g-12">
+            <p-dataTable [value]="activityLog" [lazy]="true" selectionMode="single" [rows]="20" [paginator]="true" [totalRecords]="totalRecords"
+                (onLazyLoad)="loadTransactionsLazily($event)" #dt>
+                <p-column field="tellerTransactionType" [style]="{'width':'20%'}" header="Transaction type"></p-column>
+                <p-column field="debitAccountNumber" header="Debit account" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="creditAccountNumber" header="Credit account" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column header="Account">
+                    <ng-template let-col let-data="rowData" pTemplate="body">
+                        {{ data.tellerTransactionType == 'CASH_RECEIVE' ? data.transactionCreditAccountType : data.tellerTransactionType == 'CASH_WITHDRAW'
+                        ? data.transactionDebitAccountType : data.transactionDebitAccountType}}
+                    </ng-template>
+                </p-column>
+                <p-column field="amountLcy" header="Amount LCY" [filter]="true" filterPlaceholder="Search" [style]="{'text-align':'right','width':'100px'}">
+                    <ng-template pTemplate="body" let-txn="rowData">
+                        {{ txn.amountLcy | number:'.2-2' }}
+                    </ng-template>
+                </p-column>
+                <p-column field="amountCcy" header="Amount CCY" [filter]="true" filterPlaceholder="Search" [style]="{'text-align':'right','width':'100px'}">
+                    <ng-template pTemplate="body" let-txn="rowData">
+                        {{ txn.amountCcy | number:'.2-2' }}
+                    </ng-template>
+                </p-column>
+                <p-column field="currencyCode" header="Transaction currency" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="voucherNumber" header="Voucher" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="tellerTransactionStatus" header="Transaction status" [filter]="true"></p-column>
+            </p-dataTable>
+
+        </div>
+    </div>
+</mat-card>

@@ -1,0 +1,285 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Fixed Deposit Product</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Profit Rate" icon="ui-icon-attach-money" (click)="goToProfitRate()"></button>
+            <button pButton type="button" class="default-btn" label="General ledger mapping" icon="ui-icon-insert-link" (click)="goToProductGeneralLedgerMapping()"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<mat-card>
+<div style="display: flex; flex-direction: column; width: 100%;">
+    <div style="width: 100%; margin-bottom: 10px;">
+        <mat-card style="margin-top:35px;">
+            <mat-card-title style="display: flex;flex-direction: row">
+                <div style="flex:1">Basic information:</div>
+                <!-- <div align="right">
+                    <b>
+                        <p>{{fixedDepositProductDetails.status}}</p>
+                    </b>
+                </div> -->
+            </mat-card-title>
+            <mat-card-content>
+                <div style="display:flex; flex-direction:row">
+                    <div style="flex: 2; margin-right: 3px;">
+                        <table class="table table-bordered table-striped">
+                            <tr>
+                                <th>Name</th>
+                                <td>{{fixedDepositProductDetails.name}}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>{{fixedDepositProductDetails.description}}</td>
+                            </tr>
+                            <tr>
+                                <th>Code</th>
+                                <td>{{fixedDepositProductDetails.code}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="flex:2;">
+                        <table class="table table-bordered table-striped">
+                            <!-- <tr>
+                                <th>Status</th>
+                                <td>{{fixedDepositProductDetails.status?fixedDepositProductDetails.status:'Inactive'}}</td>
+                            </tr> -->
+                            <tr>
+                                <th>Currency Resctriction</th>
+                                <td>
+                                    {{fixedDepositProductDetails.currencyRestriction | sentenceCasePipe}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Currency Code</th>
+                                <td>{{fixedDepositProductDetails.currencies}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div style="display: flex; flex-direction: row; width: 100%; margin-bottom: 10px;">
+
+        <mat-card style=" flex:3; margin-right:5px;">
+            <mat-card-title>Quard:</mat-card-title>
+            <mat-card-content>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Quard allowed</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails.isQuardAllowed?"done":"close"}}</i>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>Quard percentage</th>
+                        <td>{{fixedDepositProductDetails.quardPercentage}}</td>
+                    </tr>
+
+                </table>
+            </mat-card-content>
+        </mat-card>
+        <mat-card style=" flex:3; margin-right:5px;">
+            <mat-card-title>Withdrawal:</mat-card-title>
+            <mat-card-content>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Withdrawal allowed</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails.isWithdrawalAllowed?"done":"close"}}</i>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>Withdrawal percentage</th>
+                        <td>{{fixedDepositProductDetails.withdrawalPercentage}}</td>
+                    </tr>
+
+                </table>
+            </mat-card-content>
+        </mat-card>
+        <mat-card style=" flex:3; margin: 0px 5px 0px 5px;">
+            <mat-card-title>Amount:</mat-card-title>
+            <mat-card-content>
+                <div class="ui-g">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Minimum Deposit</th>
+                            <td>
+                                {{fixedDepositProductDetails.minimumDepositAmount}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Maximum Deposit</th>
+                            <td>
+                                {{fixedDepositProductDetails.maximumDepositAmount}}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Deposit Multiplier</th>
+                            <td>
+                                {{fixedDepositProductDetails.depositAmountMultiplier}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+
+        <mat-card style="flex:3; margin-left:5px;">
+            <mat-card-title>Lien:</mat-card-title>
+            <mat-card-content>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Lien Allowed</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails.isLienAllowed?"done":"close"}}</i>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Lien percentage</th>
+                        <td>{{fixedDepositProductDetails.lienPercentage}}</td>
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+
+    <div style="width: 100%; display:flex; flex-direction:row;">
+        <mat-card style="width:100%; flex:3; margin-right:5px">
+            <mat-card-title>Profit:</mat-card-title>
+            <mat-card-content>
+                <div class="ui-g">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Profit applied Before Maturity</th>
+                            <td>
+                                <i class="material-icons-done-close">{{fixedDepositProductDetails.isProfitAppliedBeforeMaturity?"done":"close"}}</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Profit posting period</th>
+                            <td>{{fixedDepositProductDetails.profitPostingPeriod | sentenceCasePipe}}</td>
+                        </tr>
+                        <tr>
+                            <th>Profit posting period type</th>
+                            <td>{{fixedDepositProductDetails.profitPostingPeriodType | sentenceCasePipe}}</td>
+                        </tr>
+                        <tr>
+                            <th>Compounding before maturity allowed</th>
+                            <td>
+                                <i class="material-icons-done-close">{{fixedDepositProductDetails.isCompoundingBeforeMaturityAllowed?"done":"close"}}</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Withdraw profit before maturity allowed</th>
+                            <td>
+                                <i class="material-icons-done-close">{{fixedDepositProductDetails.isWithdrawProfitBeforeMaturityAllowed?"done":"close"}}</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Profit calculation based on</th>
+                            <td>{{fixedDepositProductDetails.profitCalculationBasedOn | sentenceCasePipe}}</td>
+                        </tr>
+                        <tr>
+                            <th>Days in year</th>
+                            <td>{{fixedDepositProductDetails.daysInYear | sentenceCasePipe}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card style="flex:3; margin:0px 5px 0px 5px">
+            <mat-card-title>Tenor:</mat-card-title>
+            <mat-card-content>
+                <div class="ui-g">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Tenor Required</th>
+                            <td>
+                                <i class='material-icons-done-close'>
+                                    {{fixedDepositProductDetails.isTenorRequired?"done":"close"}}</i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tenor Type</th>
+                            <td>{{fixedDepositProductDetails.tenorType | sentenceCasePipe}}</td>
+                        </tr>
+
+                    </table>
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12">
+                            <p>
+                                <b>Tenors</b>
+                            </p>
+
+                            <p-dataTable [value]="tenors" [rows]="2" [paginator]="true">
+                                <p-column field="id" header="#SL" [style]="{'width':'70px','text-align':'center'}">
+                                    <ng-template let-i="rowIndex" pTemplate="body">
+                                        {{i+1}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column header="Tenor type" [style]="{'text-align':'center'}">
+                                    <ng-template pTemplate="body">
+                                        {{fixedDepositProductDetails.tenorType}}
+                                    </ng-template>
+                                </p-column>
+                                <p-column header="Tenor" [style]="{'text-align':'center'}">
+                                    <ng-template let-i="rowIndex" pTemplate="body">
+                                        {{tenors[i]}}
+                                    </ng-template>
+                                </p-column>
+                            </p-dataTable>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card style="flex:3; margin-left:5px">
+            <mat-card-title>Others:</mat-card-title>
+            <mat-card-content>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Auto renewal allowed</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails.isAutoRenewalAllowed?"done":"close"}}</i>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>Auto renewal override allowed</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails. isAutoRenewalOverridable?"done":"close"}}</i>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th>Link account required</th>
+                        <td>
+                            <i class="material-icons-done-close">{{fixedDepositProductDetails.isLinkAccountRequired?"done":"close"}}</i>
+                        </td>
+
+                    </tr>
+                </table>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+</div>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component> 
+</mat-card>

@@ -1,0 +1,67 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Lien</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Lien Impose" icon="ui-icon-plus" class="default-btn" (click)="createImpose()"></button>
+            <button type="button" pButton label="Search" icon="ui-icon-search" (click)="op.show($event)"></button>
+            <button pButton type="button" label="Refresh" icon="ui-icon-update" class="default-btn" (click)="refreash(dt)"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="back()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<div class="ui-g">
+    <div class="ui-g-12">
+        <p-dataTable [value]="timeDepositLiens" selectionMode="single" [responsive]="false" [(selection)]="selectedLien" (onRowSelect)="navigateToTimeDepositLienDetail()"
+            [paginator]="true" [rows]="20" [totalRecords]="totalRecords" [lazy]="true" (onLazyLoad)="loadInlandRemittanceLotLazily($event)"
+            #dt>
+            <p-column header="Reference Type" [style]="{'text-align':'left'}">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{referenceTypeMap.get(data.referenceTypeId)}}
+                </ng-template>
+            </p-column>
+            <p-column field="lienReferenceNumber" header="Reference Number" [style]="{'text-align':'left'}"></p-column>
+            <p-column header="Total Lien Amount" [style]="{'text-align':'right'}">
+                <ng-template let-col let-data="rowData" pTemplate="body">
+                    {{data.totalLienAmount | number:'1.2-2': ""}}
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+    </div>
+</div>
+
+<p-overlayPanel #op [style]="{'width':'500px'}">
+    <div [formGroup]="timeDepositLienSearchForm">
+        <br/>
+        <div class="ui-g ui-fluid form-group">
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield-2">
+                    <p-dropdown [options]="referenceTypes" [autoWidth]="false" formControlName="referenceTypeId"></p-dropdown>
+                    <label class="md-inputlabel-2">Reference Type</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="referenceNumber">
+                    <label>Reference Number</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText formControlName="customerId">
+                    <label>Customer ID</label>
+                </span>
+            </div>
+            <div class="ui-g-12 ui-md-6">
+                <span class="md-inputfield">
+                    <input type="text" pInputText #accountNumber formControlName="accountId" (blur)="searchAccountByAccountNumber(accountNumber.value)">
+                    <label>Account Number</label>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <div>
+        <button pButton type="button" label="Search" class="primary-btn" style="float:right;margin-bottom: 10px" (click)="timeDepositLiensearch(null);op.hide($event)"></button>
+    </div>
+</p-overlayPanel>

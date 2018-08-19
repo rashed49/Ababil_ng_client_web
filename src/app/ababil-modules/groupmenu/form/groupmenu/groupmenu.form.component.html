@@ -1,0 +1,37 @@
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+      <div class="card card-w-title"> 
+              <p-toolbar>
+                  <div class="ui-toolbar-group-left">
+                      <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Groupmenu Profile</label>
+                  </div> 
+                  <div class="ui-toolbar-group-right">
+                      <button pButton type="button" label="Save" icon="ui-icon-plus" class="green-btn" (click)="save()" [disabled]="formsInvalid()"></button>
+                      <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="secondary-btn" (click)="cancel()"></button>
+                  </div>
+              </p-toolbar>
+
+              <br/>
+                
+                <div class="ui-g ui-fluid form-group" [formGroup]='groupmenuForm'>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="code">
+                                <label>Code</label>
+                            </span>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12">
+                            <span class="md-inputfield">
+                                <input type="text" pInputText formControlName="name">
+                                <label>Name</label>
+                            </span>
+                        </div>
+
+                </div>
+
+      </div>            
+    </div>    
+</div>    

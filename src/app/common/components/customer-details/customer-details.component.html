@@ -1,0 +1,30 @@
+<div style="display: flex; flex-direction: row; width: 100%;">
+
+    <div style="flex: 5; margin-right: 3px;">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>Customer ID</td>
+                <th>{{customerDetails.id}}</th>
+            </tr>
+
+            <tr>
+                <td>Customer type</td>
+                <th>{{customerDetails.customerType | sentenceCasePipe}}</th>
+            </tr>
+        </table>
+    </div>
+    <div style="flex: 5;">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>Customer name</td>
+                <th>{{customerDetails.name}}</th>
+            </tr>
+
+            <tr>
+                <td>Customer status</td>
+                <th>{{customerDetails.active?'Active':'Inactive' }}</th>
+            </tr>
+        </table>
+    </div>
+
+</div>

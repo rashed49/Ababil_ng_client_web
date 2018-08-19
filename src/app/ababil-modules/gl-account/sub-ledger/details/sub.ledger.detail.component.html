@@ -1,0 +1,88 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Subsidiary Ledger Details</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-create" class="default-btn" (click)="editSubLedger()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+    <div class="row ui-g">
+        <div class="ui-g-12">
+            <div class="ui-g-6">
+                <table class="table table-bordered table-striped">
+
+                    <tr>
+                        <th>Title</th>
+                        <td>{{subLedgerDetails.name}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Code</th>
+                        <td>{{subLedgerDetails.code}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Currency code</th>
+                        <td>{{subLedgerDetails.currencyCode}}</td>
+                    </tr>
+
+                    <tr>
+                            <th>Branch id</th>
+                            <td>{{subLedgerDetails.branchId}}</td>
+                        </tr>
+                </table>
+            </div>
+            <div class="ui-g-6">
+
+                <table class="table table-bordered table-striped">
+
+                
+
+                    <tr>
+                        <th>General ledger account id</th>
+                        <td>{{subLedgerDetails.generalLedgerAccountId}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Negative balance allowed</th>
+                        <td>{{subLedgerDetails.isNegativeBalanceAllowed}}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Online txn allowed</th>
+                        <td>{{subLedgerDetails.isOnlineTxnAllowed}}</td>
+                    </tr>
+
+                    <!-- <tr>
+                        <th>lastTxnDateTime</th>
+                        <td>{{subLedgerDetails.lastTxnDateTime}}</td>
+                    </tr> -->
+
+                </table>
+            </div>
+        </div>
+    </div>
+</mat-card>
+
+<p-dialog [positionTop]=100 [contentStyle]="{'overflow':'visible'}" [closable]="false" [(visible)]="display"
+    modal="modal" responsive="true" [width]="800" appendTo="body">
+    <p-header style="font-weight: 600">
+        Update
+    </p-header>
+
+    <sub-ledger-form [generalLedgerAccountId]="generalLedgerAccountId" [subLedgerId]="subLedgerId" #form></sub-ledger-form>
+
+    <hr>
+    <div style="padding: 0px 0px 10px 0px;float: right;">
+        <button style="background: #299788; color: white;" pButton type="button" label="Save" icon="ui-icon-save" class="default-btn"
+            (click)="save()"></button>
+        <button style="background: #299788; color: white;" pButton type="button" label="Cancel" icon="ui-icon-cancel" class="default-btn"
+            (click)="dialogcancel()"></button>
+    </div>
+</p-dialog>

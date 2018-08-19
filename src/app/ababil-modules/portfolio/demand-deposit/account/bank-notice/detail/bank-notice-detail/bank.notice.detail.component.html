@@ -1,0 +1,58 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Bank Notice Detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Edit" icon="ui-icon-edit" class="default-btn" (click)="edit()"></button>
+            <button pButton type="button" label="Delete" icon="ui-icon-trash" class="default-btn" (click)="delete()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group">
+                
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="notice.startDate | date " readonly>
+                        <label>Start Date</label>
+                    </span>    
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="notice.expireDate | date" readonly>
+                        <label>Expire Date</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText currencyMask [options]="{ prefix: '',allowNegative: false,align:'left' }" [value]="notice.noticeAmount" readonly>
+                        <label>Amount*</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="notice.chequeNumber?notice.chequeNumber:' '" readonly>
+                        <label>Cheque No*</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [value]="notice.description?notice.description:' '" readonly>
+                        <label>Description*</label>
+                    </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</mat-card>

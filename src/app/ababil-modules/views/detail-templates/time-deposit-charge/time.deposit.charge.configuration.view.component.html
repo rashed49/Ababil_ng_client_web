@@ -1,0 +1,69 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" [processId]="processId" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Approve Task: Time deposit charge</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <mat-card>
+            <mat-card-title>Charge info: </mat-card-title>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th class="ui-lg-3">Charge name</th>
+                            <td class="ui-lg-3">{{charge.timeDepositChargeInfo.chargeName}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <mat-card-title>Charge configuration:</mat-card-title>
+
+            <p-dataTable [value]="charge.timeDepositChargeInfo.timeDepositChargeConfigurations" [responsive]="true" selectionMode="single"
+                (onRowSelect)="onChargeConfigurationRowSelect($event)">
+                <p-column field="productName" header="Product name">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        {{rowData.defaultConfiguration? rowData.productName+' (Default)' : rowData.productName}}
+                    </ng-template>
+                </p-column>
+                
+                <p-column field="currencyCode" header="Currency code" [style]="{'text-align':'center'}"></p-column>
+                <p-column field="chargeGl" header="Charge GL" [style]="{'text-align':'center'}"></p-column>
+                <p-column field="vatGl" header="VAT GL" [style]="{'text-align':'center'}"></p-column>
+
+                <!-- <p-column field="amountSlabApplicable" header="Amount slab applicable" [style]="{'text-align':'center'}">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        <div align="center">
+                            <i class='material-icons-done-close'> {{rowData.amountSlabApplicable? "done":"close"}}</i>
+                        </div>
+                    </ng-template>
+                </p-column> -->
+
+                <p-column field="active" header="Active" [style]="{'width':'70px','text-align':'center'}">
+                    <ng-template let-col let-rowData="rowData" pTemplate="body">
+                        <div align="center">
+                            <i class='material-icons-done-close'> {{rowData.active? "done":"close"}}</i>
+                        </div>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </mat-card>
+    </div>
+</div>
+
+
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

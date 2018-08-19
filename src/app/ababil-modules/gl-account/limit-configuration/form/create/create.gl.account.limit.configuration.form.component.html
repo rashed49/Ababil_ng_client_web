@@ -1,0 +1,88 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Create gl account limit configuration</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="save()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div style="display: flex; flex-direction: row; width: 100%;">
+
+    <mat-card style="flex: 5; margin-right: 5px;">
+        <div class="ui-g ui-fluid">
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [ngModel]="glAccount.code" [attr.disabled]="'disabled'" />
+                        <label>Account number</label>
+                    </span>
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText [ngModel]="glAccount.type" [attr.disabled]="'disabled'" />
+                        <label>Account type</label>
+                    </span>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-12">
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield-2">
+                        <input type="text" pInputText [ngModel]="glAccount.currencies" [attr.disabled]="'disabled'" />
+                        <label class="md-inputlabel-2">Account currency</label>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+
+    <mat-card style="flex: 5;">
+        <form [formGroup]="createGlLimitConfigurationForm">
+            <div class="ui-g ui-fluid form-group">
+                <div class="ui-g-12 ui-md-12 multiselect-padding">
+                    <div class="ui-g-12 ui-md-12 multiselect-padding">
+                        <span class="md-inputfield-2">Branches*</span>
+                        <p-multiSelect [options]="branches" [(ngModel)]="selectedBranches" formControlName="branchId"></p-multiSelect>
+                        <div *ngIf="createGlLimitConfigurationForm.controls['branchId'].errors && !createGlLimitConfigurationForm.controls['branchId'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createGlLimitConfigurationForm.controls['branchId'].errors.required">Branch is required.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-12 dropdown-padding">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield-2">Currency*</span>
+                        <p-dropdown [options]="currencies" [autoWidth]="false" formControlName="currencyCode"></p-dropdown>
+                        <div *ngIf="createGlLimitConfigurationForm.controls['currencyCode'].errors && !createGlLimitConfigurationForm.controls['currencyCode'].pristine">
+                            <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createGlLimitConfigurationForm.controls['currencyCode'].errors.required">Currency code is required.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-12">
+                    <div class="ui-g-12 ui-md-12">
+                        <span class="md-inputfield">
+                            <input type="text" pKeyFilter="pint" currencyMask [options]="{ prefix:'', allowNegative: false, thousands: ',', decimal: '.' }"
+                                pInputText formControlName="balanceLimit">
+                            <label>Balance limit*</label>
+                            <div *ngIf="createGlLimitConfigurationForm.controls['balanceLimit'].errors && !createGlLimitConfigurationForm.controls['balanceLimit'].pristine">
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createGlLimitConfigurationForm.controls['balanceLimit'].errors.max">Balance maximum limit crossed.</div>
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createGlLimitConfigurationForm.controls['balanceLimit'].errors.min">Balance minimum limit is not fullfilled.</div>
+                                <div class="ui-message ui-messages-error ui-corner-all" [hidden]="!createGlLimitConfigurationForm.controls['balanceLimit'].errors.required && !createGlLimitConfigurationForm.controls['balanceLimit'].errors.isNumber">Balance limit is required.</div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-card>
+
+</div>

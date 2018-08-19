@@ -1,0 +1,98 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">{{panelHeader}}</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Accept" icon="fa-check" (click)="submit()"></button>
+            <button pButton type="button" class="default-btn" label="Reject" icon="ui-icon-block" (click)="verifyTask('REJECT',null)"></button>
+            <button pButton type="button" class="default-btn" label="Correction" icon="ui-icon-edit" (click)="verifyTask('CORRECTION',null)"></button>
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+
+        </div>
+    </div>
+
+</div>
+
+<br/>
+<div style="position: relative;padding-top:10px">
+    <mat-tab-group [hidden]="view=='GUARD'">
+        <mat-tab label="Individual Information" class="tab-invalid">
+            <div class="ui-g">
+                <div class="ui-fluid ui-g-12 ui-md-12" *ngIf="customerType=='JOINT'" style="padding-right: 20px;padding-left: 20px;">
+                    <br/>
+                    <p-dropdown [options]="applicantTypes | applicantTypePipe" [autoWidth]="false" [(ngModel)]="applicantTypeId" placeholder="Applicant Type"
+                        [ngModelOptions]="{standalone: true}" required></p-dropdown>
+                </div>
+
+                <div class="ui-g-12 ui-md-12" *ngIf="customerType=='ORGANIZATION'">
+                    <br/>
+                    <label style="font-size: 14px">Share Percentage: {{sharedPercentage}}%</label>
+                    <span class="md-inputfield">
+                        <p-slider [(ngModel)]="sharedPercentage" [min]="lowerLimit" [max]="upperLimit" name="sharedPercentage" [animate]="true" [disabled]="upperLimit==0"></p-slider>
+                    </span>
+                </div>
+
+                <individual-form-view [formData]="subjectFormData" #subjectFormComponent (onAgeCheck)="onAgeCheck($event)">
+                </individual-form-view>
+
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Fatca Information">
+            <div class="ui-g">
+                <div style="display: flex; width:100%" class="ui-fluid ui-g-12 ui-md-12">
+                    <fatca-view #fatcaComponent [fatcaCisIndividualInformation]="fatcaCisIndividualInformation" [foreignAccountTaxComplianceActs]="foreignAccountTaxComplianceActs"></fatca-view>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Guardian Information">
+            <br/>
+            <div class="ui-g">
+                <div style="display: flex; width:100%; margin: -5px 15px 0px 15px" class="ui-fluid ui-g-12 ui-md-12">
+                    <mat-card style="flex: 2">
+                        <mat-card-title>Guardian Information</mat-card-title>
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <div class="ui-g-12 ui-md-5">
+                                    <span class="md-inputfield">
+                                        <input readonly [value]="guardiansFullName" type="text" pInputText>
+                                        <label>Guardian name</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-2">
+                                    <button pButton type="button" label="View details"  class="default-btn" (click)="addGuardian()"></button>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-5">
+                                    <span class="md-inputfield">
+                                        <input type="text" readonly name="relationWithAccountHolder" [value]="relationWithAccountHolder" [(ngModel)]="relationWithAccountHolder"
+                                            pInputText>
+                                        <label>Relation with account holder</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Document">
+            <br/>
+            <document-view-component [clientId]="clientId" [profileCode]="profileCode" #individualDoc></document-view-component>
+            
+        </mat-tab>
+
+    </mat-tab-group>
+
+</div>
+
+
+<button id="goToTop" icon="ui-icon-arrow-drop-up" class="goToTop" type="button" pButton class="default-btn" (click)="goToTop()"></button>
+<individual-lookup #individualLookup ></individual-lookup>
+<individual-lookup #individualsLookup ></individual-lookup>
+<short-individual-view [guardianId]="guardianId" [hidden]="view=='IND'" (onBack)="guardianBack($event);"></short-individual-view>
+<comment-component [commentGroup]="commandReference" style="width: 100%"></comment-component>

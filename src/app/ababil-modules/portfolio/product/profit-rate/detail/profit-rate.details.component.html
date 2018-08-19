@@ -1,0 +1,88 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Profit rate details of product: {{productDetails.name}}</span>
+        <div class="ababil-toolbar-button-group">
+            <div class="ui-toolbar-group-right">
+                <button pButton label="Edit" type="button" icon="ui-icon-create" class="default-btn" (click)="edit()" *ngIf="editable"></button>
+                <button pButton label="Back" type="button" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+            </div>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+<mat-card style="margin-bottom: 5px;">
+    <div class="row">
+        <div class="ui-g-12" *ngIf="isSlabApplicable">
+            <div class="ui-g-12">
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Description</th>
+                        <td>{{profitRates.description}}</td>
+                    </tr>
+                    <tr>
+                        <th>From date</th>
+                        <td>{{profitRates.fromDate| date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Currency code</th>
+                        <td>{{profitRates.currencyCode}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="ui-g-12">
+                <p-dataTable [value]="profitRateArray">
+                    <p-column field="fromTenor" header="Form tenor" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="productType !== 'DEMAND_DEPOSIT'"></p-column>
+                    <p-column field="toTenor" header="To tenor" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="productType !== 'DEMAND_DEPOSIT'"></p-column>
+                    <p-column field="amountRangeFrom" header="Amount range from" [filter]="true" filterPlaceholder="Search" sortable="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.amountRangeFrom | number:'1.2-4'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="amountRangeTo" header="Amount range to" [filter]="true" filterPlaceholder="Search" sortable="true">
+                        <ng-template let-col let-data="rowData" pTemplate="body">
+                            {{data.amountRangeTo | number:'1.2-4'}}
+                        </ng-template>
+                    </p-column>
+                    <p-column field="annualProvisionalRate" header="Annual provisional rate" [filter]="true" filterPlaceholder="Search" sortable="true"
+                        *ngIf="apr"></p-column>
+                    <p-column field="psr" header="Profit sharing ratio" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="psr"></p-column>
+                    <p-column field="weightage" header="Weightage" [filter]="true" filterPlaceholder="Search" sortable="true" *ngIf="weightage"></p-column>
+                </p-dataTable>
+            </div>
+        </div>
+        <div class="ui-g-12" *ngIf="!isSlabApplicable">
+            <div class="ui-g-12">
+                <table class="table table-bordered table-striped">
+
+                    <tr>
+                        <th>Description</th>
+                        <td>{{profitRates.description}}</td>
+                    </tr>
+                    <tr>
+                        <th>From date</th>
+                        <td>{{profitRates.fromDate | date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Currency code</th>
+                        <td>{{profitRates.currencyCode}}</td>
+                    </tr>
+                    <tr *ngIf="apr">
+                        <th>Annual provisional rate</th>
+                        <td>{{aprValue}}</td>
+                    </tr>
+                    <tr *ngIf="psr">
+                        <th>Profit sharing ratio</th>
+                        <td>{{psrValue}}</td>
+                    </tr>
+                    <tr *ngIf="weightage">
+                        <th>Weightage</th>
+                        <td>{{weightageValue}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+        </div>
+    </div>
+</mat-card>

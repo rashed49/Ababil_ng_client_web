@@ -1,0 +1,39 @@
+<div class="ui-g ui-g-fluid">
+    <div class="ui-g ui-md-12">
+
+        <mat-card style="width:100%;margin-bottom:10px">
+
+            <div class="ui-g ui-fluid form-group" [formGroup]='commentForm'>
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <textarea [rows]="3" [cols]="30" pInputTextarea formControlName="content" placeholder="Post comment.."></textarea>                        
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <button pButton type="button" label="Submit" icon="ui-icon-save" class="green-btn" (click)="submit()" [disabled]="formsInvalid()"></button>
+                </div>
+            </div>
+
+        </mat-card>
+
+        <div *ngFor="let comment of comments" style="width:100%">
+
+            <div class="box-content list-group-item" style="margin-bottom: 5px;">
+
+                <p>{{comment.content}}</p>
+                <div class="row" style="margin: 3px">
+                    <span class="message-date" style="color:#aaa;font-family:verdana;font-size:13px;
+                                ">{{comment.dateTime | date:'MMM d, y h:mm:ss a'}}</span>
+
+                    <span class="message-date pull-right" style="color:#aaa;font-family:verdana;font-size:13px;
+                                margin-left: 5px;">{{comment.username}}</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+</div>

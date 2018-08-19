@@ -1,0 +1,77 @@
+<verifier-selection [visible]="showVerifierSelectionModal" [command]="command" (onVerifierSelect)="onVerifierSelect($event)"></verifier-selection>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Special profit rate</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()" [disabled]="formInvalid()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>
+
+<mat-card>
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12">
+                <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>Title</th>
+                            <td>{{demandDepositAccount.name}}</td>
+                        </tr>
+                        <tr>
+                            <th>Account No</th>
+                            <td>{{demandDepositAccount.number}}</td>
+                        </tr>
+                    </table>
+        </div>
+        <div class="ui-g-12 ui-md-12">
+            <div class="ui-g ui-fluid form-group" [formGroup]="accountSpecialProfitRateForm">
+
+                <div class="ui-g-12 ui-md-6">
+                    <span>
+                        <p-checkbox binary="true" label="Do not apply profit" formControlName="isProfitCalculationOn" ></p-checkbox>
+                    </span>
+
+                </div>
+
+                <div class="ui-g-12 ui-md-6" *ngIf="type && type == 'RATE'">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pnum" formControlName="specialProfitRate" pInputText [attr.disabled]="disableSpecialProfitRateField ? 'disabled' : null">
+                        <label>Special profit rate</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6" *ngIf="type && type == 'PSR'">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pnum" formControlName="specialPsr" pInputText>
+                        <label>Special profit sharing rate</label>
+                    </span>
+                </div>
+
+                <div class="ui-g-12 ui-md-6" *ngIf="type && type == 'WEIGHTAGE'">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText pKeyFilter="pnum" formControlName="specialWeightage" pInputText>
+                        <label>Special weightage</label>
+                    </span>
+                </div>
+
+
+
+
+                <div class="ui-g-12 ui-md-12">
+                    <span class="md-inputfield">
+                        <input type="text" pInputText formControlName="reason">
+                        <label>Reason</label>
+                    </span>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</mat-card>
+<comment-component [commentGroup]="commandReference" style="width: 100%" *ngIf="commandReference"></comment-component>

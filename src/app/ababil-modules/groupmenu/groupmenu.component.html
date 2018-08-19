@@ -1,0 +1,29 @@
+
+<div class="ui-g">
+    <div class="ui-g-12">
+      
+      <div class="card card-w-title">                 
+              <p-toolbar>
+                  <div class="ui-toolbar-group-left">
+                      <label style="font-size: 20px; vertical-align: -webkit-baseline-middle">Group Menus</label>
+                  </div>  
+                  <div class="ui-toolbar-group-right">
+                      <button pButton type="button" label="New Groupmenu" icon="ui-icon-plus" class="green-btn" (click)="create()"></button>
+                      <button pButton type="button" label="Refresh" icon="ui-icon-update" class="orange-btn" (click)="fetchGroupmenuProfiles()"></button>
+                  </div>
+              </p-toolbar>
+              
+
+              <!-- <div class="ui-widget-header" style="padding:4px 10px;border-bottom: 0 none">
+                 <i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+                 <input #gb type="text" pInputText size="70" placeholder="Global Filter">
+              </div> -->
+              
+              <p-dataTable [value]="groupMenuProfiles" selectionMode="single" (onRowSelect)="onRowSelect($event)" #dt>               
+                <p-column field="id" header="ID" [filter]="true" filterPlaceholder="Search"></p-column>
+                <p-column field="name" header="Name" [filter]="true" filterPlaceholder="Search"></p-column>
+              </p-dataTable>
+
+        </div>
+    </div>      
+</div>    

@@ -1,0 +1,105 @@
+<ababil-image-upload (onDone)="setImage($event)" #ababilImage></ababil-image-upload>
+
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header" >{{label}} signatory</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" label="Save" icon="ui-icon-save" class="default-btn" (click)="submit()" [disabled]="formInvalid()"></button>
+            <button pButton type="button" label="Back" icon="ui-icon-keyboard-arrow-left" class="default-btn" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-12">
+        <form class="ui-g ui-fluid from-group" [formGroup]="accountSignatoryForm">
+
+            <div style="display: flex;flex-direction: row;width:100%;">
+                <div class="ui-g-12 ui-md-3">
+                    <mat-card style="margin-right: 5px;flex: 2">
+                        <img mat-card-image src="{{imageApiUrl}}/individuals/{{selectedIndividualId}}/image" alt="picture of a individual" style="height: 200px"
+                            alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';" #individualImage>
+                    </mat-card>
+                    <div style="padding-top:12px"></div>
+                    <mat-card style="margin-right: 5px;flex: 2">
+                        <img mat-card-image src="" alt="picture of signature" style="height: 150px" alt="Image not found" onerror="this.onerror=null;this.src='assets/images/noimage.jpg';"
+                            #signatorySignature>
+                        <mat-card-content style="float:left">
+                            <p>Upload Signature</p>
+                        </mat-card-content>
+                        <mat-card-actions style="float: right;padding-top: 0px;margin-bottom:5px;">
+                            <button pButton type="button" class="default-btn" label="Upload" (click)="uploadImage()"></button>
+                        </mat-card-actions>
+                        <div style="padding-top:12px"></div>
+                    </mat-card>
+                </div>
+                <div class="ui-g-12 ui-md-9">
+                    <mat-card style="flex: 8">
+                        <mat-card-title>{{label}} signatory information</mat-card-title>
+                        <br/>
+
+                        <div class="ui-g ui-fluid form-group">
+                            <div class="ui-g-12 ui-md-12" *ngIf="isOwnerSignature">
+                                <p-dropdown [options]="owners | ownerList" [style]="{'width':'100%'}" formControlName="individualId"></p-dropdown>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div [ngClass]=" isOwnerSignature ? 'ui-g-12 ui-md-12' : 'ui-g-12 ui-md-10'">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="signatoryName" pInputText>
+                                        <label>Signatory name</label>
+                                    </span>
+                                </div>
+                                <div class="ui-g-12 ui-md-2" *ngIf="!isOwnerSignature">
+                                    <button pButton type="button" icon="ui-icon-keyboard-arrow-up" class="default-btn" (click)="lookup.display=true"></button>
+                                    <button pButton type="button" icon="ui-icon-add" class="default-btn" (click)="addNominated()"></button>
+                                </div>
+                                <individual-lookup #lookup (onSelect)="onSelect($event)"></individual-lookup>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="ui-g-12 ui-md-12">
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="mobileNumber" pInputText>
+                                        <label>Mobile number</label>
+                                    </span>
+                                </div>
+                                <div class="ui-g-6 ui-md-6">
+                                    <span class="md-inputfield">
+                                        <input type="text" formControlName="remarks" pInputText>
+                                        <label>Remarks</label>
+                                    </span>
+                                </div>
+                                <br>
+                                <br>
+                            </div>
+                            <div class="ui-g-12 ui-md-12" *ngIf="!isOwnerSignature">
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="md-inputfield" >
+                                        <p-calendar placeholder="Start Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                                            utc="true" [minDate]="minStartDate" formControlName="dateFrom"></p-calendar>
+                                        <label>Start Date</label>
+                                    </span>
+                                </div>
+
+                                <div class="ui-g-12 ui-md-6">
+                                    <span class="md-inputfield" >
+                                        <p-calendar placeholder="Expire Date" hourFormat="12" monthNavigator="true" yearNavigator="true" yearRange="1900:2050" readonlyInput="true"
+                                            utc="true" [minDate]="accountSignatoryForm.get('dateFrom').value" formControlName="dateTo"></p-calendar>
+                                        <label>Expire Date</label>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </mat-card>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

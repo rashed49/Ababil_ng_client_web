@@ -1,0 +1,78 @@
+<div class="ui-g">
+    <div class="ababil-toolbar">
+        <span class="ababil-toolbar-header">Transaction limit profile detail</span>
+        <div class="ababil-toolbar-button-group">
+            <button pButton type="button" class="default-btn" label="Back" icon="ui-icon-keyboard-arrow-left" (click)="cancel()"></button>
+        </div>
+    </div>
+</div>
+<br/>
+<br/>
+
+
+<mat-card>
+    <div class="ui-g">
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Account name</th>
+                <td>{{demandDepositAccount.name}}</td>
+            </tr>
+            <tr>
+                <th>Account number</th>
+                <td>{{demandDepositAccount.number}}</td>
+            </tr>
+            <!-- <tr>
+                <th>Unique customer ID</th>
+                <td>{{demandDepositProductDetails.minimumBalance}}</td>
+            </tr>
+            <tr>
+                <th>Probable monthly income</th>
+                <td>{{demandDepositProductDetails.minRequiredOpeningBalance}}</td>
+            </tr> -->
+        </table>
+    </div>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Deposit limit:</mat-card-title>
+    <p-dataTable [value]="accountTransactionProfile" [responsive]="true">
+        <p-column field="transactionProfileDescription" header="Deposit"></p-column>
+        <p-column field="monthlyTotalDebitTxnCount" header="Probable number of deposit (monthly)" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalDebitTxnCount | number}}
+            </ng-template>
+        </p-column>
+        <p-column field="maxDebitAmountPerTransaction" header="Maximum amount of deposit (per transaction)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.maxDebitAmountPerTransaction | number}}
+            </ng-template>
+        </p-column>
+        <p-column field="monthlyTotalDebitTxnAmount" header="Probable total deposit amount (monthly)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalDebitTxnAmount | number}}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</mat-card>
+
+<mat-card>
+    <mat-card-title>Withdrawal limit:</mat-card-title>
+    <p-dataTable [value]="accountTransactionProfile" [responsive]="true">
+        <p-column field="transactionProfileDescription" header="Withdrawal"></p-column>
+        <p-column field="monthlyTotalCreditTxnCount" header="Probable number of withdrawal (monthly)" [style]="{'text-align':'center'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalCreditTxnCount | number}}
+            </ng-template>
+        </p-column>
+        <p-column field="maxCreditAmountPerTransaction" header="Maximum amount of withdrawal (per transaction)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.maxCreditAmountPerTransaction | number}}
+            </ng-template>
+        </p-column>
+        <p-column field="monthlyTotalCreditTxnAmount" header="Probable total withdrawal amount (monthly)" [style]="{'text-align':'right'}">
+            <ng-template let-col let-data="rowData" pTemplate="body">
+                {{data.monthlyTotalCreditTxnAmount | number}}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</mat-card>
